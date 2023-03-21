@@ -1,0 +1,10 @@
+{
+  "check-coverage": true,
+  "exclude": ["node_modules/"],
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "extension": [".ts"],
+  "include": ["src/**/*.ts"],
+  "lines": 0,
+  "reporter": ["lcov", "text-summary"],
+  "temp-directory": "./coverage/.nyc_output"
+}

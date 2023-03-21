@@ -1,0 +1,66 @@
+{
+  "api": {
+    "baseURL": "http://127.0.0.1",
+    "namespace": "domain",
+    "paging": {
+      "defaultLimit": 20,
+      "defaultOffset": 0
+    },
+    "port": 9002,
+    "sorting": {
+      "defaultOrder": "desc",
+      "defaultProp": "created_on"
+    },
+    "tracing": {
+      "headers": [
+        "x-request-id",
+        "x-b3-traceid",
+        "x-b3-spanid",
+        "x-b3-parentspanid",
+        "x-b3-sampled",
+        "x-b3-flags",
+        "x-ot-span-context"
+      ]
+    },
+    "version": 1
+  },
+  "logger": {
+    "app": {
+      "enabled": "true",
+      "level": "info"
+    },
+    "http": {
+      "enabled": {
+        "request": "true",
+        "response": "true"
+      },
+      "label": "http",
+      "level": "info"
+    },
+    "repo": {
+      "enabled": "false",
+      "label": "repository",
+      "level": "info"
+    },
+    "services": {
+      "example": {
+        "enabled": "true",
+        "label": "example-service",
+        "level": "info"
+      }
+    },
+    "validation": {
+      "enabled": "false",
+      "label": "validation",
+      "level": "info"
+    }
+  },
+  "services": {
+    "example": {
+      "api": {
+        "baseURL": "https://www.example.com/",
+        "timeout": 25000
+      }
+    }
+  }
+}

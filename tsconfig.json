@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": [
+      "ES2015",
+      "ES2016",
+      "ES2017",
+      "ES2018",
+      "ES2019",
+      "ES2020",
+      "ES2021",
+      "ESNext"
+    ],
+    "baseUrl": ".",
+    "importHelpers": true,
+    "isolatedModules": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "exclude": ["node_modules"],
+  "include": ["src/**/*.ts", "test/**/*.ts"]
+}

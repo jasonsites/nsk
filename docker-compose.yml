@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./test/Dockerfile
+    command: npm run dev
+    environment:
+      API_PORT: 9002
+      DEBUG: app-container*
+      LOGGER_HTTP_REQUEST_ENABLED: "true"
+      LOGGER_HTTP_RESPONSE_ENABLED: "true"
+      LOGGER_HTTP_LEVEL: debug
+      LOGGER_REPO_ENABLED: "true"
+      NODE_ENV: development
+    ports:
+      - 9002:9002
+    volumes:
+      - ./coverage:/home/app/coverage
+      - ./dist:/home/app/dist
+      - ./src:/home/app/src
+      - ./test:/home/app/test
+      - ./package.json:/home/app/package.json
+      - /home/app/node_modules

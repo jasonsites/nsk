@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "dist",
+    "rootDir": "src",
+    "removeComments": true
+  },
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*.ts"]
+}

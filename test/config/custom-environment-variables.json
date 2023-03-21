@@ -1,0 +1,42 @@
+{
+  "api": {
+    "baseURL": "API_BASE_URL",
+    "port": "API_PORT"
+  },
+  "logger": {
+    "app": {
+      "enabled": "LOGGER_APP_ENABLED",
+      "level": "LOGGER_APP_LEVEL"
+    },
+    "http": {
+      "enabled": {
+        "request": "LOGGER_HTTP_REQUEST_ENABLED",
+        "response": "LOGGER_HTTP_RESPONSE_ENABLED"
+      },
+      "level": "LOGGER_HTTP_LEVEL"
+    },
+    "repo": {
+      "enabled": "LOGGER_REPO_ENABLED",
+      "level": "LOGGER_REPO_LEVEL"
+    },
+    "services": {
+      "user": {
+        "enabled": "LOGGER_SVC_EXAMPLE_ENABLED",
+        "level": "LOGGER_SVC_EXAMPLE_LEVEL"
+      }
+    },
+    "validation": {
+      "enabled": "LOGGER_VALIDATION_ENABLED",
+      "level": "LOGGER_VALIDATION_LEVEL"
+    }
+  },
+  "services": {
+    "example": {
+      "api": {
+        "baseURL": "SVC_EXAMPLE_BASEURL",
+        "headers": "SVC_EXAMPLE_HEADERS",
+        "timeout": "SVC_EXAMPLE_TIMEOUT"
+      }
+    }
+  }
+}
