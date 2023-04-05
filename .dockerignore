@@ -1,12 +1,11 @@
+.dockerignore
+.DS_Store
+.editorconfig
+.gitignore
 coverage
 dist
 Dockerfile
 docker-compose.yml
-docker-coverage.yml
-.dockerignore
 documentation
-.DS_Store
-.editorconfig
-.gitignore
 node_modules
 npm-debug.log
