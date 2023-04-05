@@ -4,11 +4,11 @@
 
 /* eslint-disable */
 const tsNode = require('ts-node')
-const tsConfigPaths = require('tsconfig-paths')
+const tscPaths = require('tsconfig-paths')
 const TSConfigPaths = require('./tsconfig.build.json').compilerOptions.paths
 const TestTSConfigPaths = require('./tsconfig.json').compilerOptions.paths
 
-tsConfigPaths.register({
+tscPaths.register({
   baseUrl: '.',
   paths: { ...TSConfigPaths, ...TestTSConfigPaths },
 })
