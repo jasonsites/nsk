@@ -10,11 +10,11 @@
     "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist/",
     "coverage": "nyc npm t",
-    "dev": "NODE_ENV=dev nodemon -r tsconfig-paths/register",
+    "dev": "nodemon -r tsconfig-paths/register",
     "lint": "eslint src test --ext .ts,.js",
     "release": "echo 'replace with `npm run clean && npm run build && npx standard-version` after v1.0.0'",
     "start": "node dist/index.js",
-    "test": "NODE_ENV=test mocha 'test/tests/**/*.test.ts'"
+    "test": "mocha 'test/tests/**/*.test.ts'"
   },
   "keywords": [
     "api",
@@ -43,6 +43,7 @@
     "bunyan": "^1.8.15",
     "config": "^3.3.9",
     "joi": "^17.9.1",
+    "knex": "^2.4.2",
     "koa": "^2.14.1",
     "koa-body": "^6.0.1",
     "koa-compress": "^5.1.0",
