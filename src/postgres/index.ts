@@ -7,7 +7,19 @@ import config from 'config'
 import knexlib from 'knex'
 
 export default function postgres({ errors }) {
-  const options = config.get('postgres.options')
+  const { client, connection, pool, version } = config.get('postgres.options')
+  const options = {
+    client,
+    connection: {
+      ...connection,
+      port: parseInt(connection.port, 10),
+    },
+    pool: {
+      max: parseInt(pool.max, 10),
+      min: parseInt(pool.min, 10),
+    },
+    version,
+  }
   const knex = knexlib(options)
 
   return { ...errors, knex }
