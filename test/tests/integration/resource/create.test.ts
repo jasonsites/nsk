@@ -75,7 +75,7 @@ describe('[integration] POST /{namespace}/resources', function () {
             actual: actual.data,
             expected,
           })
-          assertions.common.assertSingle({ actual, resource })
+          assertions.common.assertSolo({ actual, resource })
         })
     })
   })

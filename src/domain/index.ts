@@ -28,8 +28,8 @@ export default function domain({ repo, services }) {
         return repository.list({ filters, page, sort, type })
       }
 
-      async function update({ data, type }) {
-        return repository.update({ data, type })
+      async function update({ data, id, type }) {
+        return repository.update({ data, id, type })
       }
 
       return { create, destroy, detail, list, update }

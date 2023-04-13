@@ -20,7 +20,7 @@ export const inject = {
   require: {
     core: 'core',
     models: {
-      domainResource: 'repo/models/domain-resource',
+      domainResource: 'repo/models/resource',
     },
   },
 }

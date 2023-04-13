@@ -4,7 +4,7 @@
  */
 
 export default function schemas({ body, core, query }) {
-  const { domain } = body
+  const { resource } = body
   const { Resource } = core
   const { querySchema } = query
 
@@ -16,7 +16,7 @@ export default function schemas({ body, core, query }) {
    */
   function bodySchema({ method, type }) {
     switch (type) {
-      case Resource.DomainResource: return domain({ method })
+      case Resource.DomainResource: return resource({ method })
       default: throw new Error(`invalid schema type '${type}'`)
     }
   }
@@ -27,7 +27,7 @@ export default function schemas({ body, core, query }) {
 export const inject = {
   require: {
     body: {
-      domain: 'http/validation/schemas/body/domain',
+      resource: 'http/validation/schemas/body/resource',
     },
     core: 'core',
     query: 'http/validation/schemas/query',

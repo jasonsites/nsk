@@ -3,58 +3,64 @@
  * @overview controller for domain routes
  */
 
-export default function controller({ domain, serializers, utils, validation }) {
-  async function create(ctx) {
+import { Context } from 'koa'
+
+type Controller = {
+  create: (ctx: Context) => Promise<void>
+  destroy: (ctx: Context) => Promise<void>
+  detail: (ctx: Context) => Promise<void>
+  list: (ctx: Context) => Promise<void>
+  update: (ctx: Context) => Promise<void>
+}
+
+export default function controller({ domain, serializers, utils, validation }): Controller {
+  async function create(ctx: Context): Promise<void> {
     const { correlation, type } = ctx.state
     const { body, method } = ctx.request
     validation.context(correlation).validateBody({ body, method, type })
     const { data: { properties } } = body
     const result = await domain.context(correlation).create({ data: properties, type })
-    const doc = serializers.serialize({ input: result, single: true })
-    ctx.body = doc
+    ctx.body = serializers.serialize({ input: result, solo: true })
     ctx.status = 201
     ctx.type = 'application/json'
   }
 
-  async function destroy(ctx) {
+  async function destroy(ctx: Context): Promise<void> {
     const { correlation, type } = ctx.state
     const { id } = ctx.params
     await domain.context(correlation).destroy({ id, type })
     ctx.status = 204
   }
 
-  async function detail(ctx) {
+  async function detail(ctx: Context): Promise<void> {
     const { correlation, type } = ctx.state
     const { id } = ctx.params
     const result = await domain.context(correlation).detail({ id, type })
-    const doc = serializers.serialize({ input: result, single: true })
-    ctx.body = doc
+    ctx.body = serializers.serialize({ input: result, solo: true })
     ctx.status = 200
     ctx.type = 'application/json'
   }
 
-  async function list(ctx) {
+  async function list(ctx: Context): Promise<void> {
     const { correlation, type } = ctx.state
     const { querystring } = ctx.request
     const query = utils.parseQuery(querystring)
     validation.context(correlation).validateQuery({ query, type })
     const { filters, page, sort } = utils.transformQuery(query)
     const result = await domain.context(correlation).list({ filters, page, sort, type })
-    const doc = serializers.serialize({ input: result, single: false })
-    ctx.body = doc
+    ctx.body = serializers.serialize({ input: result, solo: false })
     ctx.status = 200
     ctx.type = 'application/json'
   }
 
-  async function update(ctx) {
+  async function update(ctx: Context): Promise<void> {
     const { correlation, type } = ctx.state
     const { id } = ctx.params
     const { body, method } = ctx.request
     validation.context(correlation).validateBody({ body, id, method, type })
     const { data: { properties } } = body
     const result = await domain.context(correlation).update({ data: properties, id, type })
-    const doc = serializers.serialize({ input: result, single: true })
-    ctx.body = doc
+    ctx.body = serializers.serialize({ input: result, solo: true })
     ctx.status = 200
     ctx.type = 'application/json'
   }
