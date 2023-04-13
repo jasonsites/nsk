@@ -14,31 +14,34 @@ export default function repository({ logger, models }) {
       const log = logger.child({ module: label, req_id, level })
       log.enabled = enabled
 
-      async function create({ data, permissions, type }) {
+      async function create(params) {
+        const { data, type } = params
         const model = models.getModel({ log, type })
-        return model.create({ data, permissions })
+        return model.create({ data })
       }
 
-      async function destroy({ id, permissions, type }) {
+      async function destroy(params) {
+        const { id, type } = params
         const model = models.getModel({ log, type })
-        return model.destroy({ id, permissions })
+        return model.destroy({ id })
       }
 
-      async function detail({ id, permissions, type }) {
+      async function detail(params) {
+        const { id, type } = params
         const model = models.getModel({ log, type })
-        return model.detail({ id, permissions })
+        return model.detail({ id })
       }
 
       async function list(params) {
-        const { filters, id, page, permissions, sort, type } = params
-
+        const { filters, id, page, sort, type } = params
         const model = models.getModel({ log, type })
-        return model.list({ filters, id, page, permissions, sort })
+        return model.list({ filters, id, page, sort })
       }
 
-      async function update({ data, permissions, type }) {
+      async function update(params) {
+        const { data, id, type } = params
         const model = models.getModel({ log, type })
-        return model.update({ data, permissions })
+        return model.update({ data, id })
       }
 
       return { create, destroy, detail, list, update }

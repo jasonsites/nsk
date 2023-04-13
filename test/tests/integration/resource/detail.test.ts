@@ -74,7 +74,7 @@ describe('[integration] GET /{namespace}/resources/{id}', async function () {
             actual: actual.data,
             expected: body.data,
           })
-          assertions.common.assertSingle({ actual, resource })
+          assertions.common.assertSolo({ actual, resource })
         })
     })
   })

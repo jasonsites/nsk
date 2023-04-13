@@ -16,7 +16,7 @@ export default function route({ controller, core, middleware }) {
   router.get('/', list)
   router.get('/:id', detail)
   router.post('/', create)
-  router.patch('/:id', update)
+  router.put('/:id', update)
   router.delete('/:id', destroy)
 
   return router

@@ -30,6 +30,22 @@
       "level": "LOGGER_VALIDATION_LEVEL"
     }
   },
+  "postgres": {
+    "options": {
+      "connection": {
+        "database": "POSTGRES_DB",
+        "host": "POSTGRES_HOST",
+        "password": "POSTGRES_PASSWORD",
+        "port": "POSTGRES_PORT",
+        "user": "POSTGRES_USER"
+      },
+      "pool": {
+        "max": "PGCONN_POOL_MAX",
+        "min": "PGCONN_POOL_MIN"
+      },
+      "version": "POSTGRES_VERSION"
+    }
+  },
   "services": {
     "example": {
       "api": {

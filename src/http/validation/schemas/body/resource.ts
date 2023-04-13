@@ -5,7 +5,7 @@
 
 import joi from 'joi'
 
-export default function domain({ common, core }) {
+export default function domainResource({ common, core }) {
   const { single } = common
 
   /**
@@ -23,7 +23,10 @@ export default function domain({ common, core }) {
     const resource: Resource = {
       type: joi.string().valid(core.Resource.DomainResource).required(),
       properties: joi.object().keys({
-        name: joi.string().required(),
+        description: joi.string(),
+        enabled: joi.boolean(),
+        status: joi.number(),
+        title: joi.string().required().max(255),
       }).required(),
     }
     if (method === 'PUT') resource.id = joi.string().uuid().required()

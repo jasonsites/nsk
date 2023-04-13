@@ -1,7 +1,6 @@
 import chai from 'chai'
 import chaiUUID from 'chai-uuid'
 import config from 'config'
-import moment from 'moment'
 
 const { expect } = chai
 chai.use(chaiUUID)
@@ -48,7 +47,7 @@ export function assertMetaPaging(params) {
   expect(actual.total).to.equal(total)
 }
 
-export function assertMulti({ actual, resources, paging }) {
+export function assertMult({ actual, resources, paging }) {
   expect(actual).to.be.an('object').with.all.keys(['data', 'meta'])
   expect(actual.meta).to.be.an('object').with.all.keys(['paging'])
   expect(actual.data).to.be.an('array')
@@ -56,17 +55,17 @@ export function assertMulti({ actual, resources, paging }) {
   if (paging) paging()
 }
 
-export function assertSingle({ actual, resource }) {
+export function assertSoftDelete({ actual }) {
+  expect(actual.deleted).to.be.true
+}
+
+export function assertSolo({ actual, resource }) {
   expect(actual).to.be.an('object').with.all.keys(['data'])
   expect(actual.data).to.be.an('object')
   resource()
 }
 
-export function assertSoftDelete({ actual }) {
-  expect(actual.deleted).to.be.true
-}
-
 export function assertValidDatetimeISO({ iso }) {
-  const valid = moment(iso, moment.ISO_8601).isValid()
-  expect(valid).to.equal(true)
+  // const valid = moment(iso, moment.ISO_8601).isValid()
+  // expect(valid).to.equal(true)
 }

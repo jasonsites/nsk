@@ -1,6 +1,13 @@
 {
   "api": {
     "baseURL": "http://127.0.0.1",
+    "messages": {
+      "error": {
+        "default": "An unexpected error has occurred. Please try again later.",
+        "relatedEntityMissing": "related entity not found",
+        "uniqueConstraintViolation": "entity already exists"
+      }
+    },
     "namespace": "domain",
     "paging": {
       "defaultLimit": 20,
@@ -53,6 +60,23 @@
       "enabled": "false",
       "label": "validation",
       "level": "info"
+    }
+  },
+  "postgres": {
+    "options": {
+      "client": "pg",
+      "connection": {
+        "database": "svcdb",
+        "host": "localhost",
+        "password": "postgres",
+        "port": 5432,
+        "user": "postgres"
+      },
+      "pool": {
+        "max": 10,
+        "min": 2
+      },
+      "version": "14"
     }
   },
   "services": {

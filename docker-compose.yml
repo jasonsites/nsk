@@ -14,8 +14,8 @@ services:
     depends_on:
       postgres_db:
         condition: service_healthy
-      redis:
-        condition: service_started
+      # redis:
+      #   condition: service_started
     environment:
       API_PORT: 9002
       DEBUG: app-container*
@@ -24,12 +24,14 @@ services:
       LOGGER_HTTP_LEVEL: debug
       LOGGER_REPO_ENABLED: "true"
       NODE_ENV: development
+      PGCONN_POOL_MAX: 10
+      PGCONN_POOL_MIN: 0
       POSTGRES_DB: svcdb
       POSTGRES_HOST: postgres_db
       POSTGRES_PASSWORD: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USER: postgres
-      POSTGRES_VERSION: 14
+      POSTGRES_VERSION: "14"
       REDIS_DB: 0
       REDIS_HOST: host.docker.internal
       REDIS_PASSWORD: redis
@@ -41,11 +43,7 @@ services:
     ports:
       - 9002:9002
     volumes:
-      - ./coverage:/home/app/coverage
-      - ./dist:/home/app/dist
-      - ./src:/home/app/src
-      - ./test:/home/app/test
-      - ./package.json:/home/app/package.json
+      - .:/home/app
       - /home/app/node_modules
 
   postgres_db:
@@ -54,6 +52,7 @@ services:
       restart_policy:
         condition: on-failure
     environment:
+      PGUSER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -71,18 +70,18 @@ services:
       - ./database/scripts:/docker-entrypoint-initdb.d/
       - postgres-data:/var/lib/postgresql/data
 
-  redis:
-    image: redis:6.2
-    command: redis-server /usr/local/etc/redis/redis.conf
-    deploy:
-      restart_policy:
-        condition: on-failure
-    networks:
-      - local-dev
-    ports:
-      - 26379:6379
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+  # redis:
+  #   image: redis:6.2
+  #   command: redis-server /usr/local/etc/redis/redis.conf
+  #   deploy:
+  #     restart_policy:
+  #       condition: on-failure
+  #   networks:
+  #     - local-dev
+  #   ports:
+  #     - 26379:6379
+  #   volumes:
+  #     - ./redis.conf:/usr/local/etc/redis/redis.conf
 
 volumes:
   postgres-data:
