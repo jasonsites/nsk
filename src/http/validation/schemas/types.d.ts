@@ -1,11 +1,14 @@
 
+import type { ObjectSchema, StringSchema } from 'joi'
+import type { CoreTypes } from '../../../types/globals'
+
 export type HTTPBodyMethod = 'POST' | 'PUT'
 
 // Body schema types
 type DataSchema = {
-  type: joi.StringSchema<string>,
-  id?: joi.StringSchema<string>,
-  properties: joi.ObjectSchema<unknown>
+  type: StringSchema<string>,
+  id?: StringSchema<string>,
+  properties: ObjectSchema<unknown>
 }
 
 export type BodySchemaBuilder = (params: {
@@ -15,7 +18,7 @@ export type BodySchemaBuilder = (params: {
 
 export type BodySchemaGetter = (params: {
   method: HTTPBodyMethod,
-}) => joi.ObjectSchema<unknown>
+}) => ObjectSchema<unknown>
 
 export type BodyHandler = {
   createSchemaGetter: (params: {
@@ -25,5 +28,5 @@ export type BodyHandler = {
 }
 
 export type QueryHandler = {
-  querySchema: (params: { method: string, type: string }) => joi.ObjectSchema<unknown>,
+  querySchema: (params: { method: string, type: string }) => ObjectSchema<unknown>,
 }
