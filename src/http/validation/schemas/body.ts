@@ -20,10 +20,14 @@ export default function body(): BodyHandler {
   }): BodySchemaGetter {
     const { core, builder } = params
 
-    return ({ method }: { method: HTTPBodyMethod }) => joi.object().keys({
-      meta: joi.object(),
-      data: joi.object().keys(builder({ core, method })).required(),
-    }).required()
+    return ({ method }: { method: HTTPBodyMethod }) => {
+      const partial = builder({ core, method })
+
+      return joi.object().keys({
+        meta: joi.object(),
+        data: joi.object().keys(partial).required(),
+      }).required()
+    }
   }
 
   return { createSchemaGetter }
