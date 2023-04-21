@@ -5,11 +5,21 @@
 
 import config from 'config'
 
-export default function service({ api, logger }) {
-  const { enabled, label, level } = config.get('logger.services.example')
+import type Logger from 'bunyan'
+import type { AxiosInstance } from 'axios'
+import type { Correlation, LoggerConfiguration } from '../types/globals'
+
+interface Dependencies {
+  api: { client: AxiosInstance },
+  logger: Logger,
+}
+
+export default function service(deps: Dependencies) {
+  const { api, logger } = deps
+  const { enabled, label, level }: LoggerConfiguration = config.get('logger.services.example')
 
   return {
-    context: (correlation) => {
+    context: (correlation: Correlation) => {
       const { headers, req_id } = correlation
       const log = logger.child({ module: label, req_id, level })
 

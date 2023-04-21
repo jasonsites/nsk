@@ -13,7 +13,16 @@ type Controller = {
   update: (ctx: Context) => Promise<void>
 }
 
-export default function controller({ domain, serializers, utils, validation }): Controller {
+type Dependencies = {
+  domain: any,
+  serializers: any,
+  utils: any,
+  validation: any,
+}
+
+export default function controller(deps: Dependencies): Controller {
+  const { domain, serializers, utils, validation } = deps
+
   async function create(ctx: Context): Promise<void> {
     const { correlation, type } = ctx.state
     const { body, method } = ctx.request

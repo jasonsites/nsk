@@ -3,7 +3,13 @@
  * @overview repository entities
  */
 
-export default function index({ entities }) {
+import type { EntityData } from '../types'
+
+interface Dependencies {
+  entities: Record<string, EntityData>
+}
+
+export default function index({ entities }: Dependencies) {
   return entities
 }
 

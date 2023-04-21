@@ -4,31 +4,52 @@
  * NOTE: this module should be renamed to reflect the actual domain
  */
 
-export default function domain({ repo, services }) {
+import type { Correlation, ExternalService, Repository } from '../types/globals'
+
+interface Dependencies {
+  repo: { context: (correlation: Correlation) => Repository }
+  services: { example: ExternalService }
+}
+
+export default function domain(deps: Dependencies) {
+  const { repo, services } = deps
+
   const { example } = services
 
-  return {
-    context: (correlation) => {
-      const repository = repo.context(correlation)
+  // TODO: domain logger
 
-      async function create({ data, type }) {
+  return {
+    context: (correlation: Correlation) => {
+      const repository: Repository = repo.context(correlation)
+
+      async function create(params: { data: unknown, type: string }) {
+        const { data, type } = params
         return repository.create({ data, type })
       }
 
-      async function destroy({ id, type }) {
+      async function destroy(params: { id: string, type: string }) {
+        const { id, type } = params
         return repository.destroy({ id, type })
       }
 
-      async function detail({ id, type }) {
+      async function detail(params: { id: string, type: string }) {
+        const { id, type } = params
         await example.context(correlation).get()
         return repository.detail({ id, type })
       }
 
-      async function list({ filters, page, sort, type }) {
+      async function list(params: {
+        filters: unknown,
+        page: unknown,
+        sort: unknown,
+        type: string,
+      }) {
+        const { filters, page, sort, type } = params
         return repository.list({ filters, page, sort, type })
       }
 
-      async function update({ data, id, type }) {
+      async function update(params: { data: unknown, id: string, type: string }) {
+        const { data, id, type } = params
         return repository.update({ data, id, type })
       }
 

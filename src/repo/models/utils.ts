@@ -3,9 +3,29 @@
 * @overview repository upsert model utilities
 */
 
-export default function utils({ core, postgres }) {
-  const { Resource } = core
+import { Knex } from 'knex'
+
+import type { CoreTypes, PagingData } from '../../types/globals'
+
+interface Dependencies {
+  core: CoreTypes,
+  postgres: { knex: Knex },
+}
+
+export default function utils(deps: Dependencies) {
+  const { core, postgres } = deps
+  const { NotFoundError, Resource } = core
   const { knex } = postgres
+
+  // list metadata for all models
+  function composePagingData(params: {
+    count: number,
+    limit: number,
+    offset: number,
+  }): PagingData {
+    const { count, limit, offset } = params
+    return { limit, offset, total: count }
+  }
 
   /**
    * returns insert/update object for repo entity operations
@@ -15,7 +35,8 @@ export default function utils({ core, postgres }) {
    * @param {string} params.type    - resource type
    * @returns {object}
    */
-  function composeUpsert({ data, method = 'update', type }) {
+  function composeUpsert(params: { data: any, method: string, type: string }) {
+    const { data, method = 'update', type } = params
     const user_id = 9999 // TODO: get from context
 
     // destroy
@@ -28,34 +49,47 @@ export default function utils({ core, postgres }) {
   }
 
   // action augmentations ------------------------------------------------
-
-  function created({ user_id }) {
+  function created({ user_id }: { user_id: number }) {
     return { created_by: user_id }
   }
 
-  function modified({ user_id }) {
+  function modified({ user_id }: { user_id: number }) {
     return { modified_on: knex.fn.now(), modified_by: user_id }
   }
 
-  function softDelete({ user_id }) {
+  function softDelete({ user_id }: { user_id: number }) {
     return { deleted: true, ...modified({ user_id }) }
   }
 
   // field enforcement ---------------------------------------------------
-
-  function enforceUpsertFields({ data, type }) {
+  function enforceUpsertFields(params: { data: any, type: string }) {
+    const { data, type } = params
     switch (type) {
       case Resource.DomainResource: return domainResource({ data })
       default: throw new Error(`invalid entity type '${type}'`)
     }
   }
 
-  function domainResource({ data }) {
+  // domain resource
+  function domainResource({ data }: { data: any }) {
     const { description, enabled, status, title } = data
     return { description, enabled, status, title }
   }
 
-  return { composeUpsert }
+  // error utilities -----------------------------------------------------
+  // error
+  function throwOnNotFound(params: {
+    id: string,
+    data: any,
+    type: string,
+  }): void {
+    const { id, data, type = 'resource' } = params
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+      throw new NotFoundError(`unable to find ${type} with id '${id}'`)
+    }
+  }
+
+  return { composePagingData, composeUpsert, throwOnNotFound }
 }
 
 export const inject = {

@@ -5,12 +5,15 @@
 
 import config from 'config'
 
+import type { Context, Next } from 'koa'
+import { LoggerConfiguration } from '../../types/globals'
+
 export default function middleware() {
-  return async function responseLogger(ctx, next) {
+  return async function responseLogger(ctx: Context, next: Next) {
     await next()
-    const { enabled, level } = config.get('logger.http')
+    const { enabled, level }: LoggerConfiguration = config.get('logger.http.response')
     const { log, response } = ctx
-    if (enabled.response === 'true') {
+    if (enabled) {
       const { body, header, message, status } = response
       const base = { status, message, header }
       if (level === 'debug') log.debug({ ...base, body })

@@ -3,7 +3,13 @@
  * @overview common structures to be used across layers
  */
 
-export default function core({ errors }) {
+import type { CoreTypes, ErrorTypes } from '../types/globals'
+
+interface Dependencies {
+  errors: ErrorTypes
+}
+
+export default function core({ errors }: Dependencies): CoreTypes {
   const Resource = {
     DomainResource: 'resource',
   }

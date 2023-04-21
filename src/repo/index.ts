@@ -3,42 +3,63 @@
  * @overview repository
  */
 
+import Logger from 'bunyan'
 import config from 'config'
 
-export default function repository({ logger, models }) {
-  const { enabled, label, level } = config.get('logger.repo')
+import type { ScopedLogger, Correlation, LoggerConfiguration, Repository } from '../types/globals'
+import type { Model, RepoResult } from './types'
+
+interface Dependencies {
+  logger: Logger
+  models: { getModel: (params: { log: ScopedLogger, type: string }) => Model }
+}
+
+export default function repository(deps: Dependencies): {
+  context: (correlation: Correlation) => Repository,
+} {
+  const { logger, models } = deps
+  const { enabled, label, level }: LoggerConfiguration = config.get('logger.repo')
 
   return {
-    context: (correlation) => {
+    context: (correlation: Correlation) => {
       const { req_id } = correlation
-      const log = logger.child({ module: label, req_id, level })
+      const log: ScopedLogger = logger.child({ module: label, req_id, level })
       log.enabled = enabled
 
-      async function create(params) {
+      async function create(params: { data: unknown, type: string }): Promise<RepoResult> {
         const { data, type } = params
-        const model = models.getModel({ log, type })
+        const model: Model = models.getModel({ log, type })
         return model.create({ data })
       }
 
-      async function destroy(params) {
+      async function destroy(params: { id: string, type: string }): Promise<void> {
         const { id, type } = params
         const model = models.getModel({ log, type })
         return model.destroy({ id })
       }
 
-      async function detail(params) {
+      async function detail(params: { id: string, type: string }): Promise<RepoResult> {
         const { id, type } = params
         const model = models.getModel({ log, type })
         return model.detail({ id })
       }
 
-      async function list(params) {
-        const { filters, id, page, sort, type } = params
+      async function list(params: {
+        filters: unknown,
+        page: unknown,
+        sort: unknown,
+        type: string,
+      }): Promise<RepoResult> {
+        const { filters, page, sort, type } = params
         const model = models.getModel({ log, type })
-        return model.list({ filters, id, page, sort })
+        return model.list({ filters, page, sort })
       }
 
-      async function update(params) {
+      async function update(params: {
+        data: unknown,
+        id: string,
+        type: string,
+      }): Promise<RepoResult> {
         const { data, id, type } = params
         const model = models.getModel({ log, type })
         return model.update({ data, id })

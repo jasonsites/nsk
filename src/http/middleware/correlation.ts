@@ -5,10 +5,16 @@
 
 import config from 'config'
 
-export default function middleware() {
-  const tracing = config.get('api.tracing')
+import type { Context, Next, Request } from 'koa'
 
-  return async function correlation(ctx, next) {
+type TracingConfig = {
+  headers: string[]
+}
+
+export default function middleware() {
+  const tracing: TracingConfig = config.get('api.tracing')
+
+  return async function correlation(ctx: Context, next: Next) {
     const headers = getTracingHeaders(ctx.request)
     const req_id = headers['x-request-id']
     ctx.state = { correlation: { headers, req_id } }
@@ -17,10 +23,10 @@ export default function middleware() {
   }
 
   // https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/
-  function getTracingHeaders(request) {
-    const { headers } = tracing
+  function getTracingHeaders(request: Request) {
+    const { headers }: TracingConfig = tracing
 
-    return headers.reduce((memo, h) => {
+    return headers.reduce((memo: Record<string, string>, h: string) => {
       memo[h] = request.get(h)
       return memo
     }, {})

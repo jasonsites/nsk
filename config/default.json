@@ -37,12 +37,16 @@
       "level": "info"
     },
     "http": {
-      "enabled": {
-        "request": "true",
-        "response": "true"
+      "request": {
+        "enabled": "true",
+        "label": "http",
+        "level": "info"
       },
-      "label": "http",
-      "level": "info"
+      "response": {
+        "enabled": "true",
+        "label": "http",
+        "level": "info"
+      }
     },
     "repo": {
       "enabled": "false",

@@ -4,10 +4,23 @@
 */
 
 import config from 'config'
-import knexlib from 'knex'
+import knexlib, { Knex } from 'knex'
 
-export default function postgres({ errors }) {
-  const { client, connection, pool, version } = config.get('postgres.options')
+interface Dependencies {
+  errors: { throwOnDbError: (error: { error: { code: string } }) => void }
+}
+
+export default function postgres({ errors }: Dependencies) {
+  type PostgresClientOptions = {
+    client: string
+    connection: { host: string; port: string; user: string; password: string; database: string }
+    pool: { max: string; min: string }
+    version: string
+  }
+
+  const conf: PostgresClientOptions = config.get('postgres.options')
+  const { client, connection, pool, version } = conf
+
   const options = {
     client,
     connection: {
@@ -20,7 +33,8 @@ export default function postgres({ errors }) {
     },
     version,
   }
-  const knex = knexlib(options)
+
+  const knex: Knex = knexlib(options)
 
   return { ...errors, knex }
 }

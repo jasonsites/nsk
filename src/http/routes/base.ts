@@ -5,15 +5,18 @@
  */
 
 import config from 'config'
-import Router from '@koa/router'
+import Router from 'koa-router'
 
-export default function route() {
-  async function get(ctx) {
+import type { Context } from 'koa'
+import type { ApiConfiguration } from '../../types/globals'
+
+export default function route(): Router {
+  async function get(ctx: Context) {
     ctx.body = { data: 'base router is working....' }
     ctx.status = 200
   }
 
-  const { namespace } = config.get('api')
+  const { namespace }: ApiConfiguration = config.get('api')
   const router = new Router({ prefix: `/${namespace}` })
 
   router.get('/', get)

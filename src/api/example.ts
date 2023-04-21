@@ -8,7 +8,12 @@ import axios from 'axios'
 import config from 'config'
 
 export default function service() {
-  const options = config.get('services.example.api')
+  type ExampleApiOptions = {
+    baseURL: string,
+    timeout: number,
+  }
+
+  const options: ExampleApiOptions = config.get('services.example.api')
   const client = axios.create(options)
 
   return { client }

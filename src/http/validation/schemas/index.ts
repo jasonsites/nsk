@@ -3,18 +3,25 @@
  * @overview validation schemas
  */
 
-export default function schemas({ body, core, query }) {
-  const { resource } = body
+import type { CoreTypes } from '../../../types/globals'
+import { BodySchemaGetter, HTTPBodyMethod, QueryHandler } from './types'
+
+type Dependencies = {
+  core: CoreTypes,
+  query: QueryHandler,
+  resources: Record<string, BodySchemaGetter>,
+}
+
+export default function schemas(deps: Dependencies) {
+  const { core, query, resources } = deps
+
   const { Resource } = core
   const { querySchema } = query
+  const { resource } = resources
 
-  /**
-   * retrieve joi validation schema for POST/PATCH request bodies
-   * @param  {String} params.method - http request method
-   * @param  {String} params.type   - resource type
-   * @return {Object}
-   */
-  function bodySchema({ method, type }) {
+  function bodySchema(params: { method: HTTPBodyMethod, type: string }) {
+    const { method, type } = params
+
     switch (type) {
       case Resource.DomainResource: return resource({ method })
       default: throw new Error(`invalid schema type '${type}'`)
@@ -26,10 +33,10 @@ export default function schemas({ body, core, query }) {
 
 export const inject = {
   require: {
-    body: {
-      resource: 'http/validation/schemas/body/resource',
-    },
     core: 'core',
     query: 'http/validation/schemas/query',
+    resources: {
+      resource: 'http/validation/schemas/resources/resource',
+    },
   },
 }

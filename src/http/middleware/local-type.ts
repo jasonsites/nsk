@@ -3,8 +3,14 @@
  * @overview sets local resource type
  */
 
-export default function middleware({ type }) {
-  return function setType(ctx, next) {
+import type { Context, Next } from 'koa'
+
+type Dependencies = {
+  type: string,
+}
+
+export default function middleware({ type }: Dependencies) {
+  return function setType(ctx: Context, next: Next) {
     ctx.state.type = type
     return next()
   }

@@ -5,42 +5,37 @@
 
 import { get } from 'lodash'
 
-export default function serializers({ core, types }) {
+import type { CoreTypes, PagingData } from '../types/globals'
+
+type Dependencies = {
+  core: CoreTypes,
+  types: {
+    serializeDomainResource: (params: { record: any, type: string }) => any,
+  },
+}
+
+export default function serializers(deps: Dependencies) {
+  const { core, types } = deps
   const { Resource } = core
 
-  /*
-  {
-    meta: {
-      paging: {
-        limit,
-        offset,
-        total
-      }
-    },
-    data: [{
-      type: 'resource-type',
-      meta: {
-        ...resource entity metadata
-      },
-      record: {
-        ...resource entity fields
-      },
-      rel: [{
-        type: 'rel-type',
-        data: [{
-          ...related resource entity fields
-        }],
-      }],
-    }]
+  type InputDataResource = {
+    type: string,
+    meta?: unknown,
+    record: unknown,
+    rel?: { type: string, data: unknown[] }[],
   }
-  */
 
-  /**
-   * @param {object[]}  params.input  - configured input data
-   * @param {boolean}   params.solo   - serialize as single resource (true) or list (false)
-   * @return {object}
-   */
-  function serialize({ input, solo }) {
+  type InputData = InputDataResource[]
+
+  type InputMeta = { paging: PagingData }
+
+  type SerializableInput = {
+    data: InputData,
+    meta?: InputMeta,
+  }
+
+  function serialize(params: { input: SerializableInput, solo: boolean }) {
+    const { input, solo } = params
     const { data, meta } = input
 
     // TODO: placeholder
@@ -56,15 +51,15 @@ export default function serializers({ core, types }) {
     return JSON.stringify(result)
   }
 
-  function serializeMeta({ meta }) {
+  function serializeMeta({ meta }: { meta: InputMeta }) {
     const total = get(meta, 'paging.total', undefined)
-    const totalUnfiltered = get(meta, 'paging.total_unfiltered', undefined)
-    if (total) meta.paging.total = parseInt(total, 10)
-    if (totalUnfiltered) meta.paging.total_unfiltered = parseInt(totalUnfiltered, 10)
+    if (total) meta.paging.total = total
     return meta
   }
 
-  function serializeData({ data, solo }) {
+  function serializeData(params: { data: InputData, solo: boolean }) {
+    const { data, solo } = params
+
     if (!Array.isArray(data)) {
       throw new Error('serializer input data must be an array')
     }
@@ -76,14 +71,14 @@ export default function serializers({ core, types }) {
       if (length !== 1) {
         throw new Error(`serializer input data with length '${length}' must contain one and only one resource for single resource serialization`)
       }
-      const [params] = data
-      return serializeRecord(params)
+      const [resource] = data
+      return serializeRecord(resource)
     }
 
     // resource list
     if (length === 0) return data
-    return data.reduce((memo, params) => {
-      memo.push(serializeRecord(params))
+    return data.reduce((memo: any[], resource) => {
+      memo.push(serializeRecord(resource))
       return memo
     }, [])
   }
@@ -96,7 +91,7 @@ export default function serializers({ core, types }) {
    * @return {object}
    * @private
    */
-  function serializeRecord(params) {
+  function serializeRecord(params: InputDataResource) {
     const { record, type } = params
 
     switch (type) {
