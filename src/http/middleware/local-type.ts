@@ -5,7 +5,7 @@
 
 import type { Context, Next } from 'koa'
 
-type Dependencies = {
+interface Dependencies {
   type: string,
 }
 

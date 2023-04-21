@@ -8,7 +8,7 @@ import Router from 'koa-router'
 
 import type { ApiConfiguration, CoreTypes } from '../../types/globals'
 
-type Dependencies = {
+interface Dependencies {
   controller: any,
   core: CoreTypes,
   middleware: any,

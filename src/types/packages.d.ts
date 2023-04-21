@@ -1,5 +1,4 @@
 
-// external packages
 declare module 'app-container' {
   class AppContainer {
     constructor(options?: unknown);

@@ -13,7 +13,7 @@ type Controller = {
   update: (ctx: Context) => Promise<void>
 }
 
-type Dependencies = {
+interface Dependencies {
   domain: any,
   serializers: any,
   utils: any,

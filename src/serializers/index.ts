@@ -7,7 +7,7 @@ import { get } from 'lodash'
 
 import type { CoreTypes, PagingData } from '../types/globals'
 
-type Dependencies = {
+interface Dependencies {
   core: CoreTypes,
   types: {
     serializeDomainResource: (params: { record: any, type: string }) => any,

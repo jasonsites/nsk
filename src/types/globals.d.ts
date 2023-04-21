@@ -1,4 +1,3 @@
-// TODO
 
 import Logger, { LogLevel } from 'bunyan'
 
@@ -97,4 +96,9 @@ export interface Repository {
 // Services --------------------------------------------------------
 export interface ExternalService {
   context: (correlation: Correlation) => { get: () => Promise<unknown> }
+}
+
+export type ExampleServiceConfiguration = {
+  baseURL: string,
+  timeout: number,
 }

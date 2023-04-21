@@ -7,10 +7,7 @@ import type { CreateFieldMapParams } from '../types'
 
 export default function common() {
   /**
-   * creates a Field map for a single Entity
-   * @param {object} params.attributes  - Entity Attribute map (map[string]string)
-   * @param {string} params.entity      - entity (table) name
-   * @return {object}
+   * creates a field map for a single entity
    */
   function CreateFieldMap(params: CreateFieldMapParams): Record<string, string> {
     const { attributes, entity } = params

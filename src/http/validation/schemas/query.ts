@@ -6,7 +6,7 @@
 import joi from 'joi'
 import { CoreTypes } from '../../../types/globals'
 
-type Dependencies = {
+interface Dependencies {
   core: CoreTypes,
 }
 

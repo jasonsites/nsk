@@ -9,7 +9,7 @@ import Koa from 'koa'
 import type Logger from 'bunyan'
 import type { ApiConfiguration, HttpServer } from '../types/globals'
 
-type Dependencies = {
+interface Dependencies {
   logger: Logger,
   router: {
     configureMiddleware: (app: HttpServer) => void,

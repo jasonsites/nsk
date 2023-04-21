@@ -12,7 +12,7 @@ import type { Middleware } from 'koa'
 import type Router from 'koa-router'
 import type { HttpServer } from '../types/globals'
 
-type Dependencies = {
+interface Dependencies {
   middleware: {
     correlation: Middleware,
     errorHandler: Middleware,

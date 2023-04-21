@@ -9,7 +9,7 @@ import type Logger from 'bunyan'
 import type { Context, Next } from 'koa'
 import { LoggerConfiguration } from '../../types/globals'
 
-type Dependencies = {
+interface Dependencies {
   logger: Logger,
 }
 

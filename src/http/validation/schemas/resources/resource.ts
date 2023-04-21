@@ -8,7 +8,7 @@ import joi from 'joi'
 import type { BodyHandler, DataSchema, HTTPBodyMethod } from '../types'
 import type { CoreTypes } from '../../../../types/globals'
 
-type Dependencies = {
+interface Dependencies {
   body: BodyHandler,
   core: CoreTypes,
 }
@@ -17,13 +17,9 @@ export default function domainResource(deps: Dependencies) {
   const { body, core } = deps
   const { createSchemaGetter } = body
 
-  /**
-   * example domain resource schema builder
-   */
   function builder({ method }: { method: HTTPBodyMethod }): DataSchema {
-    const resource = {
+    const resource: DataSchema = {
       type: joi.string().valid(core.Resource.DomainResource).required(),
-      id: (method === 'PUT') ? joi.string().uuid().required() : undefined,
       properties: joi.object().keys({
         description: joi.string(),
         enabled: joi.boolean(),
@@ -31,6 +27,7 @@ export default function domainResource(deps: Dependencies) {
         title: joi.string().required().max(255),
       }).required(),
     }
+    if (method === 'PUT') resource.id = joi.string().uuid().required()
 
     return resource
   }

@@ -6,7 +6,7 @@
 import type { CoreTypes } from '../../../types/globals'
 import { BodySchemaGetter, HTTPBodyMethod, QueryHandler } from './types'
 
-type Dependencies = {
+interface Dependencies {
   core: CoreTypes,
   query: QueryHandler,
   resources: Record<string, BodySchemaGetter>,

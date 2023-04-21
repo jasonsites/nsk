@@ -11,7 +11,7 @@ import type { CoreTypes, CustomError } from '../../types/globals'
 
 type AugmentedBoom = Boom<unknown> & { details?: object[], type: string }
 
-type Dependencies = {
+interface Dependencies {
   core: CoreTypes,
 }
 

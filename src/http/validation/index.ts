@@ -10,7 +10,7 @@ import type Logger from 'bunyan'
 import type { CoreTypes, Correlation, LoggerConfiguration, ScopedLogger } from '../../types/globals'
 import { HTTPBodyMethod } from './schemas/types'
 
-type Dependencies = {
+interface Dependencies {
   core: CoreTypes,
   logger: Logger,
   schemas: {
