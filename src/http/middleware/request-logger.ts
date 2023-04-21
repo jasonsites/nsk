@@ -5,14 +5,22 @@
 
 import config from 'config'
 
-export default function middleware({ logger }) {
-  const { enabled, label, level } = config.get('logger.http')
+import type Logger from 'bunyan'
+import type { Context, Next } from 'koa'
+import { LoggerConfiguration } from '../../types/globals'
 
-  return async function requestLogger(ctx, next) {
+type Dependencies = {
+  logger: Logger,
+}
+
+export default function middleware({ logger }: Dependencies) {
+  const { enabled, label, level }: LoggerConfiguration = config.get('logger.http.request')
+
+  return async function requestLogger(ctx: Context, next: Next) {
     const { ip, request, state } = ctx
     const { correlation: { req_id } } = state
     ctx.log = logger.child({ module: label, req_id, ip, level })
-    if (enabled.request === 'true') {
+    if (enabled) {
       const { body, headers, method, url } = request
       const base = { headers, method, url }
       if (level === 'debug') ctx.log.debug({ body, ...base })

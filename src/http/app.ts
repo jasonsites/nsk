@@ -6,15 +6,27 @@
 import config from 'config'
 import Koa from 'koa'
 
-export default function application({ logger, router }) {
-  const app: any = new Koa()
+import type Logger from 'bunyan'
+import type { ApiConfiguration, HttpServer } from '../types/globals'
+
+type Dependencies = {
+  logger: Logger,
+  router: {
+    configureMiddleware: (app: HttpServer) => void,
+    registerRoutes: (app: HttpServer) => void,
+  },
+}
+
+export default function application(deps: Dependencies) {
+  const { logger, router } = deps
+  const app: HttpServer = new Koa() as HttpServer
 
   app.initialize = async function start() {
     try {
       router.configureMiddleware(app)
       router.registerRoutes(app)
-      const { port } = config.get('api')
-      app.server = app.listen(port)
+      const { port }: ApiConfiguration = config.get('api')
+      app.listen(port)
       logger.info(`application listening on port: ${port}`)
     } catch (error) {
       console.error('error starting application', error) // eslint-disable-line

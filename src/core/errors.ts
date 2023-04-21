@@ -3,8 +3,11 @@
  * @overview application errors
  */
 
-export default function errors() {
-  const ErrorType = {
+import type { ErrorTypes } from '../types/globals'
+
+export default function errors(): ErrorTypes {
+  const ErrorType: Record<string, string> = {
+    Conflict: 'ConflictError',
     Forbidden: 'ForbiddenError',
     InternalServer: 'InternalServerError',
     NotFound: 'NotFoundError',
@@ -12,11 +15,22 @@ export default function errors() {
     Validation: 'ValidationError',
   }
 
+  class ConflictError extends Error {
+    type: string
+
+    constructor(message?: string) {
+      super(message)
+      Object.setPrototypeOf(this, ConflictError.prototype)
+      this.type = ErrorType.Conflict
+    }
+  }
+
   class ForbiddenError extends Error {
     type: string
 
-    constructor(message) {
+    constructor(message?: string) {
       super(message)
+      Object.setPrototypeOf(this, ForbiddenError.prototype)
       this.type = ErrorType.Forbidden
     }
   }
@@ -24,8 +38,9 @@ export default function errors() {
   class InternalServerError extends Error {
     type: string
 
-    constructor(message) {
+    constructor(message?: string) {
       super(message)
+      Object.setPrototypeOf(this, InternalServerError.prototype)
       this.type = ErrorType.InternalServer
     }
   }
@@ -33,8 +48,9 @@ export default function errors() {
   class NotFoundError extends Error {
     type: string
 
-    constructor(message) {
+    constructor(message?: string) {
       super(message)
+      Object.setPrototypeOf(this, NotFoundError.prototype)
       this.type = ErrorType.NotFound
     }
   }
@@ -42,8 +58,9 @@ export default function errors() {
   class UnauthorizedError extends Error {
     type: string
 
-    constructor(message) {
+    constructor(message?: string) {
       super(message)
+      Object.setPrototypeOf(this, UnauthorizedError.prototype)
       this.type = ErrorType.Unauthorized
     }
   }
@@ -51,13 +68,15 @@ export default function errors() {
   class ValidationError extends Error {
     type: string
 
-    constructor(message) {
+    constructor(message?: string) {
       super(message)
+      Object.setPrototypeOf(this, ValidationError.prototype)
       this.type = ErrorType.Validation
     }
   }
 
   return {
+    ConflictError,
     ErrorType,
     ForbiddenError,
     InternalServerError,

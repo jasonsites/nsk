@@ -4,29 +4,34 @@
  */
 
 import joi from 'joi'
+import { CoreTypes } from '../../../types/globals'
 
-export default function query({ core }) {
+type Dependencies = {
+  core: CoreTypes,
+}
+
+export default function query({ core }: Dependencies) {
   const { Resource } = core
 
-  const allowedOptionTypes = []
-  const allowedSortTypes = []
-  const disallowedFilterTypes = []
+  const allowedOptionTypes: string[] = []
+  const allowedSortTypes: string[] = []
+  const disallowedFilterTypes: string[] = []
 
   const validTypes = [
     Resource.DomainResource,
   ]
 
-  function filtersSchema({ type }) {
+  function filtersSchema({ type }: { type: string }) {
     switch (type) {
       case Resource.DomainResource: return joi.object().required()
       default: throw new Error(`invalid type '${type}' for filter query`)
     }
   }
 
-  function optionsSchema({ type }) {
+  function optionsSchema({ type }: { type: string }) {
     switch (type) {
       case Resource.DomainResource: return joi.object().required()
-      default: throw new Error(`invalid type '${type}' for option query`)
+      default: throw new Error(`invalid type '${type}' for options query`)
     }
   }
 
@@ -37,14 +42,16 @@ export default function query({ core }) {
     })
   }
 
-  function querySchema({ method, type }) {
+  function querySchema(params: { list: boolean, type: string }) {
+    const { list, type } = params
+
     if (!validTypes.includes(type)) {
       throw new Error(`invalid type '${type}' for query validation`)
     }
 
     const schema = { f: {}, o: {}, p: {}, s: {} }
 
-    if (method === 'list') {
+    if (list) {
       schema.p = pagingSchema()
       if (!disallowedFilterTypes.includes(type)) {
         schema.f = filtersSchema({ type })
@@ -61,7 +68,7 @@ export default function query({ core }) {
     return joi.object().keys(schema)
   }
 
-  function sortingSchema(params) {
+  function sortingSchema(params: { type: string }) {
     const valid = validSortProps(params)
     return joi.object().keys({
       order: joi.string().valid(['asc', 'desc']),
@@ -69,7 +76,7 @@ export default function query({ core }) {
     })
   }
 
-  function validSortProps({ type }) {
+  function validSortProps({ type }: { type: string }) {
     switch (type) {
       case Resource.DomainResource: return ['name']
       default: throw new Error(`invalid type '${type}' for sort query`)

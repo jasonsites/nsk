@@ -2,8 +2,12 @@
   "compilerOptions": {
     "baseUrl": "src",
     "outDir": "dist",
+    "paths": {
+      "*": ["*", "./*"]
+    },
+    "removeComments": true,
     "rootDir": "src",
-    "removeComments": true
+    "sourceMap": true
   },
   "extends": "./tsconfig.json",
   "include": ["src/**/*.ts"]

@@ -8,8 +8,25 @@ import koaBody from 'koa-body'
 import compress from 'koa-compress'
 import helmet from 'koa-helmet'
 
-export default function router({ middleware, routes }) {
-  function configureMiddleware(app) {
+import type { Middleware } from 'koa'
+import type Router from 'koa-router'
+import type { HttpServer } from '../types/globals'
+
+type Dependencies = {
+  middleware: {
+    correlation: Middleware,
+    errorHandler: Middleware,
+    requestLogger: Middleware,
+    responseLogger: Middleware,
+    responseTime: Middleware,
+  },
+  routes: Router[],
+}
+
+export default function router(deps: Dependencies) {
+  const { middleware, routes } = deps
+
+  function configureMiddleware(app: HttpServer) {
     app.use(compress())
     app.use(middleware.responseLogger)
     app.use(middleware.responseTime)
@@ -20,7 +37,7 @@ export default function router({ middleware, routes }) {
     app.use(middleware.requestLogger)
   }
 
-  function registerRoutes(app) {
+  function registerRoutes(app: HttpServer) {
     routes.forEach((r) => {
       app.use(r.routes())
       app.use(r.allowedMethods({

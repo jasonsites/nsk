@@ -6,44 +6,31 @@
 import config from 'config'
 import qs from 'qs'
 
+import type { ParsedQs } from 'qs'
+import type { ApiConfiguration } from '../../types/globals'
+
 export default function utils() {
-  const { paging, sorting } = config.get('api')
+  const { paging, sorting }: ApiConfiguration = config.get('api')
   const { defaultLimit, defaultOffset } = paging
   const { defaultOrder, defaultProp } = sorting
 
-  /**
-   * @param {object} params.limit
-   * @param {object} params.offset
-   * @return {object}
-   * private
-   */
-  function pageSettings(params) {
-    let { limit = defaultLimit, offset = defaultOffset } = params
+  function pageSettings(params: { limit?: string, offset?: string } = {}) {
+    const { limit, offset } = params
 
-    limit = parseInt(limit, 10)
-    limit = Number.isNaN(limit) ? defaultLimit : limit
+    let parsedLimit = limit ? parseInt(limit, 10) : defaultLimit
+    if (Number.isNaN(limit)) parsedLimit = defaultLimit
 
-    offset = parseInt(offset, 10)
-    offset = Number.isNaN(offset) ? defaultOffset : offset
+    let parsedOffset = offset ? parseInt(offset, 10) : defaultOffset
+    if (Number.isNaN(offset)) parsedOffset = defaultOffset
 
-    return { limit, offset }
+    return { limit: parsedLimit, offset: parsedOffset }
   }
 
-  /**
-   * @param {string} querystring
-   * @return {object}
-   */
-  function parseQuery(querystring) {
+  function parseQuery(querystring: string): ParsedQs {
     return qs.parse(querystring)
   }
 
-  /**
-   * @param {object} params.order
-   * @param {object} params.prop
-   * @return {object}
-   * private
-   */
-  function sortSettings(params) {
+  function sortSettings(params: { order?: string, prop?: string } = {}) {
     const { prop = defaultProp } = params
     let { order = defaultOrder } = params
 
@@ -52,13 +39,7 @@ export default function utils() {
     return { order, prop }
   }
 
-  /**
-   * @param {object} params.f
-   * @param {object} params.p
-   * @param {object} params.s
-   * @return {object}
-   */
-  function transformQuery(query) {
+  function transformQuery(query: { f: object, p: object, s: object}) {
     const { f: filters = {}, p = {}, s = {} } = query
 
     const page = pageSettings(p)

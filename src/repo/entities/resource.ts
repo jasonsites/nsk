@@ -3,10 +3,19 @@
  * @overview resource entity
  */
 
-export default function entity({ common }) {
+import type { CreateFieldMapParams } from '../types'
+
+interface Dependencies {
+  common: {
+    CreateFieldMap: ({ attributes, entity }: CreateFieldMapParams) => Record<string, string>
+    Entity: Record<string, string>
+  }
+}
+
+export default function resource({ common }: Dependencies) {
   const { CreateFieldMap, Entity } = common
 
-  const Attribute = {
+  const Attribute: Record<string, string> = {
     CreatedBy: 'created_by',
     CreatedOn: 'created_on',
     Deleted: 'deleted',

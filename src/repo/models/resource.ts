@@ -4,8 +4,32 @@
 */
 
 import Bluebird from 'bluebird'
+import { Knex } from 'knex'
 
-export default function model({ core, entities, helpers, postgres, utils }) {
+import type { EntityData, Model, RepoResult } from '../types'
+import type { DBError } from '../../postgres/errors'
+import type { CoreTypes, ScopedLogger } from '../../types/globals'
+
+interface Dependencies {
+  core: CoreTypes,
+  entities: Record<string, EntityData>,
+  postgres: {
+    knex: Knex,
+    throwOnDbError: ({ error }: { error: DBError }) => void,
+  },
+  utils: {
+    composePagingData: ({ count, limit, offset }: {
+      count: number,
+      limit: number,
+      offset: number,
+    }) => any,
+    composeUpsert: ({ data, method, type }: { data?: any, method?: string, type?: string }) => any,
+    throwOnNotFound: ({ id, data }: { id: string, data: any }) => void,
+  },
+}
+
+export default function model(deps: Dependencies) {
+  const { core, entities, postgres, utils } = deps
   const { Resource } = core
   const { ResourceEntity } = entities
   const { knex, throwOnDbError } = postgres
@@ -14,11 +38,11 @@ export default function model({ core, entities, helpers, postgres, utils }) {
    * @param {object} params.log   - repo logger
    * @return {object}
    */
-  return function DomainResourceModel({ log }) {
+  return function DomainResourceModel({ log }: { log: ScopedLogger }): Model {
     const type = Resource.DomainResource
 
     // create
-    async function create({ data }) {
+    async function create({ data }: { data: any }): Promise<RepoResult> {
       return knex.transaction(async (trx) => {
         try {
           const resourceInsert = utils.composeUpsert({ data, method: 'create', type })
@@ -27,19 +51,19 @@ export default function model({ core, entities, helpers, postgres, utils }) {
             .returning(ResourceEntity.fields)
 
           return { data: [{ type, record }] }
-        } catch (error) {
-          if (log.enabled === 'true') log.error(error)
+        } catch (error: DBError | any) {
+          if (log.enabled) log.error(error)
           return throwOnDbError({ error })
         }
       })
     }
 
     // destroy (delete)
-    async function destroy({ id }) {
+    async function destroy({ id }: { id: string }): Promise<void> {
       const [record] = await knex(ResourceEntity.table)
         .where(ResourceEntity.Field.Deleted, false)
         .where(ResourceEntity.Field.Id, id)
-      helpers.throwOnNotFound({ id, data: record })
+      utils.throwOnNotFound({ id, data: record })
 
       const destroyUpsert = utils.composeUpsert({ method: 'destroy' })
       await Bluebird.try(() => knex(ResourceEntity.table)
@@ -50,19 +74,19 @@ export default function model({ core, entities, helpers, postgres, utils }) {
     }
 
     // detail
-    async function detail({ id }) {
+    async function detail({ id }: { id: string }): Promise<RepoResult> {
       const [record] = await knex.from(ResourceEntity.table)
         .select(ResourceEntity.fields)
         .where(ResourceEntity.Field.Deleted, false)
         .where(ResourceEntity.Field.Id, id)
 
-      helpers.throwOnNotFound({ id, data: record })
+      utils.throwOnNotFound({ id, data: record })
 
       return { data: [{ type, record }] }
     }
 
     // list
-    async function list(params) {
+    async function list(params: { filters: any, page: any, sort: any }): Promise<RepoResult> {
       const { filters, page, sort } = params
 
       const { limit, offset } = page
@@ -79,7 +103,7 @@ export default function model({ core, entities, helpers, postgres, utils }) {
         .count(ResourceEntity.Field.Id)
         .where(ResourceEntity.Field.Deleted, false)
 
-      Object.entries(filters).forEach(([k, v]) => {
+      Object.entries(filters).forEach(([k, v]: [k: any, v: any]) => {
         query.where(k, v)
         totalQuery.where(k, v)
       })
@@ -88,13 +112,14 @@ export default function model({ core, entities, helpers, postgres, utils }) {
       const [{ count }] = await totalQuery
 
       const data = await Bluebird.map(resourceRecords, async (record) => ({ type, record }))
-      const meta = { paging: helpers.composePagingData({ count, limit, offset }) }
+      const meta = { paging: utils.composePagingData({ count, limit, offset }) }
 
       return { data, meta }
     }
 
     // update
-    async function update({ data, id }) {
+    async function update(params: { data: any, id: string }): Promise<RepoResult> {
+      const { data, id } = params
       let record
       try {
         const resourceUpdate = utils.composeUpsert({ data, type })
@@ -103,12 +128,12 @@ export default function model({ core, entities, helpers, postgres, utils }) {
           .update(resourceUpdate)
           .returning(ResourceEntity.fields)
         record = rec
-      } catch (error) {
-        if (log.enabled === 'true') log.error(error)
+      } catch (error: DBError | any) {
+        if (log.enabled) log.error(error)
         return throwOnDbError({ error })
       }
 
-      helpers.throwOnNotFound({ id, data: record })
+      utils.throwOnNotFound({ id, data: record })
 
       return { data: [{ type, record }] }
     }
@@ -121,7 +146,6 @@ export const inject = {
   require: {
     core: 'core',
     entities: 'entities',
-    helpers: 'repo/helpers',
     postgres: 'postgres',
     utils: 'repo/models/utils',
   },
