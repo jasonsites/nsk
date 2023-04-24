@@ -1,6 +1,6 @@
 /**
 * @file repo/models/index.ts
-* @overview repository models
+* @overview repository entity models
 */
 
 import type { CoreTypes, ScopedLogger } from '../../types/globals'

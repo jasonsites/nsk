@@ -1,6 +1,6 @@
 /**
-* @file repo/models/cycle-template.js
-* @overview cycle template model
+* @file repo/models/resource.ts
+* @overview resource entity model
 */
 
 import Bluebird from 'bluebird'
@@ -147,6 +147,6 @@ export const inject = {
     core: 'core',
     entities: 'entities',
     postgres: 'postgres',
-    utils: 'repo/models/utils',
+    utils: 'repo/models/utilities',
   },
 }

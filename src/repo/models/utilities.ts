@@ -1,6 +1,6 @@
 /**
 * @file repo/models/utils.ts
-* @overview repository upsert model utilities
+* @overview repository entity model utilities
 */
 
 import { Knex } from 'knex'
@@ -12,7 +12,7 @@ interface Dependencies {
   postgres: { knex: Knex },
 }
 
-export default function utils(deps: Dependencies) {
+export default function utilities(deps: Dependencies) {
   const { core, postgres } = deps
   const { NotFoundError, Resource } = core
   const { knex } = postgres

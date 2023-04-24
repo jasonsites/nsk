@@ -1,6 +1,6 @@
 /**
- * @file repo/entities/resource/index.js
- * @overview resource entity
+ * @file repo/entities/resource.ts
+ * @overview resource entity definition
  */
 
 import type { CreateFieldMapParams } from '../types'
