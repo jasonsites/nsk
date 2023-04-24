@@ -1,6 +1,6 @@
 /**
  * @file repo/entities/index.ts
- * @overview repository entities
+ * @overview repository entity definitions
  */
 
 import type { EntityData } from '../types'
