@@ -7,7 +7,7 @@ import config from 'config'
 
 import type { CoreTypes } from '../types/globals'
 
-// knex error object shim
+// TODO: outdated (knex) error object shim
 export type DBError = {
   code?: string
 }
@@ -25,6 +25,7 @@ export default function errors({ core }: Dependencies) {
     uniqueConstraintViolation,
   }: Record<string, string> = config.get('api.messages.error')
 
+  // TODO: outdated (knex) error codes
   function throwOnDbError({ error }: { error: DBError }) {
     switch (error.code) {
       case '23503': throw new ValidationError(relatedEntityMissing) // foreign_key_violation

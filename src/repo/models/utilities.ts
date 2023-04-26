@@ -3,19 +3,16 @@
 * @overview repository entity model utilities
 */
 
-import { Knex } from 'knex'
+import { sql } from 'kysely'
 
 import type { CoreTypes, PagingData } from '../../types/globals'
 
 interface Dependencies {
   core: CoreTypes,
-  postgres: { knex: Knex },
 }
 
 export default function utilities(deps: Dependencies) {
-  const { core, postgres } = deps
-  const { NotFoundError, Resource } = core
-  const { knex } = postgres
+  const { core: { NotFoundError, Resource } } = deps
 
   // list metadata for all models
   function composePagingData(params: {
@@ -54,7 +51,7 @@ export default function utilities(deps: Dependencies) {
   }
 
   function modified({ user_id }: { user_id: number }) {
-    return { modified_on: knex.fn.now(), modified_by: user_id }
+    return { modified_on: sql`now()`, modified_by: user_id }
   }
 
   function softDelete({ user_id }: { user_id: number }) {
@@ -95,6 +92,5 @@ export default function utilities(deps: Dependencies) {
 export const inject = {
   require: {
     core: 'core',
-    postgres: 'postgres',
   },
 }

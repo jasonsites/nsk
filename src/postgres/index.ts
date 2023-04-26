@@ -4,7 +4,11 @@
 */
 
 import config from 'config'
-import knexlib, { Knex } from 'knex'
+
+import { Pool } from 'pg'
+import { Kysely, PostgresDialect } from 'kysely'
+
+import type { Database } from '../types/database'
 
 interface Dependencies {
   errors: { throwOnDbError: (error: { error: { code: string } }) => void }
@@ -19,24 +23,23 @@ export default function postgres({ errors }: Dependencies) {
   }
 
   const conf: PostgresClientOptions = config.get('postgres.options')
-  const { client, connection, pool, version } = conf
+  const { connection, pool } = conf
 
-  const options = {
-    client,
-    connection: {
-      ...connection,
-      port: parseInt(connection.port, 10),
-    },
-    pool: {
-      max: parseInt(pool.max, 10),
-      min: parseInt(pool.min, 10),
-    },
-    version,
-  }
+  const db = new Kysely<Database>({
+    dialect: new PostgresDialect({
+      pool: new Pool({
+        database: connection.database,
+        host: connection.host,
+        max: parseInt(pool.max, 10),
+        min: parseInt(pool.min, 10),
+        password: connection.password,
+        port: parseInt(connection.port, 10),
+        user: connection.user,
+      }),
+    }),
+  })
 
-  const knex: Knex = knexlib(options)
-
-  return { ...errors, knex }
+  return { db, ...errors }
 }
 
 export const inject = {
