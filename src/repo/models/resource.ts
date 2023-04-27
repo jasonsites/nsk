@@ -6,7 +6,6 @@
 import Bluebird from 'bluebird'
 
 import { Kysely } from 'kysely'
-// import { repeat } from 'lodash'
 import type { EntityData, Model, RepoResult } from '../types'
 import type { DBError } from '../../postgres/errors'
 import type { CoreTypes, ScopedLogger } from '../../types/globals'
@@ -15,7 +14,7 @@ interface Dependencies {
   core: CoreTypes,
   entities: Record<string, EntityData>,
   postgres: {
-    db: Kysely<any>,
+    client: Kysely<any>,
     throwOnDbError: ({ error }: { error: DBError }) => void,
   },
   utils: {
@@ -33,7 +32,7 @@ export default function model(deps: Dependencies) {
   const { core, entities, postgres, utils } = deps
   const { Resource } = core
   const { ResourceEntity } = entities
-  const { db, throwOnDbError } = postgres
+  const { client, throwOnDbError } = postgres
 
   return function DomainResourceModel({ log }: { log: ScopedLogger }): Model {
     const type = Resource.DomainResource
@@ -41,7 +40,7 @@ export default function model(deps: Dependencies) {
     async function create({ data }: { data: any }): Promise<RepoResult> {
       try {
         const resourceInsert = utils.composeUpsert({ data, method: 'create', type })
-        const record = await db
+        const record = await client
           .insertInto(ResourceEntity.table)
           .values(resourceInsert)
           .returning(ResourceEntity.fields)
@@ -56,7 +55,7 @@ export default function model(deps: Dependencies) {
 
     async function destroy({ id }: { id: string }): Promise<void> {
       try {
-        const [record] = await db.selectFrom(ResourceEntity.table)
+        const [record] = await client.selectFrom(ResourceEntity.table)
           .select(ResourceEntity.fields)
           .where(ResourceEntity.Field.Deleted, '=', false)
           .where(ResourceEntity.Field.Id, '=', id)
@@ -64,7 +63,7 @@ export default function model(deps: Dependencies) {
         utils.throwOnNotFound({ id, data: record })
 
         const destroyUpsert = utils.composeUpsert({ method: 'destroy' })
-        await db
+        await client
           .updateTable(ResourceEntity.table)
           .set(destroyUpsert)
           .where(ResourceEntity.Field.Id, '=', id)
@@ -80,7 +79,7 @@ export default function model(deps: Dependencies) {
 
     async function detail({ id }: { id: string }): Promise<RepoResult> {
       try {
-        const [record] = await db.selectFrom(ResourceEntity.table)
+        const [record] = await client.selectFrom(ResourceEntity.table)
           .select(ResourceEntity.fields)
           .where(ResourceEntity.Field.Deleted, '=', false)
           .where(ResourceEntity.Field.Id, '=', id)
@@ -101,15 +100,15 @@ export default function model(deps: Dependencies) {
       const { order, prop } = sort
 
       try {
-        const query = db.selectFrom(ResourceEntity.table)
+        const query = client.selectFrom(ResourceEntity.table)
           .select(ResourceEntity.fields)
           .where(ResourceEntity.Field.Deleted, '=', false)
           .limit(limit)
           .offset(offset)
           .orderBy(prop, order)
 
-        const totalQuery = db.selectFrom(ResourceEntity.table)
-          .select(db.fn.countAll<number>().as('count'))
+        const totalQuery = client.selectFrom(ResourceEntity.table)
+          .select(client.fn.countAll<number>().as('count'))
           .where(ResourceEntity.Field.Deleted, '=', false)
 
         Object.entries(filters).forEach(([k, v]: [k: any, v: any]) => {
@@ -135,7 +134,7 @@ export default function model(deps: Dependencies) {
 
       try {
         const resourceUpdate = utils.composeUpsert({ data, type })
-        const record = await db
+        const record = await client
           .updateTable(ResourceEntity.table)
           .set(resourceUpdate)
           .where(ResourceEntity.Field.Id, '=', id)

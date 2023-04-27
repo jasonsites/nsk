@@ -7,11 +7,11 @@
     "node": ">=18.15.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
     "clean": "rm -rf dist/",
     "coverage": "nyc npm t",
     "dev": "nodemon -r tsconfig-paths/register",
-    "migrate": "echo 'replace with kysely custom migrator'",
+    "migrate": "npm run build && node dist/index.js migrate",
     "migrate:make": "echo 'replace with kysely custom migrator'",
     "lint": "eslint src test --ext .ts,.js",
     "release": "echo 'replace with `npm run clean && npm run build && npx standard-version` after v1.0.0'",

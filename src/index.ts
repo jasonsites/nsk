@@ -5,4 +5,5 @@
 
 import container from './container'
 
-container.load('http/app')
+if (process.argv[2] === 'migrate') container.load('postgres/migrator')
+else container.load('http/app')

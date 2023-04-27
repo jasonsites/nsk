@@ -3,48 +3,23 @@
 * @overview postgres client
 */
 
-import config from 'config'
-
-import { Pool } from 'pg'
-import { Kysely, PostgresDialect } from 'kysely'
-
-import type { Database } from '../types/database'
+import { Kysely } from 'kysely'
 
 interface Dependencies {
-  errors: { throwOnDbError: (error: { error: { code: string } }) => void }
+  client: Kysely<any>,
+  errors: { throwOnDbError: (error: { error: { code: string } }) => void },
 }
 
-export default function postgres({ errors }: Dependencies) {
-  type PostgresClientOptions = {
-    client: string
-    connection: { host: string; port: string; user: string; password: string; database: string }
-    pool: { max: string; min: string }
-    version: string
-  }
+export default function postgres(deps: Dependencies) {
+  const { client, errors } = deps
 
-  const conf: PostgresClientOptions = config.get('postgres.options')
-  const { connection, pool } = conf
-
-  const db = new Kysely<Database>({
-    dialect: new PostgresDialect({
-      pool: new Pool({
-        database: connection.database,
-        host: connection.host,
-        max: parseInt(pool.max, 10),
-        min: parseInt(pool.min, 10),
-        password: connection.password,
-        port: parseInt(connection.port, 10),
-        user: connection.user,
-      }),
-    }),
-  })
-
-  return { db, ...errors }
+  return { client, ...errors }
 }
 
 export const inject = {
   name: 'postgres',
   require: {
+    client: 'postgres/client',
     errors: 'postgres/errors',
   },
 }

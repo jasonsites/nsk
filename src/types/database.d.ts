@@ -1,14 +1,3 @@
-// import { Pool } from 'pg'
-// import {
-//   Kysely,
-//   PostgresDialect,
-//   Generated,
-//   ColumnType,
-//   Selectable,
-//   Insertable,
-//   Updateable,
-// } from 'kysely'
-
 
 export interface ResourceEntity {
   id: Generated<string> // uuid

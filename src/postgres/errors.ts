@@ -16,7 +16,7 @@ interface Dependencies {
   core: CoreTypes
 }
 
-export default function errors({ core }: Dependencies) {
+export default function postgresErrors({ core }: Dependencies) {
   const { ConflictError, ValidationError } = core
 
   const {
