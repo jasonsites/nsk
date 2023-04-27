@@ -1,9 +1,7 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.up = async function up(knex) {
-  const sql = `
+import { Kysely, sql } from 'kysely'
+
+export async function up(client: Kysely<any>): Promise<void> {
+  const raw = `
     CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
     -- Resource Entity
@@ -25,16 +23,10 @@ exports.up = async function up(knex) {
 
     CREATE INDEX resource_entity_status_idx ON resource_entity (status);
   `
-
-  await knex.raw(sql)
+  await sql.raw(raw).execute(client)
 }
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.down = async function down(knex) {
-  const sql = 'DROP TABLE IF EXISTS "resource_entity";'
-
-  await knex.raw(sql)
+export async function down(client: Kysely<any>): Promise<void> {
+  const raw = 'DROP TABLE IF EXISTS "resource_entity";'
+  await sql.raw(raw).execute(client)
 }

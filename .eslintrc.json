@@ -7,7 +7,7 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "globals": {},
-  "ignorePatterns": ["/dist/**/*.js", "/knexfile.js", "/node_modules/**/*.js"],
+  "ignorePatterns": ["/database/**/*.js", "/dist/**/*.js", "/node_modules/**/*.js"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {"ecmaVersion": 2022},
   "plugins": ["@typescript-eslint"],

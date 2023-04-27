@@ -3,45 +3,23 @@
 * @overview postgres client
 */
 
-import config from 'config'
-import knexlib, { Knex } from 'knex'
+import { Kysely } from 'kysely'
 
 interface Dependencies {
-  errors: { throwOnDbError: (error: { error: { code: string } }) => void }
+  client: Kysely<any>,
+  errors: { throwOnDbError: (error: { error: { code: string } }) => void },
 }
 
-export default function postgres({ errors }: Dependencies) {
-  type PostgresClientOptions = {
-    client: string
-    connection: { host: string; port: string; user: string; password: string; database: string }
-    pool: { max: string; min: string }
-    version: string
-  }
+export default function postgres(deps: Dependencies) {
+  const { client, errors } = deps
 
-  const conf: PostgresClientOptions = config.get('postgres.options')
-  const { client, connection, pool, version } = conf
-
-  const options = {
-    client,
-    connection: {
-      ...connection,
-      port: parseInt(connection.port, 10),
-    },
-    pool: {
-      max: parseInt(pool.max, 10),
-      min: parseInt(pool.min, 10),
-    },
-    version,
-  }
-
-  const knex: Knex = knexlib(options)
-
-  return { ...errors, knex }
+  return { client, ...errors }
 }
 
 export const inject = {
   name: 'postgres',
   require: {
+    client: 'postgres/client',
     errors: 'postgres/errors',
   },
 }

@@ -12,7 +12,7 @@ const container = new Container({
 
 container.glob('**/*.+(js|ts)', {
   cwd: __dirname,
-  ignore: ['container.js', 'container.ts', 'index.js', 'index.ts'],
+  ignore: ['container.js', 'index.js', 'postgres/migrations/*'],
 })
 
 export default container
