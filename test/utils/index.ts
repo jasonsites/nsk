@@ -11,7 +11,7 @@ export async function bootstrap() {
  * @param  {Object} modules - module map
  * @return {Promise}
  */
-export async function loadModules(modules) {
+export async function loadModules(ctx: Mocha.Context, modules: { [key: string]: string }) {
   const mods = await container.load(modules)
-  extend(this, mods)
+  extend(ctx, mods) // ignore ts error
 }
