@@ -5,6 +5,7 @@
   "extension": [".ts"],
   "include": ["src/**/*.ts"],
   "lines": 0,
+  "report-dir": "./test/coverage",
   "reporter": ["lcov", "text-summary"],
-  "temp-directory": "./coverage/.nyc_output"
+  "temp-directory": "./test/coverage/output"
 }
