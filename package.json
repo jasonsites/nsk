@@ -7,14 +7,14 @@
     "node": ">=18.15.0"
   },
   "scripts": {
-    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "build": "npm run clean && tsc -p tsconfig.json",
     "clean": "rm -rf dist/",
     "coverage": "nyc npm t",
     "dev": "nodemon -r tsconfig-paths/register",
     "migrate": "npm run build && node dist/index.js migrate",
     "migrate:make": "node database/make.js",
     "lint": "eslint src test --ext .ts,.js",
-    "release": "echo 'replace with `npm run clean && npm run build && npx standard-version` after v1.0.0'",
+    "release": "echo 'replace with `npm run build && npx standard-version` after v1.0.0'",
     "start": "node dist/index.js",
     "test": "mocha 'test/tests/**/*.test.ts'"
   },
