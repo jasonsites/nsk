@@ -10,11 +10,13 @@ import assertions from '../../assertions'
 import chance from '../../../fixtures'
 import { bootstrap, loadModules } from '../../../utils'
 
+import type { APIResponseSolo, APIResponseErrors } from '../../../types'
+
 describe('[integration] POST /{namespace}/resources', function () {
   before('load modules', async function () {
     this.timeout(30000)
     await bootstrap()
-    await loadModules.call(this, { app: 'http/app', core: 'core' })
+    await loadModules(this, { app: 'http/app', core: 'core' })
     this.namespace = config.get('api.namespace')
     this.request = agent(createServer(this.app.callback()))
     this.sandbox = sinon.createSandbox()
@@ -35,7 +37,7 @@ describe('[integration] POST /{namespace}/resources', function () {
         .post(`/${namespace}/resources`)
         .send(body)
         .expect(status)
-        .then(({ body: actual }) => {
+        .then(({ body: actual }: { body: APIResponseErrors }) => {
           const expectations = [{
             detail: '"data" is required',
             pointer: '/data',
@@ -64,13 +66,13 @@ describe('[integration] POST /{namespace}/resources', function () {
       const { core, namespace } = this
 
       const body = chance.domainResourceBody(core)
-      const expected = { id: 1, ...body.data }
+      const expected = { ...body.data }
 
       return this.request
         .post(`/${namespace}/resources`)
         .send(body)
         .expect(201)
-        .then(({ body: actual }) => {
+        .then(({ body: actual }: { body: APIResponseSolo }) => {
           const resource = () => assertions.api.assertDomainResource({
             actual: actual.data,
             expected,

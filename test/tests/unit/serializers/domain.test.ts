@@ -8,7 +8,7 @@ import { loadModules } from '../../../utils'
 describe('[unit] http.serializers.domain', function () {
   before('load modules', async function () {
     this.timeout(30000)
-    await loadModules.call(this, { core: 'core', serializers: 'serializers' })
+    await loadModules(this, { core: 'core', serializers: 'serializers' })
   })
 
   it('should serialize a single domain resource', function () {

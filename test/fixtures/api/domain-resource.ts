@@ -1,18 +1,26 @@
 import chance from '../chance'
 
-export function domainResource(core, params: any = {}) {
+import type { CoreTypes } from '../../../src/types/globals'
+
+export function domainResource(core: CoreTypes, params: any = {}) {
   const defaults = {
-    name: chance.word(),
+    description: chance.sentence(),
+    enabled: chance.bool(),
+    status: chance.integer({ min: 0, max: 4 }),
+    title: chance.word({ length: 8 }),
   }
 
   params = { ...defaults, ...params }
 
-  const { id, name } = params
+  const { description, enabled, id, status, title } = params
 
   const resource: any = {
     type: core.Resource.DomainResource,
     properties: {
-      name,
+      description,
+      enabled,
+      status,
+      title,
     },
   }
 
@@ -21,6 +29,6 @@ export function domainResource(core, params: any = {}) {
   return resource
 }
 
-export function domainResourceBody(core, params = {}) {
+export function domainResourceBody(core: CoreTypes, params = {}) {
   return { data: domainResource(core, params) }
 }

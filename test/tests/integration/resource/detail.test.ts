@@ -10,14 +10,18 @@ import assertions from '../../assertions'
 import chance from '../../../fixtures'
 import { bootstrap, loadModules } from '../../../utils'
 
+import type { APIResponseSolo, APIResponseErrors } from '../../../types'
+
 describe('[integration] GET /{namespace}/resources/{id}', async function () {
   before('load modules', async function () {
     this.timeout(30000)
     await bootstrap()
-    await loadModules.call(this, {
+    await loadModules(this, {
       api: 'api/example',
       app: 'http/app',
       core: 'core',
+      entities: 'entities',
+      postgres: 'postgres',
       service: 'services/example',
     })
     this.namespace = config.get('api.namespace')
@@ -41,7 +45,7 @@ describe('[integration] GET /{namespace}/resources/{id}', async function () {
       return this.request
         .get(`/${namespace}/resources/${id}`)
         .expect(status)
-        .then(({ body: actual }) => {
+        .then(({ body: actual }: { body: APIResponseErrors }) => {
           const expectations = [{
             detail: 'validation error',
             status,
@@ -60,19 +64,29 @@ describe('[integration] GET /{namespace}/resources/{id}', async function () {
 
   describe('success states', function () {
     it('succeeds (200) with valid payload', async function () {
-      const { core, namespace } = this
+      const { core, entities, namespace, postgres } = this
 
-      const id = 99
-      const body = chance.domainResourceBody(core, { id, name: 'example' })
+      const resourceModel = chance.domainResourceRecord()
+      const record = await postgres.client
+        .insertInto(entities.ResourceEntity.table)
+        .values(resourceModel)
+        .returning(entities.ResourceEntity.fields)
+        .executeTakeFirstOrThrow()
+
+      this.sandbox.stub(this.api, 'client').resolves({ data: {} })
+
+      const { id } = record
+      const expected = { record }
       const status = 200
 
       return this.request
         .get(`/${namespace}/resources/${id}`)
         .expect(status)
-        .then(({ body: actual }) => {
-          const resource = () => assertions.api.assertDomainResource({
+        .then(({ body: actual }: { body: APIResponseSolo }) => {
+          const resource = () => assertions.serializer.assertDomainResource({
             actual: actual.data,
-            expected: body.data,
+            core,
+            expected,
           })
           assertions.common.assertSolo({ actual, resource })
         })

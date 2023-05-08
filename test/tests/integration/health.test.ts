@@ -8,11 +8,13 @@ import { agent } from 'supertest'
 import assertions from '../assertions'
 import { bootstrap, loadModules } from '../../utils'
 
+import type { APIResponseHealthCheck } from '../../types'
+
 describe('[integration] /{namespace}/health', function () {
   before('load modules', async function () {
     this.timeout(30000)
     await bootstrap()
-    await loadModules.call(this, { app: 'http/app' })
+    await loadModules(this, { app: 'http/app' })
     this.namespace = config.get('api.namespace')
     this.request = agent(createServer(this.app.callback()))
   })
@@ -24,7 +26,7 @@ describe('[integration] /{namespace}/health', function () {
       return Bluebird.try(() => this.request
         .get(`/${namespace}/health`)
         .expect(200)
-        .then(({ body: actual }) => {
+        .then(({ body: actual }: { body: APIResponseHealthCheck }) => {
           assertions.common.assertHealthCheck({ actual })
         }))
     })

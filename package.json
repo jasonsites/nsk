@@ -7,14 +7,14 @@
     "node": ">=18.15.0"
   },
   "scripts": {
-    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "build": "npm run clean && tsc -p tsconfig.json",
     "clean": "rm -rf dist/",
     "coverage": "nyc npm t",
     "dev": "nodemon -r tsconfig-paths/register",
     "migrate": "npm run build && node dist/index.js migrate",
     "migrate:make": "node database/make.js",
     "lint": "eslint src test --ext .ts,.js",
-    "release": "echo 'replace with `npm run clean && npm run build && npx standard-version` after v1.0.0'",
+    "release": "echo 'replace with `npm run build && npx standard-version` after v1.0.0'",
     "start": "node dist/index.js",
     "test": "mocha 'test/tests/**/*.test.ts'"
   },
@@ -68,8 +68,8 @@
     "@types/koa-compress": "^4.0.3",
     "@types/koa-router": "^7.4.4",
     "@types/lodash": "^4.14.191",
+    "@types/lodash.assignin": "^4.2.7",
     "@types/mocha": "^10.0.1",
-    "@types/moment": "^2.13.0",
     "@types/node": "^18.15.5",
     "@types/pg": "^8.6.6",
     "@types/qs": "^6.9.7",

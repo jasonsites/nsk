@@ -34,7 +34,7 @@ export default function utilities(deps: Dependencies) {
    */
   function composeUpsert(params: { data: any, method: string, type: string }) {
     const { data, method = 'update', type } = params
-    const user_id = 9999 // TODO: get from context
+    const user_id = 1 // TODO: get from context
 
     // destroy
     if (method === 'destroy') return softDelete({ user_id })
