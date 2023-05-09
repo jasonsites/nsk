@@ -1,18 +1,12 @@
 /**
- * @file http/controllers/domain.ts
- * @overview controller for domain routes
+ * @file controller (http routes handlers)
  */
 
 import { Context } from 'koa'
 
-type Controller = {
-  create: (ctx: Context) => Promise<void>
-  destroy: (ctx: Context) => Promise<void>
-  detail: (ctx: Context) => Promise<void>
-  list: (ctx: Context) => Promise<void>
-  update: (ctx: Context) => Promise<void>
-}
+import { Controller } from '../types'
 
+// TODO: types
 interface Dependencies {
   domain: any,
   serializers: any,

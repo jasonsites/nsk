@@ -1,9 +1,8 @@
 /**
- * @file repo/entities/index.ts
- * @overview repository entity definitions
+ * @file entity definitions
  */
 
-import type { EntityData } from '../types'
+import type { EntityData } from './types'
 
 interface Dependencies {
   entities: Record<string, EntityData>

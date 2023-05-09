@@ -1,11 +1,11 @@
 /**
- * @file http/serializers/index.js
- * @overview http response serializers
+ * @file http response serializers
  */
 
 import { get } from 'lodash'
 
-import type { CoreTypes, PagingData } from '../types/globals'
+import type { CoreTypes } from '../types/core'
+import type { PagingData } from '../types/pagination'
 
 interface Dependencies {
   core: CoreTypes,

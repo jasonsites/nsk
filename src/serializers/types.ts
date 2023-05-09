@@ -1,8 +1,8 @@
 /**
- * @file http/serializers/types.ts
- * @overview
+ * @file serializer types
  */
 
+// TODO: wtf
 type DomainResource = {
   id: string,
   title: string,

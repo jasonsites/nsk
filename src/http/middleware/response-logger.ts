@@ -1,12 +1,11 @@
 /**
- * @file http/middleware/response-logger.ts
- * @overview http response logger
+ * @file http response logger
  */
 
 import config from 'config'
 
 import type { Context, Next } from 'koa'
-import { LoggerConfiguration } from '../../types/globals'
+import { LoggerConfiguration } from '../../types/logger'
 
 export default function middleware() {
   return async function responseLogger(ctx: Context, next: Next) {

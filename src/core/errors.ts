@@ -1,9 +1,8 @@
 /**
- * @file core/errors.ts
- * @overview application errors
+ * @file custom application errors
  */
 
-import type { ErrorTypes } from '../types/globals'
+import type { ErrorTypes } from '../types/core'
 
 export default function errors(): ErrorTypes {
   const ErrorType: Record<string, string> = {

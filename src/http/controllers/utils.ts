@@ -1,20 +1,20 @@
 /**
- * @file http/controllers/utils.ts
- * @overview controller utilities
+ * @file controller utilities
  */
 
 import config from 'config'
 import qs from 'qs'
 
 import type { ParsedQs } from 'qs'
-import type { ApiConfiguration } from '../../types/globals'
+import type { DefaultOrder, SortingData } from '../../types/pagination'
+import type { ApiConfiguration } from '../types'
 
 export default function utils() {
   const { paging, sorting }: ApiConfiguration = config.get('api')
   const { defaultLimit, defaultOffset } = paging
   const { defaultOrder, defaultProp } = sorting
 
-  function pageSettings(params: { limit?: string, offset?: string } = {}) {
+  function pageSettings(params: { limit?: string; offset?: string; } = {}) {
     const { limit, offset } = params
 
     let parsedLimit = limit ? parseInt(limit, 10) : defaultLimit
@@ -30,13 +30,13 @@ export default function utils() {
     return qs.parse(querystring)
   }
 
-  function sortSettings(params: { order?: string, prop?: string } = {}) {
-    const { prop = defaultProp } = params
-    let { order = defaultOrder } = params
+  function sortSettings(params: { order?: DefaultOrder; prop?: string; } = {}): SortingData {
+    const { order, prop } = params
 
-    order = (order === 'desc' || order === 'asc') ? order : defaultOrder
+    const o: DefaultOrder = order || defaultOrder
+    const p: string = prop || defaultProp
 
-    return { order, prop }
+    return { order: o, prop: p }
   }
 
   function transformQuery(query: { f: object, p: object, s: object}) {

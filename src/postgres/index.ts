@@ -1,6 +1,5 @@
 /**
-* @file postgres/index.ts
-* @overview postgres client
+* @file postgres module
 */
 
 import { Kysely } from 'kysely'

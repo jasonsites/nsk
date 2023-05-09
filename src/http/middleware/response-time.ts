@@ -1,6 +1,5 @@
 /**
- * @file http/middleware/response-time.ts
- * @overview http response time tracker
+ * @file http response time tracker
  */
 
 import type { Context, Next } from 'koa'

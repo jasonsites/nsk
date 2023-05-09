@@ -1,11 +1,11 @@
 /**
-* @file repo/models/utils.ts
-* @overview repository entity model utilities
+* @file repository entity model utilities
 */
 
 import { sql } from 'kysely'
 
-import type { CoreTypes, PagingData } from '../../types/globals'
+import type { CoreTypes } from '../../types/core'
+import type { PagingData } from '../../types/pagination'
 
 interface Dependencies {
   core: CoreTypes,

@@ -1,15 +1,16 @@
 /**
- * @file core/index.ts
- * @overview common structures to be used across layers
+ * @file common structures to be used across application layers
  */
 
-import type { CoreTypes, ErrorTypes } from '../types/globals'
+import type { CoreTypes, ErrorTypes } from '../types/core'
 
 interface Dependencies {
   errors: ErrorTypes
 }
 
-export default function core({ errors }: Dependencies): CoreTypes {
+export default function core(deps: Dependencies): CoreTypes {
+  const { errors } = deps
+
   const Resource = {
     DomainResource: 'resource',
   }

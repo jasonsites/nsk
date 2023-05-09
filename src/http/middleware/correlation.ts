@@ -1,6 +1,5 @@
 /**
- * @file http/middleware/correlation.ts
- * @overview composes correlation object from tracing headers
+ * @file composes correlation object from tracing headers
  */
 
 import config from 'config'

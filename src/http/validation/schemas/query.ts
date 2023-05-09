@@ -1,17 +1,17 @@
 /**
- * @file http/validation/schemas/query.js
- * @overview query schemas
+ * @file query schemas
  */
 
 import joi from 'joi'
-import { CoreTypes } from '../../../types/globals'
+
+import type { CoreTypes } from '../../../types/core'
 
 interface Dependencies {
   core: CoreTypes,
 }
 
-export default function query({ core }: Dependencies) {
-  const { Resource } = core
+export default function query(deps: Dependencies) {
+  const { core: { Resource } } = deps
 
   const allowedOptionTypes: string[] = []
   const allowedSortTypes: string[] = []

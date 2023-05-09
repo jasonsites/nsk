@@ -1,21 +1,17 @@
 /**
- * @file repo/entities/resource.ts
- * @overview resource entity definition
+ * @file resource entity definition
  */
 
-import type { CreateFieldMapParams } from '../types'
+import type { EntityUtilities } from './types'
 
 interface Dependencies {
-  common: {
-    CreateFieldMap: ({ attributes, entity }: CreateFieldMapParams) => Record<string, string>
-    Entity: Record<string, string>
-  }
+  utils: EntityUtilities
 }
 
-export default function resource({ common }: Dependencies) {
-  const { CreateFieldMap, Entity } = common
+export default function resource({ utils }: Dependencies) {
+  const { createFieldMap, Entity } = utils
 
-  const Attribute: Record<string, string> = {
+  const attributeSchema: Record<string, string> = {
     CreatedBy: 'created_by',
     CreatedOn: 'created_on',
     Deleted: 'deleted',
@@ -28,7 +24,7 @@ export default function resource({ common }: Dependencies) {
     Title: 'title',
   }
 
-  const Field = CreateFieldMap({ attributes: Attribute, entity: Entity.Resource })
+  const Field = createFieldMap({ attributes: attributeSchema, entity: Entity.Resource })
   const fields = Object.values(Field)
   const table = Entity.Resource
 
@@ -37,6 +33,6 @@ export default function resource({ common }: Dependencies) {
 
 export const inject = {
   require: {
-    common: 'repo/entities/common',
+    utils: 'repo/entities/utils',
   },
 }

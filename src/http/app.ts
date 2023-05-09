@@ -1,13 +1,12 @@
 /**
- * @file http/app.ts
- * @overview http server
+ * @file http server application
  */
 
 import config from 'config'
 import Koa from 'koa'
 
 import type Logger from 'bunyan'
-import type { ApiConfiguration, HttpServer } from '../types/globals'
+import type { ApiConfiguration, HttpServer } from './types'
 
 interface Dependencies {
   logger: Logger,

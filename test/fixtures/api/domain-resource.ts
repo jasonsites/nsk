@@ -1,6 +1,6 @@
 import chance from '../chance'
 
-import type { CoreTypes } from '../../../src/types/globals'
+import type { CoreTypes } from '../../../src/types/core'
 
 export function domainResource(core: CoreTypes, params: any = {}) {
   const defaults = {

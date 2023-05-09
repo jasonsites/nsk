@@ -1,6 +1,5 @@
 /**
- * @file container.ts
- * @overview dependency injection container
+ * @file dependency injection container
  */
 
 import Container from 'app-container'
@@ -25,11 +24,18 @@ container.glob('**/*.+(js|ts)', {
     */
     'container.ts',
     'index.ts',
-    'http/validation/schemas/types.d.ts',
-    'repo/types.d.ts',
+    'http/types.d.ts',
+    'http/validation/types.d.ts',
+    'repo/entities/types.d.ts',
+    'repo/models/types.d.ts',
+    'types/core.d.ts',
     'types/database.d.ts',
-    'types/globals.d.ts',
+    'types/logger.d.ts',
     'types/packages.d.ts',
+    'types/pagination.d.ts',
+    'types/postgres.d.ts',
+    'types/repository.d.ts',
+    'types/services.d.ts',
   ],
 })
 

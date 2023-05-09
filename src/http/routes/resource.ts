@@ -1,13 +1,14 @@
 /**
- * @file http/routes/resource.ts
- * @overview example resource router
+ * @file example resource router
  */
 
 import config from 'config'
 import Router from 'koa-router'
 
-import type { ApiConfiguration, CoreTypes } from '../../types/globals'
+import type { CoreTypes } from '../../types/core'
+import type { ApiConfiguration } from '../types'
 
+// TODO: types
 interface Dependencies {
   controller: any,
   core: CoreTypes,

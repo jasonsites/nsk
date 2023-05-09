@@ -1,12 +1,11 @@
 /**
- * @file validation/schemas/domain.ts
- * @overview domain schemas
+ * @file resource schema
  */
 
 import joi from 'joi'
 
-import type { BodyHandler, DataSchema, HTTPBodyMethod } from '../types'
-import type { CoreTypes } from '../../../../types/globals'
+import type { BodyHandler, DataSchema, HTTPBodyMethod } from '../../types'
+import type { CoreTypes } from '../../../../types/core'
 
 interface Dependencies {
   body: BodyHandler,

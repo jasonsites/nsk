@@ -1,22 +1,30 @@
 /**
- * @file validation/index.ts
- * @overview schema validation
+ * @file schema validation
  */
 
 import config from 'config'
 import joi from 'joi'
 
 import type Logger from 'bunyan'
-import type { CoreTypes, Correlation, LoggerConfiguration, ScopedLogger } from '../../types/globals'
-import { HTTPBodyMethod } from './schemas/types'
+import type { CoreTypes, Correlation } from '../../types/core'
+import type { LoggerConfiguration, ScopedLogger } from '../../types/logger'
+import type { HTTPBodyMethod, ValidationSchemas } from './types'
+
+// TODO: types
+type ErrorBuilder = {
+  details: {
+    status: number
+    source: { pointer: string }
+    title: string
+    detail: string
+  }[]
+  messages: string[]
+}
 
 interface Dependencies {
-  core: CoreTypes,
-  logger: Logger,
-  schemas: {
-    bodySchema: (params: { method: HTTPBodyMethod, type: string }) => joi.ObjectSchema<unknown>
-    querySchema: (params: { list: boolean, type: string }) => joi.ObjectSchema<unknown>
-  },
+  core: CoreTypes
+  logger: Logger
+  schemas: ValidationSchemas
 }
 
 export default function validation(deps: Dependencies) {
@@ -28,10 +36,11 @@ export default function validation(deps: Dependencies) {
   return {
     context: (correlation: Correlation) => {
       const { req_id } = correlation
+
       const log: ScopedLogger = logger.child({ module: label, req_id, level })
       log.enabled = enabled
 
-      function composeValidationError(params: TempErrorBuilder) {
+      function composeValidationError(params: ErrorBuilder) {
         const { details, messages } = params
 
         const error = new ValidationError(messages.join(', '))
@@ -39,23 +48,13 @@ export default function validation(deps: Dependencies) {
         return error
       }
 
-      type ErrorData = {
-        status: number,
-        source: { pointer: string },
-        title: string,
-        detail: string,
-      }
+      function formatBasicValidationErrors(params: { error: joi.ValidationError }) {
+        const { error } = params
 
-      type TempErrorBuilder = {
-        details: ErrorData[],
-        messages: string[],
-      }
-
-      function formatBasicValidationErrors({ error }: { error: joi.ValidationError }) {
         if (!error || !error.isJoi || !Array.isArray(error.details)) {
           throw new Error('unknown validation error')
         }
-        return error.details.reduce((memo: TempErrorBuilder, detail: joi.ValidationErrorItem) => {
+        return error.details.reduce((memo: ErrorBuilder, detail: joi.ValidationErrorItem) => {
           const { message, path } = detail
           memo.messages.push(message)
           const data = {
@@ -69,7 +68,9 @@ export default function validation(deps: Dependencies) {
         }, { details: [], messages: [] })
       }
 
-      function throwOnInvalid({ errors }: { errors: TempErrorBuilder }) {
+      function throwOnInvalid(params: { errors: ErrorBuilder }) {
+        const { errors } = params
+
         if (errors.details.length) {
           const err = composeValidationError(errors)
           if (log.enabled) log.error(`${err.message}`)
@@ -77,20 +78,20 @@ export default function validation(deps: Dependencies) {
         }
       }
 
-      function validateBody(params: { body: object, method: HTTPBodyMethod, type: string}): void {
+      function validateBody(params: { body: object; method: HTTPBodyMethod; type: string; }): void {
         const { body, method, type } = params
 
         const schema = schemas.bodySchema({ method, type })
         const options = { abortEarly: false }
         const { error } = schema.validate(body, options)
 
-        const errors: TempErrorBuilder = error
+        const errors: ErrorBuilder = error
           ? formatBasicValidationErrors({ error })
           : { details: [], messages: [] }
         throwOnInvalid({ errors })
       }
 
-      function validateQuery(params: { list: boolean, query: string, type: string }): void {
+      function validateQuery(params: { list: boolean; query: string; type: string; }): void {
         const { list, query, type } = params
 
         const schema = schemas.querySchema({ list, type })

@@ -1,13 +1,13 @@
 /**
- * @file services/example.ts
- * @overview example service
+ * @file example service
  */
 
 import config from 'config'
 
 import type Logger from 'bunyan'
 import type { AxiosInstance } from 'axios'
-import type { Correlation, LoggerConfiguration } from '../types/globals'
+import type { Correlation } from '../types/core'
+import type { LoggerConfiguration } from '../types/logger'
 
 interface Dependencies {
   api: { client: AxiosInstance },

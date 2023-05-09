@@ -1,13 +1,12 @@
 /**
- * @file http/routes/health.ts
- * @overview healthcheck router
+ * @file healthcheck router
  */
 
 import config from 'config'
 import Router from 'koa-router'
 
 import type { Context } from 'koa'
-import type { ApiConfiguration } from '../../types/globals'
+import type { ApiConfiguration } from '../types'
 
 export default function route(): Router {
   const { namespace }: ApiConfiguration = config.get('api')

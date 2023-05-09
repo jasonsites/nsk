@@ -1,13 +1,12 @@
 /**
- * @file http/middleware/error-handler.ts
- * @overview http error handler
+ * @file http error handler
  */
 
 import { badRequest, boomify, conflict, forbidden, notFound, unauthorized } from '@hapi/boom'
 
 import type Boom from 'boom'
 import type { Context, Next } from 'koa'
-import type { CoreTypes, CustomError } from '../../types/globals'
+import type { CoreTypes, CustomError } from '../../types/core'
 
 type AugmentedBoom = Boom<unknown> & { details?: object[], type: string }
 
@@ -15,8 +14,8 @@ interface Dependencies {
   core: CoreTypes,
 }
 
-export default function middleware({ core }: Dependencies) {
-  const { ErrorType } = core
+export default function middleware(deps: Dependencies) {
+  const { core: { ErrorType } } = deps
 
   return async function errorHandler(ctx: Context, next: Next) {
     try {

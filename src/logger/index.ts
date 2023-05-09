@@ -1,12 +1,11 @@
 /**
- * @file logger/index.ts
- * @overview application (base) logger
+ * @file (base) application logger
  */
 
 import Logger, { LoggerOptions, createLogger } from 'bunyan'
 import config from 'config'
 
-import type { LoggerConfiguration } from '../types/globals'
+import type { LoggerConfiguration } from '../types/logger'
 
 const {
   npm_package_name: name = 'unknown',

@@ -1,13 +1,14 @@
 /**
- * @file repo/index.ts
- * @overview repository
+ * @file repository interface
  */
 
 import Logger from 'bunyan'
 import config from 'config'
 
-import type { ScopedLogger, Correlation, LoggerConfiguration, Repository } from '../types/globals'
-import type { Model, RepoResult } from './types'
+import type { Correlation } from '../types/core'
+import type { ScopedLogger, LoggerConfiguration } from '../types/logger'
+import type { Repository } from '../types/repository'
+import type { Model, RepoResult } from './models/types'
 
 interface Dependencies {
   logger: Logger

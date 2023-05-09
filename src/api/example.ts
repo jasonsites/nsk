@@ -1,13 +1,15 @@
 /**
- * @file api/example.ts
- * @overview example service client
- * NOTE: this module (dir and filename) should be renamed to reflect the actual service client
+ * @file example service client
+ * NOTE: this module (directory & filename) should be renamed to reflect an actual service client
  */
 
 import axios from 'axios'
 import config from 'config'
 
-import type { ExampleServiceConfiguration } from '../types/globals'
+type ExampleServiceConfiguration = {
+  baseURL: string
+  timeout: number
+}
 
 export default function service() {
   const options: ExampleServiceConfiguration = config.get('services.example.api')

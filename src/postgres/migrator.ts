@@ -1,6 +1,5 @@
 /**
-* @file postgres/migrator.ts
-* @overview postgres migrator
+* @file postgres migrator
 */
 
 import * as path from 'path'
@@ -23,7 +22,7 @@ export default function postgresMigrator({ db }: Dependencies) {
   })
 
   async function migrateToLatest() {
-    console.log('migrating to latest')
+    console.log('migrating to latest') // TODO: logger
 
     const { error, results } = await migrator.migrateToLatest()
 

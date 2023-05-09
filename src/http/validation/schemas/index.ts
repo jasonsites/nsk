@@ -1,10 +1,9 @@
 /**
- * @file validation/schemas/index.ts
- * @overview validation schemas
+ * @file validation schemas
  */
 
-import type { CoreTypes } from '../../../types/globals'
-import { BodySchemaGetter, HTTPBodyMethod, QueryHandler } from './types'
+import type { CoreTypes } from '../../../types/core'
+import { BodySchemaGetter, HTTPBodyMethod, QueryHandler } from '../types'
 
 interface Dependencies {
   core: CoreTypes,

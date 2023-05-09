@@ -1,10 +1,10 @@
 /**
-* @file repo/models/index.ts
-* @overview repository entity models
+* @file repository entity models
 */
 
-import type { CoreTypes, ScopedLogger } from '../../types/globals'
-import type { Model } from '../types'
+import type { CoreTypes } from '../../types/core'
+import type { ScopedLogger } from '../../types/logger'
+import type { Model } from './types'
 
 interface Dependencies {
   core: CoreTypes,

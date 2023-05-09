@@ -1,6 +1,5 @@
 /**
-* @file postgres/index.ts
-* @overview postgres client
+* @file postgres client
 */
 
 import config from 'config'

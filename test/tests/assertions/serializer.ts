@@ -6,7 +6,7 @@ import chaiUUID from 'chai-uuid'
 
 import { assertValidDatetimeISO } from './common'
 
-import type { CoreTypes } from '../../../src/types/globals'
+import type { CoreTypes } from '../../../src/types/core'
 
 const { expect } = chai
 chai.use(chaiUUID)
