@@ -21,6 +21,11 @@ export type Controller = {
   update: (ctx: Context) => Promise<void>
 }
 
+export type HttpRouter = {
+  configureMiddleware: (app: HttpServer) => void,
+  registerRoutes: (app: HttpServer) => void,
+}
+
 export type HttpServer = Koa & { initialize: () => Promise<void> }
 
-export type Middleware = (ctx: Context, next: Next) => Promise<void>
+export type MiddlewareLocalType = { localType: (params: { type: string }) => Middleware }

@@ -2,9 +2,9 @@
  * @file http response time tracker
  */
 
-import type { Context, Next } from 'koa'
+import type { Context, Middleware, Next } from 'koa'
 
-export default function middleware() {
+export default function middleware(): Middleware {
   return async function responseTime(ctx: Context, next: Next) {
     const start = Date.now()
     await next()

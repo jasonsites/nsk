@@ -5,7 +5,7 @@
 import { badRequest, boomify, conflict, forbidden, notFound, unauthorized } from '@hapi/boom'
 
 import type Boom from 'boom'
-import type { Context, Next } from 'koa'
+import type { Context, Middleware, Next } from 'koa'
 import type { CoreTypes, CustomError } from '../../types/core'
 
 type AugmentedBoom = Boom<unknown> & { details?: object[], type: string }
@@ -14,7 +14,7 @@ interface Dependencies {
   core: CoreTypes,
 }
 
-export default function middleware(deps: Dependencies) {
+export default function middleware(deps: Dependencies): Middleware {
   const { core: { ErrorType } } = deps
 
   return async function errorHandler(ctx: Context, next: Next) {

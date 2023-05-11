@@ -4,15 +4,16 @@
  */
 
 import type { Correlation } from '../types/core'
-import type { RepositoryModule, Repository } from '../types/repository'
+import type { DomainModule } from '../types/domain'
 import type { ExternalService } from '../types/services'
+import type { RepositoryModule, Repository } from '../types/repository'
 
 interface Dependencies {
   repo: RepositoryModule
   services: { example: ExternalService }
 }
 
-export default function domain(deps: Dependencies) {
+export default function domain(deps: Dependencies): DomainModule {
   const { repo, services } = deps
   const { example } = services
 

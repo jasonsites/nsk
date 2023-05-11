@@ -15,7 +15,7 @@ export type PagingDefaults = {
   defaultOffset: number
 }
 
-export type SortingData = {
+export type SortSettings = {
   order: DefaultOrder
   prop: string
 }

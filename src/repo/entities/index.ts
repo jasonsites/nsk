@@ -8,7 +8,7 @@ interface Dependencies {
   entities: Record<string, EntityData>
 }
 
-export default function index({ entities }: Dependencies) {
+export default function index({ entities }: Dependencies): Record<string, EntityData> {
   return entities
 }
 

@@ -8,18 +8,7 @@ import joi from 'joi'
 import type Logger from 'bunyan'
 import type { CoreTypes, Correlation } from '../../types/core'
 import type { LoggerConfiguration, ScopedLogger } from '../../types/logger'
-import type { HTTPBodyMethod, ValidationSchemas } from './types'
-
-// TODO: types
-type ErrorBuilder = {
-  details: {
-    status: number
-    source: { pointer: string }
-    title: string
-    detail: string
-  }[]
-  messages: string[]
-}
+import type { ErrorBuilder, HTTPBodyMethod, ValidationModule, ValidationSchemas } from './types'
 
 interface Dependencies {
   core: CoreTypes
@@ -27,7 +16,7 @@ interface Dependencies {
   schemas: ValidationSchemas
 }
 
-export default function validation(deps: Dependencies) {
+export default function validation(deps: Dependencies): ValidationModule {
   const { core, logger, schemas } = deps
   const { ValidationError } = core
 

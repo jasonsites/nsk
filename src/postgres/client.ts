@@ -7,15 +7,9 @@ import { Kysely, PostgresDialect } from 'kysely'
 import { Pool } from 'pg'
 
 import type { Database } from '../types/database'
+import type { PostgresClientOptions } from './types'
 
-export default function postgresClient() {
-  type PostgresClientOptions = {
-    client: string
-    connection: { host: string; port: string; user: string; password: string; database: string }
-    pool: { max: string; min: string }
-    version: string
-  }
-
+export default function postgresClient(): Kysely<Database> {
   const conf: PostgresClientOptions = config.get('postgres.options')
   const { connection, pool } = conf
 

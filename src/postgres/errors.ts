@@ -5,13 +5,13 @@
 import config from 'config'
 
 import type { CoreTypes } from '../types/core'
-import type { ThrowOnDBErrorParams } from '../types/postgres'
+import type { PostgresErrors, ThrowOnDBErrorParams } from './types'
 
 interface Dependencies {
   core: CoreTypes
 }
 
-export default function postgresErrors(deps: Dependencies) {
+export default function postgresErrors(deps: Dependencies): PostgresErrors {
   const { core } = deps
   const { ConflictError, ValidationError } = core
 

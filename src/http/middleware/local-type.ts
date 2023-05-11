@@ -1,14 +1,15 @@
 /**
  * @file sets local resource type
+ * NOTE: this middleware is uniquely accessed per route
  */
 
-import type { Context, Next } from 'koa'
+import type { Context, Middleware, Next } from 'koa'
 
 interface Dependencies {
   type: string,
 }
 
-export default function middleware(deps: Dependencies) {
+export default function middleware(deps: Dependencies): Middleware {
   const { type } = deps
 
   return function setType(ctx: Context, next: Next) {

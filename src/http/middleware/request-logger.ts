@@ -5,14 +5,14 @@
 import config from 'config'
 
 import type Logger from 'bunyan'
-import type { Context, Next } from 'koa'
+import type { Context, Middleware, Next } from 'koa'
 import { LoggerConfiguration } from '../../types/logger'
 
 interface Dependencies {
   logger: Logger,
 }
 
-export default function middleware(deps: Dependencies) {
+export default function middleware(deps: Dependencies): Middleware {
   const { logger } = deps
   const { enabled, label, level }: LoggerConfiguration = config.get('logger.http.request')
 

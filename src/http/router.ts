@@ -9,7 +9,7 @@ import helmet from 'koa-helmet'
 
 import type { Middleware } from 'koa'
 import type Router from 'koa-router'
-import type { HttpServer } from './types'
+import type { HttpRouter, HttpServer } from './types'
 
 interface Dependencies {
   middleware: {
@@ -22,7 +22,7 @@ interface Dependencies {
   routes: Router[],
 }
 
-export default function router(deps: Dependencies) {
+export default function router(deps: Dependencies): HttpRouter {
   const { middleware, routes } = deps
 
   function configureMiddleware(app: HttpServer) {

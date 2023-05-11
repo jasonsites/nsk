@@ -6,10 +6,11 @@ import config from 'config'
 import qs from 'qs'
 
 import type { ParsedQs } from 'qs'
-import type { DefaultOrder, SortingData } from '../../types/pagination'
+import type { DefaultOrder, SortSettings } from '../../types/pagination'
 import type { ApiConfiguration } from '../types'
+import type { ControllerUtilities } from './types'
 
-export default function utils() {
+export default function utils(): ControllerUtilities {
   const { paging, sorting }: ApiConfiguration = config.get('api')
   const { defaultLimit, defaultOffset } = paging
   const { defaultOrder, defaultProp } = sorting
@@ -30,7 +31,7 @@ export default function utils() {
     return qs.parse(querystring)
   }
 
-  function sortSettings(params: { order?: DefaultOrder; prop?: string; } = {}): SortingData {
+  function sortSettings(params: { order?: DefaultOrder; prop?: string; } = {}): SortSettings {
     const { order, prop } = params
 
     const o: DefaultOrder = order || defaultOrder

@@ -6,7 +6,7 @@ import Bluebird from 'bluebird'
 
 import type { CoreTypes } from '../../types/core'
 import type { ScopedLogger } from '../../types/logger'
-import type { PostgresClient } from '../../types/postgres'
+import type { PostgresClient } from '../../postgres/types'
 import type { EntityData } from '../entities/types'
 import type { Model, ModelUtilities, RepoResult } from './types'
 

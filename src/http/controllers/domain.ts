@@ -4,13 +4,15 @@
 
 import { Context } from 'koa'
 
-import { Controller } from '../types'
+import type { DomainModule } from '../../types/domain'
+import type { Controller } from '../types'
+import type { ControllerUtilities } from './types'
 
 // TODO: types
 interface Dependencies {
-  domain: any,
+  domain: DomainModule,
   serializers: any,
-  utils: any,
+  utils: ControllerUtilities,
   validation: any,
 }
 

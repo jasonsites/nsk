@@ -6,13 +6,13 @@ import config from 'config'
 import Router from 'koa-router'
 
 import type { CoreTypes } from '../../types/core'
-import type { ApiConfiguration } from '../types'
+import type { ApiConfiguration, Controller, MiddlewareLocalType } from '../types'
 
 // TODO: types
 interface Dependencies {
-  controller: any,
-  core: CoreTypes,
-  middleware: any,
+  controller: Controller
+  core: CoreTypes
+  middleware: MiddlewareLocalType
 }
 
 export default function route(deps: Dependencies): Router {
