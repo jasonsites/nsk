@@ -1,17 +1,18 @@
 /**
- * @file http/routes/resource.ts
- * @overview example resource router
+ * @file example resource router
  */
 
 import config from 'config'
 import Router from 'koa-router'
 
-import type { ApiConfiguration, CoreTypes } from '../../types/globals'
+import type { CoreTypes } from '../../types/core'
+import type { ApiConfiguration, Controller, MiddlewareLocalType } from '../types'
 
+// TODO: types
 interface Dependencies {
-  controller: any,
-  core: CoreTypes,
-  middleware: any,
+  controller: Controller
+  core: CoreTypes
+  middleware: MiddlewareLocalType
 }
 
 export default function route(deps: Dependencies): Router {
@@ -20,7 +21,7 @@ export default function route(deps: Dependencies): Router {
 
   const { namespace }: ApiConfiguration = config.get('api')
   const router = new Router({ prefix: `/${namespace}/resources` })
-  router.use(middleware.localType({ type: core.Resource.DomainResource }))
+  router.use(middleware.localType({ type: core.DomainModel.ExampleDomainModel }))
 
   router.get('/', list)
   router.get('/:id', detail)

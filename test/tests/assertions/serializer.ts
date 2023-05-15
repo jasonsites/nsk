@@ -6,7 +6,7 @@ import chaiUUID from 'chai-uuid'
 
 import { assertValidDatetimeISO } from './common'
 
-import type { CoreTypes } from '../../../src/types/globals'
+import type { CoreTypes } from '../../../src/types/core'
 
 const { expect } = chai
 chai.use(chaiUUID)
@@ -24,7 +24,7 @@ export function assertDomainResource(params: AssertDomainResourceParams) {
 
   expect(actual).to.be.an('object').with.all.keys(['type', 'id', 'properties'])
   const { type, id, properties } = actual
-  expect(type).to.equal(core.Resource.DomainResource)
+  expect(type).to.equal(core.DomainModel.ExampleDomainModel)
   expect(id).to.equal(record.id)
   expect(properties).to.be.an('object').with.all.keys([
     'created_by',

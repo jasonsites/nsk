@@ -1,19 +1,19 @@
 /**
- * @file http/middleware/request-logger.ts
- * @overview http request logger
+ * @file http request logger
  */
 
 import config from 'config'
 
 import type Logger from 'bunyan'
-import type { Context, Next } from 'koa'
-import { LoggerConfiguration } from '../../types/globals'
+import type { Context, Middleware, Next } from 'koa'
+import { LoggerConfiguration } from '../../types/logger'
 
 interface Dependencies {
   logger: Logger,
 }
 
-export default function middleware({ logger }: Dependencies) {
+export default function middleware(deps: Dependencies): Middleware {
+  const { logger } = deps
   const { enabled, label, level }: LoggerConfiguration = config.get('logger.http.request')
 
   return async function requestLogger(ctx: Context, next: Next) {

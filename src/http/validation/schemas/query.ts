@@ -1,36 +1,36 @@
 /**
- * @file http/validation/schemas/query.js
- * @overview query schemas
+ * @file query schemas
  */
 
 import joi from 'joi'
-import { CoreTypes } from '../../../types/globals'
+
+import type { CoreTypes } from '../../../types/core'
 
 interface Dependencies {
   core: CoreTypes,
 }
 
-export default function query({ core }: Dependencies) {
-  const { Resource } = core
+export default function query(deps: Dependencies) {
+  const { core: { DomainModel } } = deps
 
   const allowedOptionTypes: string[] = []
   const allowedSortTypes: string[] = []
   const disallowedFilterTypes: string[] = []
 
   const validTypes = [
-    Resource.DomainResource,
+    DomainModel.ExampleDomainModel,
   ]
 
   function filtersSchema({ type }: { type: string }) {
     switch (type) {
-      case Resource.DomainResource: return joi.object().required()
+      case DomainModel.ExampleDomainModel: return joi.object().required()
       default: throw new Error(`invalid type '${type}' for filter query`)
     }
   }
 
   function optionsSchema({ type }: { type: string }) {
     switch (type) {
-      case Resource.DomainResource: return joi.object().required()
+      case DomainModel.ExampleDomainModel: return joi.object().required()
       default: throw new Error(`invalid type '${type}' for options query`)
     }
   }
@@ -78,7 +78,7 @@ export default function query({ core }: Dependencies) {
 
   function validSortProps({ type }: { type: string }) {
     switch (type) {
-      case Resource.DomainResource: return ['name']
+      case DomainModel.ExampleDomainModel: return ['name']
       default: throw new Error(`invalid type '${type}' for sort query`)
     }
   }

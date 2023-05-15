@@ -1,43 +1,32 @@
 /**
-* @file repo/models/resource.ts
-* @overview resource entity model
+* @file resource entity model
 */
 
 import Bluebird from 'bluebird'
 
-import { Kysely } from 'kysely'
-import type { EntityData, Model, RepoResult } from '../types'
-import type { DBError } from '../../postgres/errors'
-import type { CoreTypes, ScopedLogger } from '../../types/globals'
+import type { CoreTypes } from '../../types/core'
+import type { ScopedLogger } from '../../types/logger'
+import type { PostgresClient } from '../../postgres/types'
+import type { EntityData } from '../entities/types'
+import type { Model, ModelUtilities, RepoResult } from './types'
 
 interface Dependencies {
-  core: CoreTypes,
-  entities: Record<string, EntityData>,
-  postgres: {
-    client: Kysely<any>,
-    throwOnDbError: ({ error }: { error: DBError }) => void,
-  },
-  utils: {
-    composePagingData: ({ count, limit, offset }: {
-      count: number,
-      limit: number,
-      offset: number,
-    }) => any,
-    composeUpsert: ({ data, method, type }: { data?: any, method?: string, type?: string }) => any,
-    throwOnNotFound: ({ id, data }: { id: string, data: any }) => void,
-  },
+  core: CoreTypes
+  entities: Record<string, EntityData>
+  postgres: PostgresClient
+  utils: ModelUtilities
 }
 
 export default function model(deps: Dependencies) {
   const { core, entities, postgres, utils } = deps
-  const { Resource } = core
   const { ResourceEntity } = entities
   const { client, throwOnDbError } = postgres
 
   return function DomainResourceModel({ log }: { log: ScopedLogger }): Model {
-    const type = Resource.DomainResource
+    const type = core.DomainModel.ExampleDomainModel
 
-    async function create({ data }: { data: any }): Promise<RepoResult> {
+    async function create(params: { data: any }): Promise<RepoResult> {
+      const { data } = params
       try {
         const resourceInsert = utils.composeUpsert({ data, method: 'create', type })
         const record = await client
@@ -45,7 +34,6 @@ export default function model(deps: Dependencies) {
           .values(resourceInsert)
           .returning(ResourceEntity.fields)
           .executeTakeFirstOrThrow()
-
         return { data: [{ type, record }] }
       } catch (error: any) {
         if (log.enabled) log.error(error)
@@ -53,7 +41,8 @@ export default function model(deps: Dependencies) {
       }
     }
 
-    async function destroy({ id }: { id: string }): Promise<void> {
+    async function destroy(params: { id: string }): Promise<void> {
+      const { id } = params
       try {
         const [record] = await client.selectFrom(ResourceEntity.table)
           .select(ResourceEntity.fields)
@@ -77,7 +66,8 @@ export default function model(deps: Dependencies) {
       return undefined
     }
 
-    async function detail({ id }: { id: string }): Promise<RepoResult> {
+    async function detail(params: { id: string }): Promise<RepoResult> {
+      const { id } = params
       try {
         const [record] = await client.selectFrom(ResourceEntity.table)
           .select(ResourceEntity.fields)
@@ -94,6 +84,7 @@ export default function model(deps: Dependencies) {
       }
     }
 
+    // TODO: params type
     async function list(params: { filters: any, page: any, sort: any }): Promise<RepoResult> {
       const { filters, page, sort } = params
       const { limit, offset } = page
@@ -111,6 +102,7 @@ export default function model(deps: Dependencies) {
           .select(client.fn.countAll<number>().as('count'))
           .where(ResourceEntity.Field.Deleted, '=', false)
 
+        // TODO
         Object.entries(filters).forEach(([k, v]: [k: any, v: any]) => {
           query.where(k, '=', v)
           totalQuery.where(k, '=', v)
@@ -160,6 +152,6 @@ export const inject = {
     core: 'core',
     entities: 'entities',
     postgres: 'postgres',
-    utils: 'repo/models/utilities',
+    utils: 'repo/models/utils',
   },
 }

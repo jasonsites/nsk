@@ -1,16 +1,16 @@
 /**
-* @file postgres/index.ts
-* @overview postgres client
+* @file postgres module
 */
 
 import { Kysely } from 'kysely'
+import { PostgresClient, PostgresErrors } from './types'
 
 interface Dependencies {
-  client: Kysely<any>,
-  errors: { throwOnDbError: (error: { error: { code: string } }) => void },
+  client: Kysely<any>
+  errors: PostgresErrors
 }
 
-export default function postgres(deps: Dependencies) {
+export default function postgres(deps: Dependencies): PostgresClient {
   const { client, errors } = deps
 
   return { client, ...errors }

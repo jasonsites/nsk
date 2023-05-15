@@ -1,17 +1,16 @@
 /**
- * @file http/middleware/correlation.ts
- * @overview composes correlation object from tracing headers
+ * @file composes correlation object from tracing headers
  */
 
 import config from 'config'
 
-import type { Context, Next, Request } from 'koa'
+import type { Context, Middleware, Next, Request } from 'koa'
 
 type TracingConfig = {
   headers: string[]
 }
 
-export default function middleware() {
+export default function middleware(): Middleware {
   const tracing: TracingConfig = config.get('api.tracing')
 
   return async function correlation(ctx: Context, next: Next) {

@@ -1,3 +1,7 @@
+/**
+ * @file database schema
+ * @see https://kysely-org.github.io/kysely/
+ */
 
 export interface ResourceEntity {
   id: Generated<string> // uuid
@@ -12,8 +16,7 @@ export interface ResourceEntity {
   modified_by: number | null
 }
 
-
-// Keys of this interface are table names.
+// keys of this interface are table names
 export interface Database {
   resource: ResourceEntity
 }

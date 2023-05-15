@@ -1,6 +1,5 @@
 /**
- * @file http/routes/base.ts
- * @overview root (`/`) router
+ * @file root (`/`) router
  * NOTE: the base route only exists to easily verify a working app and should normally be removed
  */
 
@@ -8,7 +7,7 @@ import config from 'config'
 import Router from 'koa-router'
 
 import type { Context } from 'koa'
-import type { ApiConfiguration } from '../../types/globals'
+import type { ApiConfiguration } from '../types'
 
 export default function route(): Router {
   async function get(ctx: Context) {

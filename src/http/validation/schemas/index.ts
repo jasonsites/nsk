@@ -1,10 +1,9 @@
 /**
- * @file validation/schemas/index.ts
- * @overview validation schemas
+ * @file validation schemas
  */
 
-import type { CoreTypes } from '../../../types/globals'
-import { BodySchemaGetter, HTTPBodyMethod, QueryHandler } from './types'
+import type { CoreTypes } from '../../../types/core'
+import { BodySchemaGetter, HTTPBodyMethod, QueryHandler } from '../types'
 
 interface Dependencies {
   core: CoreTypes,
@@ -15,7 +14,7 @@ interface Dependencies {
 export default function schemas(deps: Dependencies) {
   const { core, query, resources } = deps
 
-  const { Resource } = core
+  const { DomainModel } = core
   const { querySchema } = query
   const { resource } = resources
 
@@ -23,7 +22,7 @@ export default function schemas(deps: Dependencies) {
     const { method, type } = params
 
     switch (type) {
-      case Resource.DomainResource: return resource({ method })
+      case DomainModel.ExampleDomainModel: return resource({ method })
       default: throw new Error(`invalid schema type '${type}'`)
     }
   }

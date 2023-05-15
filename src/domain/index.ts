@@ -1,19 +1,20 @@
 /**
- * @file domain/index.ts
- * @overview domain logic
- * NOTE: this module should be renamed to reflect the actual domain
+ * @file domain/business logic module
+ * NOTE: this module (directory) should be renamed to reflect the actual domain
  */
 
-import type { Correlation, ExternalService, Repository } from '../types/globals'
+import type { Correlation } from '../types/core'
+import type { DomainModule } from '../types/domain'
+import type { ExternalService } from '../types/services'
+import type { RepositoryModule, Repository } from '../types/repository'
 
 interface Dependencies {
-  repo: { context: (correlation: Correlation) => Repository }
+  repo: RepositoryModule
   services: { example: ExternalService }
 }
 
-export default function domain(deps: Dependencies) {
+export default function domain(deps: Dependencies): DomainModule {
   const { repo, services } = deps
-
   const { example } = services
 
   // TODO: domain logger

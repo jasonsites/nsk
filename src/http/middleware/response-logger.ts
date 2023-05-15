@@ -1,14 +1,13 @@
 /**
- * @file http/middleware/response-logger.ts
- * @overview http response logger
+ * @file http response logger
  */
 
 import config from 'config'
 
-import type { Context, Next } from 'koa'
-import { LoggerConfiguration } from '../../types/globals'
+import type { Context, Middleware, Next } from 'koa'
+import type { LoggerConfiguration } from '../../types/logger'
 
-export default function middleware() {
+export default function middleware(): Middleware {
   return async function responseLogger(ctx: Context, next: Next) {
     await next()
     const { enabled, level }: LoggerConfiguration = config.get('logger.http.response')

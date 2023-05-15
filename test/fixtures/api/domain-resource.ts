@@ -1,6 +1,6 @@
 import chance from '../chance'
 
-import type { CoreTypes } from '../../../src/types/globals'
+import type { CoreTypes } from '../../../src/types/core'
 
 export function domainResource(core: CoreTypes, params: any = {}) {
   const defaults = {
@@ -15,7 +15,7 @@ export function domainResource(core: CoreTypes, params: any = {}) {
   const { description, enabled, id, status, title } = params
 
   const resource: any = {
-    type: core.Resource.DomainResource,
+    type: core.DomainModel.ExampleDomainModel,
     properties: {
       description,
       enabled,

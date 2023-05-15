@@ -1,22 +1,18 @@
 /**
- * @file http/controllers/domain.ts
- * @overview controller for domain routes
+ * @file controller (http routes handlers)
  */
 
 import { Context } from 'koa'
 
-type Controller = {
-  create: (ctx: Context) => Promise<void>
-  destroy: (ctx: Context) => Promise<void>
-  detail: (ctx: Context) => Promise<void>
-  list: (ctx: Context) => Promise<void>
-  update: (ctx: Context) => Promise<void>
-}
+import type { DomainModule } from '../../types/domain'
+import type { Controller } from '../types'
+import type { QueryUtilities } from './types'
 
+// TODO: types
 interface Dependencies {
-  domain: any,
+  domain: DomainModule,
   serializers: any,
-  utils: any,
+  utils: QueryUtilities,
   validation: any,
 }
 
@@ -81,7 +77,7 @@ export const inject = {
   require: {
     domain: 'domain',
     serializers: 'serializers',
-    utils: 'http/controllers/utils',
+    utils: 'http/controllers/query',
     validation: 'validation',
   },
 }

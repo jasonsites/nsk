@@ -1,6 +1,5 @@
 /**
- * @file index.ts
- * @overview application entrypoint
+ * @file application entrypoint
  */
 
 import container from './container'

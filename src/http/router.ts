@@ -1,6 +1,5 @@
 /**
- * @file http/router.ts
- * @overview http middleware and router configuration
+ * @file http middleware and router configuration
  */
 
 import { notImplemented, methodNotAllowed } from '@hapi/boom'
@@ -10,7 +9,7 @@ import helmet from 'koa-helmet'
 
 import type { Middleware } from 'koa'
 import type Router from 'koa-router'
-import type { HttpServer } from '../types/globals'
+import type { HttpRouter, HttpServer } from './types'
 
 interface Dependencies {
   middleware: {
@@ -23,7 +22,7 @@ interface Dependencies {
   routes: Router[],
 }
 
-export default function router(deps: Dependencies) {
+export default function router(deps: Dependencies): HttpRouter {
   const { middleware, routes } = deps
 
   function configureMiddleware(app: HttpServer) {
