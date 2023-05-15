@@ -27,6 +27,6 @@ export type ErrorTypes = {
   ValidationError: typeof CustomError
 }
 
-type ResourceTypes = { Resource: Record<string, string> }
+type DomainModelTypes = { DomainModel: Record<string, string> }
 
-export type CoreTypes = ErrorTypes & ResourceTypes
+export type CoreTypes = ErrorTypes & DomainModelTypes

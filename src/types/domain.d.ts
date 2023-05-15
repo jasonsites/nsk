@@ -1,12 +1,12 @@
 /**
- * @file domain.d.ts
+ * @file domain/businsess logic type definitions
  */
 
 export interface DomainModule {
-  context: (correlation: Correlation) => Domain
+  context: (correlation: Correlation) => DomainService
 }
 
-interface Domain {
+interface DomainService {
   create: (params: CreateParams) => Promise<unknown>
   destroy: (params: DestroyParams) => Promise<unknown>
   detail: (params: DetailParams) => Promise<unknown>
@@ -40,4 +40,17 @@ type UpdateParams = {
   data: unknown
   id: string
   type: string
+}
+
+// domain models -------------------------------------------------
+export type DomainModel = {
+  id: string
+  title: string
+  description: string
+  status: string
+  enabled: boolean
+  created_on: string
+  created_by: string
+  modified_on: string
+  modified_by: string
 }

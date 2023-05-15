@@ -2,16 +2,20 @@
  * @file controller utilities type definitions
  */
 
-export type ControllerUtilities = {
-  pageSettings: (params?: PageSettingsParams) => PageSettings
+export type QueryUtilities = {
   parseQuery: (querystring: string) => ParsedQs
-  sortSettings: (params?: SortSettingsParams) => SortSettings
   transformQuery: (query: TransformQueryParams) => QueryParameters
 }
 
-type PageSettingsParams = {
+// page
+type PageQueryParams = {
   limit?: string
   offset?: string
+}
+
+type PagingDefaults = {
+  defaultLimit: number
+  defaultOffset: number
 }
 
 type PageSettings = {
@@ -19,15 +23,27 @@ type PageSettings = {
   offset: number
 }
 
-type SortSettingsParams = {
-  order?: DefaultOrder
+// sort
+type SortQueryParams = {
+  order?: SortOrderOptions
   prop?: string
 }
 
+type SortingDefaults = {
+  defaultOrder: SortOrderOptions
+  defaultProp: string
+}
+
+type SortSettings = {
+  order: SortOrderOptions
+  prop: string
+}
+
+// transform
 type TransformQueryParams = {
   f: object
-  p: object
-  s: object
+  p: PageSettings
+  s: SortSettings
 }
 
 type QueryParameters = {

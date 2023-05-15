@@ -2,25 +2,15 @@
  * @file pagination type definitions
  */
 
-export type DefaultOrder = 'asc' | 'desc'
+export type SortOrderOptions = 'asc' | 'desc'
 
-export type PagingData = {
+export type PageMetadata = {
   limit: number
   offset: number
   total: number
 }
 
-export type PagingDefaults = {
-  defaultLimit: number
-  defaultOffset: number
-}
-
-export type SortSettings = {
-  order: DefaultOrder
+export type SortMetadata = {
+  order: SortOrderOptions
   prop: string
-}
-
-export type SortingDefaults = {
-  defaultOrder: DefaultOrder
-  defaultProp: string
 }

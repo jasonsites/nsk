@@ -21,7 +21,7 @@ export default function route(deps: Dependencies): Router {
 
   const { namespace }: ApiConfiguration = config.get('api')
   const router = new Router({ prefix: `/${namespace}/resources` })
-  router.use(middleware.localType({ type: core.Resource.DomainResource }))
+  router.use(middleware.localType({ type: core.DomainModel.ExampleDomainModel }))
 
   router.get('/', list)
   router.get('/:id', detail)

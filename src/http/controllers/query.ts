@@ -6,16 +6,24 @@ import config from 'config'
 import qs from 'qs'
 
 import type { ParsedQs } from 'qs'
-import type { DefaultOrder, SortSettings } from '../../types/pagination'
+import type { SortOrderOptions } from '../../types/pagination'
 import type { ApiConfiguration } from '../types'
-import type { ControllerUtilities } from './types'
+import type {
+  PageQueryParams,
+  PageSettings,
+  QueryParameters,
+  QueryUtilities,
+  SortQueryParams,
+  SortSettings,
+  TransformQueryParams,
+} from './types'
 
-export default function utils(): ControllerUtilities {
+export default function utils(): QueryUtilities {
   const { paging, sorting }: ApiConfiguration = config.get('api')
   const { defaultLimit, defaultOffset } = paging
   const { defaultOrder, defaultProp } = sorting
 
-  function pageSettings(params: { limit?: string; offset?: string; } = {}) {
+  function handlePageParams(params: PageQueryParams = {}): PageSettings {
     const { limit, offset } = params
 
     let parsedLimit = limit ? parseInt(limit, 10) : defaultLimit
@@ -27,29 +35,29 @@ export default function utils(): ControllerUtilities {
     return { limit: parsedLimit, offset: parsedOffset }
   }
 
-  function parseQuery(querystring: string): ParsedQs {
-    return qs.parse(querystring)
-  }
-
-  function sortSettings(params: { order?: DefaultOrder; prop?: string; } = {}): SortSettings {
+  function handleSortParams(params: SortQueryParams = {}): SortSettings {
     const { order, prop } = params
 
-    const o: DefaultOrder = order || defaultOrder
+    const o: SortOrderOptions = order || defaultOrder
     const p: string = prop || defaultProp
 
     return { order: o, prop: p }
   }
 
-  function transformQuery(query: { f: object, p: object, s: object}) {
+  function parseQuery(querystring: string): ParsedQs {
+    return qs.parse(querystring)
+  }
+
+  function transformQuery(query: TransformQueryParams): QueryParameters {
     const { f: filters = {}, p = {}, s = {} } = query
 
-    const page = pageSettings(p)
-    const sort = sortSettings(s)
+    const page = handlePageParams(p)
+    const sort = handleSortParams(s)
 
     return { filters, page, sort }
   }
 
-  return { pageSettings, parseQuery, sortSettings, transformQuery }
+  return { parseQuery, transformQuery }
 }
 
 

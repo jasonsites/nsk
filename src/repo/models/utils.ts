@@ -5,21 +5,21 @@
 import { sql } from 'kysely'
 
 import type { CoreTypes } from '../../types/core'
-import type { PagingData } from '../../types/pagination'
+import { PageMetadata } from '../../types/pagination'
 
 interface Dependencies {
   core: CoreTypes,
 }
 
 export default function utilities(deps: Dependencies) {
-  const { core: { NotFoundError, Resource } } = deps
+  const { core: { NotFoundError, DomainModel } } = deps
 
   // list metadata for all models
   function composePagingData(params: {
     count: number,
     limit: number,
     offset: number,
-  }): PagingData {
+  }): PageMetadata {
     const { count, limit, offset } = params
     return { limit, offset, total: count }
   }
@@ -62,7 +62,7 @@ export default function utilities(deps: Dependencies) {
   function enforceUpsertFields(params: { data: any, type: string }) {
     const { data, type } = params
     switch (type) {
-      case Resource.DomainResource: return domainResource({ data })
+      case DomainModel.ExampleDomainModel: return domainResource({ data })
       default: throw new Error(`invalid entity type '${type}'`)
     }
   }

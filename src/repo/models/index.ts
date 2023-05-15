@@ -13,12 +13,13 @@ interface Dependencies {
 
 export default function index(deps: Dependencies) {
   const { core, models } = deps
-  const { InternalServerError, Resource } = core
+  const { InternalServerError } = core
 
   function getModel(params: { log: ScopedLogger, type: string }): Model {
     const { log, type } = params
     switch (type) {
-      case Resource.DomainResource: return models.domainResource({ log })
+      // TODO: core.Model collision
+      case core.DomainModel.ExampleDomainModel: return models.domainResource({ log })
       default: throw new InternalServerError(`invalid resource type '${type}'`)
     }
   }

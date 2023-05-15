@@ -18,7 +18,7 @@ export default function domainResource(deps: Dependencies) {
 
   function builder({ method }: { method: HTTPBodyMethod }): DataSchema {
     const resource: DataSchema = {
-      type: joi.string().valid(core.Resource.DomainResource).required(),
+      type: joi.string().valid(core.DomainModel.ExampleDomainModel).required(),
       properties: joi.object().keys({
         description: joi.string(),
         enabled: joi.boolean(),

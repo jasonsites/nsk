@@ -6,13 +6,13 @@ import { Context } from 'koa'
 
 import type { DomainModule } from '../../types/domain'
 import type { Controller } from '../types'
-import type { ControllerUtilities } from './types'
+import type { QueryUtilities } from './types'
 
 // TODO: types
 interface Dependencies {
   domain: DomainModule,
   serializers: any,
-  utils: ControllerUtilities,
+  utils: QueryUtilities,
   validation: any,
 }
 
@@ -77,7 +77,7 @@ export const inject = {
   require: {
     domain: 'domain',
     serializers: 'serializers',
-    utils: 'http/controllers/utils',
+    utils: 'http/controllers/query',
     validation: 'validation',
   },
 }

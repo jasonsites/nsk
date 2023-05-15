@@ -11,11 +11,11 @@ interface Dependencies {
 export default function core(deps: Dependencies): CoreTypes {
   const { errors } = deps
 
-  const Resource = {
-    DomainResource: 'resource',
+  const DomainModel = {
+    ExampleDomainModel: 'example-domain-model',
   }
 
-  return { ...errors, Resource }
+  return { ...errors, DomainModel }
 }
 
 export const inject = {

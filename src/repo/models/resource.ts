@@ -19,12 +19,11 @@ interface Dependencies {
 
 export default function model(deps: Dependencies) {
   const { core, entities, postgres, utils } = deps
-  const { Resource } = core
   const { ResourceEntity } = entities
   const { client, throwOnDbError } = postgres
 
   return function DomainResourceModel({ log }: { log: ScopedLogger }): Model {
-    const type = Resource.DomainResource
+    const type = core.DomainModel.ExampleDomainModel
 
     async function create(params: { data: any }): Promise<RepoResult> {
       const { data } = params

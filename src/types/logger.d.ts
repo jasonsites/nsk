@@ -1,5 +1,5 @@
 /**
- * @file logger.d.ts
+ * @file logger type definitions
  */
 
 import Logger, { LogLevel } from 'bunyan'

@@ -15,7 +15,7 @@ export function domainResource(core: CoreTypes, params: any = {}) {
   const { description, enabled, id, status, title } = params
 
   const resource: any = {
-    type: core.Resource.DomainResource,
+    type: core.DomainModel.ExampleDomainModel,
     properties: {
       description,
       enabled,
