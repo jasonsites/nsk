@@ -2,6 +2,10 @@
  * @file repository model type definitions
  */
 
+export type EntityModel = {
+  ({ log }: { log: ScopedLogger }): Model
+}
+
 export type Model = {
   type: string
   create: (params: {data: any }) => Promise<RepoResult>

@@ -4,11 +4,11 @@
 
 import type { CoreTypes } from '../../types/core'
 import type { ScopedLogger } from '../../types/logger'
-import type { Model } from './types'
+import type { EntityModel, Model } from './types'
 
 interface Dependencies {
   core: CoreTypes,
-  models: Record<string, any>,
+  models: Record<string, EntityModel>,
 }
 
 export default function index(deps: Dependencies) {
@@ -18,7 +18,6 @@ export default function index(deps: Dependencies) {
   function getModel(params: { log: ScopedLogger, type: string }): Model {
     const { log, type } = params
     switch (type) {
-      // TODO: core.Model collision
       case core.DomainModel.ExampleDomainModel: return models.domainResource({ log })
       default: throw new InternalServerError(`invalid resource type '${type}'`)
     }
