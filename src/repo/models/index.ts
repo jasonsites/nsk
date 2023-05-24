@@ -4,33 +4,34 @@
 
 import type { CoreTypes } from '../../types/core'
 import type { ScopedLogger } from '../../types/logger'
-import type { EntityModel, Model } from './types'
+import type { Repository } from '../../types/repository'
+import type { EntityModelConstructor } from './types'
 
 interface Dependencies {
   core: CoreTypes,
-  models: Record<string, EntityModel>,
+  models: Record<string, EntityModelConstructor>,
 }
 
 export default function index(deps: Dependencies) {
   const { core, models } = deps
   const { InternalServerError } = core
 
-  function getModel(params: { log: ScopedLogger, type: string }): Model {
+  function getEntityModel(params: { log: ScopedLogger, type: string }): Repository {
     const { log, type } = params
     switch (type) {
-      case core.DomainModel.ExampleDomainModel: return models.domainResource({ log })
+      case core.model.example: return models.example({ log })
       default: throw new InternalServerError(`invalid resource type '${type}'`)
     }
   }
 
-  return { getModel }
+  return { getEntityModel }
 }
 
 export const inject = {
   require: {
     core: 'core',
     models: {
-      domainResource: 'repo/models/resource',
+      example: 'repo/models/example',
     },
   },
 }

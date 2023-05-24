@@ -16,7 +16,7 @@ export const inject = {
   name: 'entities',
   require: {
     entities: {
-      ResourceEntity: 'repo/entities/resource',
+      example: 'repo/entities/example',
     },
   },
 }

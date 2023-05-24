@@ -8,11 +8,11 @@ import config from 'config'
 import type { Correlation } from '../types/core'
 import type { ScopedLogger, LoggerConfiguration } from '../types/logger'
 import type { Repository } from '../types/repository'
-import type { Model, RepoResult } from './models/types'
+import type { EntityModel, RepoResult } from './models/types'
 
 interface Dependencies {
   logger: Logger
-  models: { getModel: (params: { log: ScopedLogger, type: string }) => Model }
+  models: { getEntityModel: (params: { log: ScopedLogger, type: string }) => EntityModel }
 }
 
 export default function repository(deps: Dependencies): {
@@ -29,19 +29,19 @@ export default function repository(deps: Dependencies): {
 
       async function create(params: { data: unknown, type: string }): Promise<RepoResult> {
         const { data, type } = params
-        const model: Model = models.getModel({ log, type })
+        const model: EntityModel = models.getEntityModel({ log, type })
         return model.create({ data })
       }
 
       async function destroy(params: { id: string, type: string }): Promise<void> {
         const { id, type } = params
-        const model = models.getModel({ log, type })
+        const model = models.getEntityModel({ log, type })
         return model.destroy({ id })
       }
 
       async function detail(params: { id: string, type: string }): Promise<RepoResult> {
         const { id, type } = params
-        const model = models.getModel({ log, type })
+        const model = models.getEntityModel({ log, type })
         return model.detail({ id })
       }
 
@@ -52,7 +52,7 @@ export default function repository(deps: Dependencies): {
         type: string,
       }): Promise<RepoResult> {
         const { filters, page, sort, type } = params
-        const model = models.getModel({ log, type })
+        const model = models.getEntityModel({ log, type })
         return model.list({ filters, page, sort })
       }
 
@@ -62,7 +62,7 @@ export default function repository(deps: Dependencies): {
         type: string,
       }): Promise<RepoResult> {
         const { data, id, type } = params
-        const model = models.getModel({ log, type })
+        const model = models.getEntityModel({ log, type })
         return model.update({ data, id })
       }
 

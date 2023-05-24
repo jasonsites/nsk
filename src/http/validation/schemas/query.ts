@@ -11,26 +11,26 @@ interface Dependencies {
 }
 
 export default function query(deps: Dependencies) {
-  const { core: { DomainModel } } = deps
+  const { core: { model } } = deps
 
   const allowedOptionTypes: string[] = []
   const allowedSortTypes: string[] = []
   const disallowedFilterTypes: string[] = []
 
   const validTypes = [
-    DomainModel.ExampleDomainModel,
+    model.example,
   ]
 
   function filtersSchema({ type }: { type: string }) {
     switch (type) {
-      case DomainModel.ExampleDomainModel: return joi.object().required()
+      case model.example: return joi.object().required()
       default: throw new Error(`invalid type '${type}' for filter query`)
     }
   }
 
   function optionsSchema({ type }: { type: string }) {
     switch (type) {
-      case DomainModel.ExampleDomainModel: return joi.object().required()
+      case model.example: return joi.object().required()
       default: throw new Error(`invalid type '${type}' for options query`)
     }
   }
@@ -78,7 +78,7 @@ export default function query(deps: Dependencies) {
 
   function validSortProps({ type }: { type: string }) {
     switch (type) {
-      case DomainModel.ExampleDomainModel: return ['name']
+      case model.example: return ['name']
       default: throw new Error(`invalid type '${type}' for sort query`)
     }
   }

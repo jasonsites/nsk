@@ -43,7 +43,7 @@ type UpdateParams = {
 }
 
 // domain models -------------------------------------------------
-export type DomainModel = {
+export type ExampleDomainModel = {
   id: string
   title: string
   description: string

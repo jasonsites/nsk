@@ -17,13 +17,13 @@ import type {
 interface Dependencies {
   core: CoreTypes,
   resources: {
-    domainResource: Serializer,
+    example: Serializer
   },
 }
 
 export default function serializers(deps: Dependencies) {
-  const { core: { DomainModel }, resources } = deps
-  const { domainResource } = resources
+  const { core, resources } = deps
+  const { example } = resources
 
   function serialize(params: { input: SerializableInput, solo: boolean }) {
     const { input, solo } = params
@@ -73,8 +73,8 @@ export default function serializers(deps: Dependencies) {
     const { record: model, type } = params
 
     switch (type) {
-      case DomainModel.ExampleDomainModel:
-        return domainResource.serialize({ model, type })
+      case core.model.example:
+        return example.serialize({ model, type })
       default:
         throw new Error(`invalid resource type '${type}'`)
     }
@@ -88,7 +88,7 @@ export const inject = {
   require: {
     core: 'core',
     resources: {
-      domainResource: 'serializers/domain-model',
+      example: 'serializers/example',
     },
   },
 }

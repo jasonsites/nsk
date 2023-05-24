@@ -12,7 +12,7 @@ interface Dependencies {
 }
 
 export default function utilities(deps: Dependencies) {
-  const { core: { NotFoundError, DomainModel } } = deps
+  const { core: { NotFoundError, model } } = deps
 
   // list metadata for all models
   function composePagingData(params: {
@@ -62,13 +62,13 @@ export default function utilities(deps: Dependencies) {
   function enforceUpsertFields(params: { data: any, type: string }) {
     const { data, type } = params
     switch (type) {
-      case DomainModel.ExampleDomainModel: return domainResource({ data })
+      case model.example: return exampleEntity({ data })
       default: throw new Error(`invalid entity type '${type}'`)
     }
   }
 
-  // domain resource
-  function domainResource({ data }: { data: any }) {
+  // example entity
+  function exampleEntity({ data }: { data: any }) {
     const { description, enabled, status, title } = data
     return { description, enabled, status, title }
   }
