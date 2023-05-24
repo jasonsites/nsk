@@ -8,8 +8,8 @@ interface Dependencies {
   utils: EntityUtilities
 }
 
-export default function resource({ utils }: Dependencies) {
-  const { createFieldMap, Entity } = utils
+export default function example({ utils }: Dependencies) {
+  const { createFieldMap, entity } = utils
 
   const attributeSchema: Record<string, string> = {
     CreatedBy: 'created_by',
@@ -24,11 +24,11 @@ export default function resource({ utils }: Dependencies) {
     Title: 'title',
   }
 
-  const Field = createFieldMap({ attributes: attributeSchema, entity: Entity.Resource })
-  const fields = Object.values(Field)
-  const table = Entity.Resource
+  const field = createFieldMap({ attributes: attributeSchema, entity: entity.example })
+  const fields = Object.values(field)
+  const table = entity.example
 
-  return { Field, fields, table }
+  return { field, fields, table }
 }
 
 export const inject = {

@@ -2,6 +2,7 @@
  * @file
  */
 
+import type { ExampleDomainModel } from '../types/domain'
 import type { PagingData } from '../types/pagination'
 
 // serialization types ------------------------------------------
@@ -18,9 +19,9 @@ export type SerializableInput = {
 export type SerializableInputData = SerializableInputDataSingle[]
 
 export type SerializableInputDataSingle = {
-  type: string,
-  meta?: unknown,
-  record: unknown,
+  type: string
+  meta?: unknown
+  record: DomainModel
   rel?: {
     type: string
     data: unknown[]
@@ -32,7 +33,7 @@ export type SerializableInputMeta = {
 }
 
 // domain resources ---------------------------------------------
-export type DomainModel = DomainModel // | SomeOtherDomainModel | ...
+export type DomainModel = ExampleDomainModel // | SomeOtherDomainModel | ...
 
 export interface Serializer {
   serialize: (params: { model: DomainModel, type: string }) => any

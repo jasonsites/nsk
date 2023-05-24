@@ -1,5 +1,5 @@
 /**
- * @file resource schema
+ * @file example resource schema
  */
 
 import joi from 'joi'
@@ -12,13 +12,13 @@ interface Dependencies {
   core: CoreTypes,
 }
 
-export default function domainResource(deps: Dependencies) {
+export default function exampleResource(deps: Dependencies) {
   const { body, core } = deps
   const { createSchemaGetter } = body
 
   function builder({ method }: { method: HTTPBodyMethod }): DataSchema {
     const resource: DataSchema = {
-      type: joi.string().valid(core.DomainModel.ExampleDomainModel).required(),
+      type: joi.string().valid(core.model.example).required(),
       properties: joi.object().keys({
         description: joi.string(),
         enabled: joi.boolean(),

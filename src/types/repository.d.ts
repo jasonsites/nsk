@@ -14,11 +14,7 @@ export interface Repository {
     sort: unknown
     type: string
   }) => Promise<RepoResult>
-  update: (params: {
-    data: unknown
-    id: string
-    type: string
-  }) => Promise<RepoResult>
+  update: (params: { data: unknown, id: string, type: string }) => Promise<RepoResult>
 }
 
 export interface RepositoryModule {

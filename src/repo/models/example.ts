@@ -8,31 +8,30 @@ import type { CoreTypes } from '../../types/core'
 import type { ScopedLogger } from '../../types/logger'
 import type { PostgresClient } from '../../postgres/types'
 import type { EntityData } from '../entities/types'
-import type { Model, ModelUtilities, RepoResult } from './types'
+import type { EntityModel, EntityModelUtilities, RepoResult } from './types'
 
 interface Dependencies {
   core: CoreTypes
   entities: Record<string, EntityData>
   postgres: PostgresClient
-  utils: ModelUtilities
+  utils: EntityModelUtilities
 }
 
 export default function model(deps: Dependencies) {
   const { core, entities, postgres, utils } = deps
-  const { ResourceEntity } = entities
   const { client, throwOnDbError } = postgres
 
-  return function DomainResourceModel({ log }: { log: ScopedLogger }): Model {
-    const type = core.DomainModel.ExampleDomainModel
+  return function Example({ log }: { log: ScopedLogger }): EntityModel {
+    const type = core.model.example
 
     async function create(params: { data: any }): Promise<RepoResult> {
       const { data } = params
       try {
-        const resourceInsert = utils.composeUpsert({ data, method: 'create', type })
+        const insert = utils.composeUpsert({ data, method: 'create', type })
         const record = await client
-          .insertInto(ResourceEntity.table)
-          .values(resourceInsert)
-          .returning(ResourceEntity.fields)
+          .insertInto(entities.example.table)
+          .values(insert)
+          .returning(entities.example.fields)
           .executeTakeFirstOrThrow()
         return { data: [{ type, record }] }
       } catch (error: any) {
@@ -44,19 +43,19 @@ export default function model(deps: Dependencies) {
     async function destroy(params: { id: string }): Promise<void> {
       const { id } = params
       try {
-        const [record] = await client.selectFrom(ResourceEntity.table)
-          .select(ResourceEntity.fields)
-          .where(ResourceEntity.Field.Deleted, '=', false)
-          .where(ResourceEntity.Field.Id, '=', id)
+        const [record] = await client.selectFrom(entities.example.table)
+          .select(entities.example.fields)
+          .where(entities.example.field.Deleted, '=', false)
+          .where(entities.example.field.Id, '=', id)
           .execute()
         utils.throwOnNotFound({ id, data: record })
 
         const destroyUpsert = utils.composeUpsert({ method: 'destroy' })
         await client
-          .updateTable(ResourceEntity.table)
+          .updateTable(entities.example.table)
           .set(destroyUpsert)
-          .where(ResourceEntity.Field.Id, '=', id)
-          .returning(ResourceEntity.Field.Id)
+          .where(entities.example.field.Id, '=', id)
+          .returning(entities.example.field.Id)
           .executeTakeFirstOrThrow()
       } catch (error: any) {
         if (log.enabled) log.error(error)
@@ -69,10 +68,10 @@ export default function model(deps: Dependencies) {
     async function detail(params: { id: string }): Promise<RepoResult> {
       const { id } = params
       try {
-        const [record] = await client.selectFrom(ResourceEntity.table)
-          .select(ResourceEntity.fields)
-          .where(ResourceEntity.Field.Deleted, '=', false)
-          .where(ResourceEntity.Field.Id, '=', id)
+        const [record] = await client.selectFrom(entities.example.table)
+          .select(entities.example.fields)
+          .where(entities.example.field.Deleted, '=', false)
+          .where(entities.example.field.Id, '=', id)
           .execute()
 
         utils.throwOnNotFound({ id, data: record })
@@ -91,16 +90,16 @@ export default function model(deps: Dependencies) {
       const { order, prop } = sort
 
       try {
-        const query = client.selectFrom(ResourceEntity.table)
-          .select(ResourceEntity.fields)
-          .where(ResourceEntity.Field.Deleted, '=', false)
+        const query = client.selectFrom(entities.example.table)
+          .select(entities.example.fields)
+          .where(entities.example.field.Deleted, '=', false)
           .limit(limit)
           .offset(offset)
           .orderBy(prop, order)
 
-        const totalQuery = client.selectFrom(ResourceEntity.table)
+        const totalQuery = client.selectFrom(entities.example.table)
           .select(client.fn.countAll<number>().as('count'))
-          .where(ResourceEntity.Field.Deleted, '=', false)
+          .where(entities.example.field.Deleted, '=', false)
 
         // TODO
         Object.entries(filters).forEach(([k, v]: [k: any, v: any]) => {
@@ -127,11 +126,11 @@ export default function model(deps: Dependencies) {
       try {
         const resourceUpdate = utils.composeUpsert({ data, type })
         const record = await client
-          .updateTable(ResourceEntity.table)
+          .updateTable(entities.example.table)
           .set(resourceUpdate)
-          .where(ResourceEntity.Field.Id, '=', id)
-          .where(ResourceEntity.Field.Deleted, '=', false)
-          .returning(ResourceEntity.fields)
+          .where(entities.example.field.Id, '=', id)
+          .where(entities.example.field.Deleted, '=', false)
+          .returning(entities.example.fields)
           .executeTakeFirstOrThrow()
 
         utils.throwOnNotFound({ id, data: record })

@@ -14,15 +14,15 @@ interface Dependencies {
 export default function schemas(deps: Dependencies) {
   const { core, query, resources } = deps
 
-  const { DomainModel } = core
+  const { model } = core
   const { querySchema } = query
-  const { resource } = resources
+  const { exampleResource } = resources
 
   function bodySchema(params: { method: HTTPBodyMethod, type: string }) {
     const { method, type } = params
 
     switch (type) {
-      case DomainModel.ExampleDomainModel: return resource({ method })
+      case model.example: return exampleResource({ method })
       default: throw new Error(`invalid schema type '${type}'`)
     }
   }
@@ -35,7 +35,7 @@ export const inject = {
     core: 'core',
     query: 'http/validation/schemas/query',
     resources: {
-      resource: 'http/validation/schemas/resources/resource',
+      exampleResource: 'http/validation/schemas/resources/example',
     },
   },
 }

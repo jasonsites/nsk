@@ -13,13 +13,13 @@ export default function utilities(): EntityUtilities {
     }, {})
   }
 
-  const Entity: Record<string, string> = {
-    Resource: 'resource_entity',
+  const entity: Record<string, string> = {
+    example: 'example_entity',
   }
 
   return {
     createFieldMap,
-    Entity,
+    entity,
   }
 }
 

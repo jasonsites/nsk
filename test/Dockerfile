@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:18 as build
+FROM node:20 as build
 ENV APP=/home/app
 WORKDIR $APP
 COPY package*.json tsconfig.json $APP/
@@ -11,8 +11,8 @@ RUN npm run build
 RUN npm run lint
 
 
-# FROM gcr.io/distroless/nodejs:18
-FROM node:18-slim
+# FROM gcr.io/distroless/nodejs:20
+FROM node:20-slim
 ENV NODE_ENV=development
 ENV APP=/home/app
 WORKDIR $APP

@@ -8,12 +8,12 @@ export type CreateFieldMapParams = {
 }
 
 export type EntityData = {
-  Field: Record<string, string>,
+  field: Record<string, string>,
   fields: string[],
   table: string,
 }
 
 export type EntityUtilities = {
   createFieldMap: ({ attributes, entity }: CreateFieldMapParams) => Record<string, string>
-  Entity: Record<string, string>
+  entity: Record<string, string>
 }
