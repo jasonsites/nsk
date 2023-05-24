@@ -1,4 +1,4 @@
-FROM node:18 as base
+FROM node:20 as base
 ENV APP=/home/app
 WORKDIR $APP
 COPY package*.json $APP/
@@ -13,8 +13,8 @@ COPY . $APP
 RUN npm run build
 
 
-# FROM gcr.io/distroless/nodejs:18
-FROM node:18-slim
+# FROM gcr.io/distroless/nodejs:20
+FROM node:20-slim
 ENV NODE_ENV=production
 ENV APP=/home/app
 WORKDIR $APP
