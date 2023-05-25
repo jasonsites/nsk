@@ -17,7 +17,7 @@ type AssertDomainResourceParams = {
   modified?: boolean
 }
 
-export function assertDomainResource(params: AssertDomainResourceParams) {
+export function assertExampleResource(params: AssertDomainResourceParams) {
   const { actual, expected, modified = false } = params
   const { type, id, properties } = actual
 

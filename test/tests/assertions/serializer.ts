@@ -11,20 +11,20 @@ import type { CoreTypes } from '../../../src/types/core'
 const { expect } = chai
 chai.use(chaiUUID)
 
-type AssertDomainResourceParams = {
+type AssertExampleResourceParams = {
   actual: any
   core: CoreTypes
   expected: any
   modified?: boolean
 }
 
-export function assertDomainResource(params: AssertDomainResourceParams) {
+export function assertExampleResource(params: AssertExampleResourceParams) {
   const { actual, core, expected, modified = false } = params
   const { record } = expected
 
   expect(actual).to.be.an('object').with.all.keys(['type', 'id', 'properties'])
   const { type, id, properties } = actual
-  expect(type).to.equal(core.DomainModel.ExampleDomainModel)
+  expect(type).to.equal(core.model.example)
   expect(id).to.equal(record.id)
   expect(properties).to.be.an('object').with.all.keys([
     'created_by',

@@ -47,10 +47,10 @@ export type ExampleDomainModel = {
   id: string
   title: string
   description: string
-  status: string
+  status: number
   enabled: boolean
   created_on: string
-  created_by: string
+  created_by: number
   modified_on: string
-  modified_by: string
+  modified_by: number
 }

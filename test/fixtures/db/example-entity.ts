@@ -1,6 +1,6 @@
 import chance from '../chance'
 
-type DomainResourceRecordParams = {
+type ExampleEntityRecordParams = {
   deleted?: boolean
   description?: string
   enabled?: boolean
@@ -11,7 +11,7 @@ type DomainResourceRecordParams = {
   user_id?: number
 }
 
-export function domainResourceRecord(params: DomainResourceRecordParams = {}) {
+export function exampleEntityRecord(params: ExampleEntityRecordParams = {}) {
   const defaults = {
     deleted: false,
     description: chance.sentence(),
@@ -59,4 +59,4 @@ function validateParams() {
   return undefined
 }
 
-export default { domainResourceRecord }
+export default { exampleEntityRecord }
