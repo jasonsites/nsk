@@ -8,11 +8,11 @@ import config from 'config'
 import type { Correlation } from '../types/core'
 import type { ScopedLogger, LoggerConfiguration } from '../types/logger'
 import type { Repository } from '../types/repository'
-import type { EntityModel, RepoResult } from './models/types'
+import type { RepoResult } from './models/types'
 
 interface Dependencies {
   logger: Logger
-  models: { getEntityModel: (params: { log: ScopedLogger, type: string }) => EntityModel }
+  models: { getEntityModel: (params: { log: ScopedLogger, type: string }) => any }
 }
 
 export default function repository(deps: Dependencies): {
@@ -27,9 +27,11 @@ export default function repository(deps: Dependencies): {
       const log: ScopedLogger = logger.child({ module: label, req_id, level })
       log.enabled = enabled
 
+      // switch on type to get entity model
+
       async function create(params: { data: unknown, type: string }): Promise<RepoResult> {
         const { data, type } = params
-        const model: EntityModel = models.getEntityModel({ log, type })
+        const model = models.getEntityModel({ log, type })
         return model.create({ data })
       }
 

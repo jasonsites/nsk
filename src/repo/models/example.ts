@@ -1,5 +1,5 @@
 /**
-* @file resource entity model
+* @file example entity model
 */
 
 import Bluebird from 'bluebird'
@@ -7,8 +7,9 @@ import Bluebird from 'bluebird'
 import type { CoreTypes } from '../../types/core'
 import type { ScopedLogger } from '../../types/logger'
 import type { PostgresClient } from '../../postgres/types'
+import type { Repository } from '../../types/repository'
 import type { EntityData } from '../entities/types'
-import type { EntityModel, EntityModelUtilities, RepoResult } from './types'
+import type { EntityModelUtilities, RepoResult } from './types'
 
 interface Dependencies {
   core: CoreTypes
@@ -21,7 +22,7 @@ export default function model(deps: Dependencies) {
   const { core, entities, postgres, utils } = deps
   const { client, throwOnDbError } = postgres
 
-  return function Example({ log }: { log: ScopedLogger }): EntityModel {
+  return function Example({ log }: { log: ScopedLogger }): Repository {
     const type = core.model.example
 
     async function create(params: { data: any }): Promise<RepoResult> {
@@ -142,7 +143,7 @@ export default function model(deps: Dependencies) {
       }
     }
 
-    return { create, destroy, detail, list, type, update }
+    return { create, destroy, detail, list, update }
   }
 }
 
