@@ -6,14 +6,14 @@ export type EntityModelConstructor = {
   ({ log }: { log: ScopedLogger }): EntityModel
 }
 
-export type EntityModel = {
-  type: string
-  create: (params: {data: any }) => Promise<RepoResult>
-  destroy: (params: { id: string }) => Promise<void>
-  detail: (params: { id: string }) => Promise<RepoResult>
-  list: (params: { filters: any; page: any; sort: any; }) => Promise<RepoResult>
-  update: (params: { data: any; id: string; }) => Promise<RepoResult>
-}
+// export type EntityModel = {
+//   type: string
+//   create: (params: {data: any }) => Promise<RepoResult>
+//   destroy: (params: { id: string }) => Promise<void>
+//   detail: (params: { id: string }) => Promise<RepoResult>
+//   list: (params: { filters: any; page: any; sort: any; }) => Promise<RepoResult>
+//   update: (params: { data: any; id: string; }) => Promise<RepoResult>
+// }
 
 export type EntityModelUtilities = {
   composePagingData: (params: { count: number; limit: number; offset: number; }) => any

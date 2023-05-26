@@ -2,7 +2,7 @@ import chance from '../chance'
 
 import type { CoreTypes } from '../../../src/types/core'
 
-export function domainResource(core: CoreTypes, params: any = {}) {
+export function exampleResource(core: CoreTypes, params: any = {}) {
   const defaults = {
     description: chance.sentence(),
     enabled: chance.bool(),
@@ -15,7 +15,7 @@ export function domainResource(core: CoreTypes, params: any = {}) {
   const { description, enabled, id, status, title } = params
 
   const resource: any = {
-    type: core.DomainModel.ExampleDomainModel,
+    type: core.model.example,
     properties: {
       description,
       enabled,
@@ -29,6 +29,6 @@ export function domainResource(core: CoreTypes, params: any = {}) {
   return resource
 }
 
-export function domainResourceBody(core: CoreTypes, params = {}) {
-  return { data: domainResource(core, params) }
+export function exampleResourceBody(core: CoreTypes, params = {}) {
+  return { data: exampleResource(core, params) }
 }

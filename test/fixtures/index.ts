@@ -1,8 +1,8 @@
 import chance from './chance'
 
-import { domainResource, domainResourceBody } from './api/domain-resource'
+import { exampleResource, exampleResourceBody } from './api/example-resource'
 
-import { domainResourceRecord } from './db/domain-resource'
+import { exampleEntityRecord } from './db/example-entity'
 
 import {
   integerId,
@@ -11,9 +11,9 @@ import {
 } from './utils/helpers'
 
 chance.mixin({
-  domainResource,
-  domainResourceBody,
-  domainResourceRecord,
+  exampleEntityRecord,
+  exampleResource,
+  exampleResourceBody,
   integerId,
   modifiedFields,
   status,
