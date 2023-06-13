@@ -21,7 +21,7 @@ $ docker compose run --rm --service-ports api
 
 **Run full test suite with code coverage**
 ```shell
-$ docker compose -f docker-coverage.yml run --rm coverage
+$ docker compose run --rm api npm run coverage
 ```
 
 ## License
