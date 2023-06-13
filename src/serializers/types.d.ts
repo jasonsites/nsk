@@ -2,7 +2,7 @@
  * @file
  */
 
-import type { ExampleDomainModel } from '../types/domain'
+import type { ExampleDomainModel } from '../types/domain-models'
 import type { PagingData } from '../types/pagination'
 
 // serialization types ------------------------------------------

@@ -33,6 +33,6 @@ export default function example({ utils }: Dependencies) {
 
 export const inject = {
   require: {
-    utils: 'repo/entities/utils',
+    utils: 'repository/entities/utils',
   },
 }

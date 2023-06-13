@@ -21,6 +21,14 @@ export type Controller = {
   update: (ctx: Context) => Promise<void>
 }
 
+type HTTPResource = {
+  data: {
+    type: string
+    id?: string
+    properties: Record<string, unknown>
+  }
+}
+
 export type HttpRouter = {
   configureMiddleware: (app: HttpServer) => void,
   registerRoutes: (app: HttpServer) => void,

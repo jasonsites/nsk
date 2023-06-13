@@ -7,6 +7,11 @@ export type Correlation = {
   req_id: string
 }
 
+export type CorrelationWithType = {
+  correlation: Correlation
+  type: string
+}
+
 interface CustomError extends Error {
   type: string
 }

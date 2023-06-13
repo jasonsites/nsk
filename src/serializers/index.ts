@@ -21,6 +21,12 @@ interface Dependencies {
   },
 }
 
+// result {
+//   data: [{ attributes: [Object], meta: null, related: [] }],
+//     solo: true
+// }
+
+
 export default function serializers(deps: Dependencies) {
   const { core, resources } = deps
   const { example } = resources
