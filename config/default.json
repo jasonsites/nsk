@@ -36,6 +36,11 @@
       "enabled": "true",
       "level": "info"
     },
+    "domain": {
+      "enabled": "false",
+      "label": "domain",
+      "level": "info"
+    },
     "http": {
       "request": {
         "enabled": "true",

@@ -1,4 +1,5 @@
 {
+  "delay": 500,
   "exec": "npm run build && npm start",
   "ext": "ts",
   "ignore": ["**/*.test.ts", "node_modules"],
