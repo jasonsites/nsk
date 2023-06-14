@@ -5,9 +5,9 @@
 import { Context } from 'koa'
 
 import type { CorrelationWithType } from '../../types/core'
-import type { DomainModule, DomainService } from '../../types/domain-services'
+import type { DomainModule, DomainServiceWithContext } from '../../types/domain-services'
 import type { Controller, HTTPResource } from '../types'
-import type { QueryUtilities } from './types'
+import type { QueryUtilities, TransformQueryParams } from './types'
 
 // TODO: types
 interface Dependencies {
@@ -25,7 +25,7 @@ export default function controller(deps: Dependencies): Controller {
     const { body, method } = ctx.request
     validation.context(correlation).validateBody({ body, method, type })
     const { data: { properties } }: HTTPResource = body
-    const service: DomainService = domain.getService(type)
+    const service: DomainServiceWithContext = domain.getService(type)
     const result = await service.context(correlation).create({ data: properties, type })
     ctx.body = serializers.serialize({ input: result, solo: true })
     ctx.status = 201
@@ -35,7 +35,7 @@ export default function controller(deps: Dependencies): Controller {
   async function destroy(ctx: Context): Promise<void> {
     const { correlation, type }: CorrelationWithType = ctx.state
     const { id }: { id: string } = ctx.params
-    const service: DomainService = domain.getService(type)
+    const service: DomainServiceWithContext = domain.getService(type)
     await service.context(correlation).destroy({ id, type })
     ctx.status = 204
   }
@@ -43,10 +43,9 @@ export default function controller(deps: Dependencies): Controller {
   async function detail(ctx: Context): Promise<void> {
     const { correlation, type }: CorrelationWithType = ctx.state
     const { id }: { id: string } = ctx.params
-    const service: DomainService = domain.getService(type)
-    const result = await service.context(correlation).detail({ id, type })
-    console.log('result', result)
-    ctx.body = serializers.serialize({ input: result, solo: true })
+    const service: DomainServiceWithContext = domain.getService(type)
+    const model = await service.context(correlation).detail({ id, type })
+    ctx.body = serializers.serialize({ model, type })
     ctx.status = 200
     ctx.type = 'application/json'
   }
@@ -56,8 +55,9 @@ export default function controller(deps: Dependencies): Controller {
     const { querystring } = ctx.request
     const query = utils.parseQuery(querystring)
     validation.context(correlation).validateQuery({ query, type })
-    const { filters, page, sort } = utils.transformQuery(query)
-    const service: DomainService = domain.getService(type)
+    // TODO: query as unknown as TransformQueryParams
+    const { filters, page, sort } = utils.transformQuery(query as unknown as TransformQueryParams)
+    const service: DomainServiceWithContext = domain.getService(type)
     const result = await service.context(correlation).list({ filters, page, sort, type })
     ctx.body = serializers.serialize({ input: result, solo: false })
     ctx.status = 200
@@ -70,7 +70,7 @@ export default function controller(deps: Dependencies): Controller {
     const { body, method } = ctx.request
     validation.context(correlation).validateBody({ body, id, method, type })
     const { data: { properties } }: HTTPResource = body
-    const service: DomainService = domain.getService(type)
+    const service: DomainServiceWithContext = domain.getService(type)
     const result = await service.context(correlation).update({ data: properties, id, type })
     ctx.body = serializers.serialize({ input: result, solo: true })
     ctx.status = 200

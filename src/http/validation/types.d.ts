@@ -2,8 +2,8 @@
  * @file validation schemas types
  */
 
-import type { ObjectSchema, StringSchema } from 'joi'
-import type { CoreTypes } from '../../../types/core'
+import type { ObjectSchema, StringSchema, ValidationError } from 'joi'
+import type { CoreTypes, Correlation } from '../../types/core'
 
 export type BodySchemaBuilder = (params: {
   core: CoreTypes,
@@ -53,7 +53,7 @@ type ErrorBuilder = {
 interface Validation {
   composeValidationError: (params: ErrorBuilder) => any;
   formatBasicValidationErrors: (params: {
-    error: joi.ValidationError;
+    error: ValidationError;
   }) => ErrorBuilder;
   validateBody: (params: {
     body: object;

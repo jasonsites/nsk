@@ -3,7 +3,8 @@
  */
 
 import type { ExampleEntity } from '../../types/database'
-import type { DomainModelComposite } from '../../types/domain-models'
+import type { DomainModel } from '../../types/domain-models'
+import type { PageMetadata } from '../../types/pagination'
 
 export type MarshalParams = {
   data: EntityModel[]
@@ -12,7 +13,7 @@ export type MarshalParams = {
 }
 
 export interface EntityModelMarshaller {
-  marshal: (params: MarshalParams) => DomainModelComposite
+  marshal: (params: MarshalParams) => DomainModel
 }
 
 export type EntityModel = ExampleEntityModel // | SomeOtherEntityModel ...

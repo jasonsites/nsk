@@ -3,6 +3,8 @@
  * @see https://kysely-org.github.io/kysely/
  */
 
+import type { Generated } from 'kysely'
+
 export interface ExampleEntity {
   id: Generated<string> // uuid
   title: string

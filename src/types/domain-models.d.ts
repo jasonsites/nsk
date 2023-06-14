@@ -4,14 +4,18 @@
 
 import type { PageMetadata } from './pagination'
 
-export type DomainModelComposite = {
-  meta?: { paging: PageMetadata }
-  data: ExampleDomainModel[] // | SomeOtherDomainModel[] // | ...
+export type DomainModel = {
+  data: ExampleDomainObject[] // | SomeOtherDomainModel[] // | ...
+  meta?: DomainModelMetadata
   solo: boolean
 }
 
+export type DomainModelMetadata = {
+  paging: PageMetadata
+}
+
 // Example Domain Model
-export type ExampleDomainModel = {
+export type ExampleDomainObject = {
   attributes: {
     id: string
     title: string
@@ -26,3 +30,5 @@ export type ExampleDomainModel = {
   meta?: any
   related?: any[]
 }
+
+export type DomainObject = ExampleDomainObject // | SomeOtherDomainObject | ...

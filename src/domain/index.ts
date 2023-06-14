@@ -3,18 +3,18 @@
  */
 
 import { CoreTypes } from '../types/core'
-import type { DomainModule, DomainService } from '../types/domain-services'
+import type { DomainModule, DomainServiceWithContext } from '../types/domain-services'
 
 interface Dependencies {
   core: CoreTypes
-  services: { example: DomainService }
+  services: { example: DomainServiceWithContext }
 }
 
 export default function domain(deps: Dependencies): DomainModule {
   const { core, services } = deps
   const { InternalServerError, model } = core
 
-  function getService(type: string): DomainService {
+  function getService(type: string): DomainServiceWithContext {
     switch (type) {
       case model.example:
         return services.example

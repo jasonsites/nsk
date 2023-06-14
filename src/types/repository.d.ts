@@ -2,18 +2,20 @@
  * @file repository type definitions
  */
 
-import type { DomainModelComposite } from './domain-models'
+import type { Correlation } from './core'
+import type { DomainModel } from './domain-models'
+import type { ScopedLogger } from './logger'
 
 export interface Repository {
-  create: (params: { data: unknown }) => Promise<DomainModelComposite | void>
+  create: (params: { data: unknown }) => Promise<DomainModel | void>
   destroy: (params: { id: string }) => Promise<void>
-  detail: (params: { id: string }) => Promise<DomainModelComposite | void>
+  detail: (params: { id: string }) => Promise<DomainModel | void>
   list: (params: {
     filters: unknown
     page: unknown
     sort: unknown
-  }) => Promise<DomainModelComposite | void>
-  update: (params: { data: unknown, id: string }) => Promise<DomainModelComposite | void>
+  }) => Promise<DomainModel | void>
+  update: (params: { data: unknown, id: string }) => Promise<DomainModel | void>
 }
 
 export interface RepositoryModule {

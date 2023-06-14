@@ -2,18 +2,23 @@
  * @file domain/businsess logic module/service type definitions
  */
 
+import type { Correlation } from './core'
+import type { DomainModel } from './domain-models'
+
 export interface DomainModule {
-  getService: (type: string) => DomainService
+  getService: (type: string) => DomainServiceWithContext
+}
+
+export interface DomainServiceWithContext {
+  context: (correlation: Correlation) => DomainService
 }
 
 export interface DomainService {
-  context: (correlation: Correlation) => {
-    create: (params: CreateParams) => Promise<DomainModelComposite | void>
-    destroy: (params: DestroyParams) => Promise<void>
-    detail: (params: DetailParams) => Promise<DomainModelComposite | void>
-    list: (params: ListParams) => Promise<DomainModelComposite | void>
-    update: (params: UpdateParams) => Promise<DomainModelComposite | void>
-  }
+  create: (params: CreateParams) => Promise<DomainModel | void>
+  destroy: (params: DestroyParams) => Promise<void>
+  detail: (params: DetailParams) => Promise<DomainModel | void>
+  list: (params: ListParams) => Promise<DomainModel | void>
+  update: (params: UpdateParams) => Promise<DomainModel | void>
 }
 
 type CreateParams = {

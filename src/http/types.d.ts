@@ -2,6 +2,11 @@
  * @file http type definitions
  */
 
+import type Koa from 'koa'
+import type { Context, Middleware } from 'koa'
+import type { ErrorMessages } from '../types/core'
+import type { PagingDefaults, SortingDefaults } from './controllers/types'
+
 export type ApiConfiguration = {
   baseURL: string
   messages: { error: ErrorMessages }

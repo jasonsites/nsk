@@ -3,7 +3,8 @@
  */
 
 import type { CoreTypes } from '../types/core'
-import type { DomainModel, Serializer } from './types'
+import type { DomainObject } from '../types/domain-models'
+import type { Serializer } from './types'
 
 interface Dependencies {
   core: CoreTypes,
@@ -12,11 +13,11 @@ interface Dependencies {
 export default function serializer(deps: Dependencies): Serializer {
   const { core } = deps
 
-  const type = core.model.example
+  const type = core.model.example // TODO
 
-  function serialize(params: { model: DomainModel }) {
-    const { model } = params
-    const { attributes } = model
+  function serialize(params: { obj: DomainObject }) {
+    const { obj } = params
+    const { attributes } = obj
 
     const { id, ...fields } = attributes
     const {

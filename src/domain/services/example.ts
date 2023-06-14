@@ -5,8 +5,8 @@
 import config from 'config'
 
 import type { Correlation } from '../../types/core'
-import type { DomainModelComposite } from '../../types/domain-models'
-import type { DomainService } from '../../types/domain-services'
+import type { DomainModel } from '../../types/domain-models'
+import type { DomainServiceWithContext } from '../../types/domain-services'
 import type { LoggerConfiguration, ScopedLogger } from '../../types/logger'
 import type { ExternalService } from '../../types/services'
 import type { RepositoryModule, Repository } from '../../types/repository'
@@ -18,7 +18,7 @@ interface Dependencies {
   repository: RepositoryModule
 }
 
-export default function service(deps: Dependencies): DomainService {
+export default function service(deps: Dependencies): DomainServiceWithContext {
   const { externalService, logger, repository } = deps
 
   const { enabled, label, level }: LoggerConfiguration = config.get('logger.domain')
@@ -32,26 +32,30 @@ export default function service(deps: Dependencies): DomainService {
 
       const repo: Repository = repository.context(correlation)
 
-      async function create(params: { data: unknown }): Promise<DomainModelComposite | void> {
+      async function create(params: { data: unknown }): Promise<DomainModel | void> {
         const { data } = params
+        // pre-repo domain logic here
         const result = await repo.create({ data })
-        // domain logic here
+        // post-repo domain logic here
         return result
       }
 
       async function destroy(params: { id: string, type: string }): Promise<void> {
         const { id } = params
+        // pre-repo domain logic here
         return repo.destroy({ id })
       }
 
       async function detail(params: {
         id: string
         type: string
-      }): Promise<DomainModelComposite | void> {
+      }): Promise<DomainModel | void> {
         const { id } = params
+        // pre-repo domain logic here
+        // external service request example
         await externalService.context(correlation).get()
         const result = repo.detail({ id })
-        // domain logic here
+        // post-repo domain logic here
         return result
       }
 
@@ -60,10 +64,11 @@ export default function service(deps: Dependencies): DomainService {
         page: unknown,
         sort: unknown,
         type: string,
-      }): Promise<DomainModelComposite | void> {
+      }): Promise<DomainModel | void> {
         const { filters, page, sort } = params
+        // pre-repo domain logic here
         const result = repo.list({ filters, page, sort })
-        // domain logic here
+        // post-repo domain logic here
         return result
       }
 
@@ -71,10 +76,11 @@ export default function service(deps: Dependencies): DomainService {
         data: unknown,
         id: string,
         type: string,
-      }): Promise<DomainModelComposite | void> {
+      }): Promise<DomainModel | void> {
         const { data, id } = params
+        // pre-repo domain logic here
         const result = repo.update({ data, id })
-        // domain logic here
+        // post-repo domain logic here
         return result
       }
 

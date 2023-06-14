@@ -5,10 +5,10 @@
 import config from 'config'
 
 import type { CoreTypes, Correlation } from '../../../types/core'
-import type { DomainModelComposite } from '../../../types/domain-models'
+import type { DomainModel } from '../../../types/domain-models'
 import type { LoggerConfiguration, ScopedLogger } from '../../../types/logger'
+import type { RepositoryModule } from '../../../types/repository'
 import type { PostgresClient } from '../../../postgres/types'
-// import type { Repository } from '../../../types/repository'
 import type { EntityData } from '../../entities/types'
 import type {
   EntityModelMarshaller,
@@ -29,11 +29,13 @@ interface Dependencies {
   }
 }
 
-export default function example(deps: Dependencies) {
+export default function example(deps: Dependencies): RepositoryModule {
   const { core, entities, logger, model, postgres, utils } = deps
   const { client, throwOnDbError } = postgres
 
   const { enabled, label, level }: LoggerConfiguration = config.get('logger.domain')
+
+  const type = core.model.example
 
   return {
     context: (correlation: Correlation) => {
@@ -42,10 +44,9 @@ export default function example(deps: Dependencies) {
       const log: ScopedLogger = logger.child({ module: label, req_id, level })
       log.enabled = enabled
 
-      const type = core.model.example
-
-      async function create(params: { data: any }): Promise<DomainModelComposite | void> {
+      async function create(params: { data: any }): Promise<DomainModel | void> {
         const { data } = params
+
         try {
           const insert = utils.upsert.compose({ data, method: 'create', type })
           const record: ExampleEntityModel = await client
@@ -53,6 +54,7 @@ export default function example(deps: Dependencies) {
             .values(insert)
             .returning(entities.example.fields)
             .executeTakeFirstOrThrow()
+
           return model.marshal({ data: [record] })
         } catch (error: any) {
           if (log.enabled) log.error(error)
@@ -62,6 +64,7 @@ export default function example(deps: Dependencies) {
 
       async function destroy(params: { id: string }): Promise<void> {
         const { id } = params
+
         try {
           const [record] = await client.selectFrom(entities.example.table)
             .select(entities.example.fields)
@@ -85,8 +88,9 @@ export default function example(deps: Dependencies) {
         return undefined
       }
 
-      async function detail(params: { id: string }): Promise<DomainModelComposite | void> {
+      async function detail(params: { id: string }): Promise<DomainModel | void> {
         const { id } = params
+
         try {
           const [record] = await client.selectFrom(entities.example.table)
             .select(entities.example.fields)
@@ -108,7 +112,7 @@ export default function example(deps: Dependencies) {
         filters: any
         page: any
         sort: any
-      }): Promise<DomainModelComposite | void> {
+      }): Promise<DomainModel | void> {
         const { filters, page, sort } = params
         const { limit, offset } = page
         const { order, prop } = sort
@@ -146,7 +150,7 @@ export default function example(deps: Dependencies) {
       async function update(params: {
         data: any
         id: string
-      }): Promise<DomainModelComposite | void> {
+      }): Promise<DomainModel | void> {
         const { data, id } = params
 
         try {

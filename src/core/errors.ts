@@ -15,62 +15,50 @@ export default function errors(): ErrorTypes {
   }
 
   class ConflictError extends Error {
-    type: string
-
-    constructor(message?: string) {
+    constructor(message: string | undefined) {
       super(message)
       Object.setPrototypeOf(this, ConflictError.prototype)
-      this.type = ErrorType.Conflict
+      this.name = ErrorType.Conflict
     }
   }
 
   class ForbiddenError extends Error {
-    type: string
-
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, ForbiddenError.prototype)
-      this.type = ErrorType.Forbidden
+      this.name = ErrorType.Forbidden
     }
   }
 
   class InternalServerError extends Error {
-    type: string
-
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, InternalServerError.prototype)
-      this.type = ErrorType.InternalServer
+      this.name = ErrorType.InternalServer
     }
   }
 
   class NotFoundError extends Error {
-    type: string
-
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, NotFoundError.prototype)
-      this.type = ErrorType.NotFound
+      this.name = ErrorType.NotFound
     }
   }
 
   class UnauthorizedError extends Error {
-    type: string
-
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, UnauthorizedError.prototype)
-      this.type = ErrorType.Unauthorized
+      this.name = ErrorType.Unauthorized
     }
   }
 
   class ValidationError extends Error {
-    type: string
-
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, ValidationError.prototype)
-      this.type = ErrorType.Validation
+      this.name = ErrorType.Validation
     }
   }
 

@@ -43,7 +43,7 @@
     "allowUnreachableCode": false,                       /* Disable error reporting for unreachable code. */
 
     /* Completeness */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "skipLibCheck": false                                 /* Skip type checking all .d.ts files. */
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*.ts"],

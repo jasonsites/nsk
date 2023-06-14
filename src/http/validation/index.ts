@@ -60,7 +60,7 @@ export default function validation(deps: Dependencies): ValidationModule {
       function throwOnInvalid(params: { errors: ErrorBuilder }) {
         const { errors } = params
 
-        if (errors.details.length) {
+        if (errors?.details?.length) {
           const err = composeValidationError(errors)
           if (log.enabled) log.error(`${err.message}`)
           throw err
