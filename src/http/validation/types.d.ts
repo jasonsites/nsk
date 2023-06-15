@@ -3,7 +3,8 @@
  */
 
 import type { ObjectSchema, StringSchema, ValidationError } from 'joi'
-import type { CoreTypes, Correlation } from '../../types/core'
+import type { CoreTypes } from '../../types/core'
+import type { Correlation } from '../../types/correlation'
 
 export type BodySchemaBuilder = (params: {
   core: CoreTypes,

@@ -6,7 +6,8 @@ import config from 'config'
 import joi from 'joi'
 
 import type Logger from 'bunyan'
-import type { CoreTypes, Correlation } from '../../types/core'
+import type { CoreTypes } from '../../types/core'
+import type { Correlation } from '../../types/correlation'
 import type { LoggerConfiguration, ScopedLogger } from '../../types/logger'
 import type { ErrorBuilder, HTTPBodyMethod, ValidationModule, ValidationSchemas } from './types'
 

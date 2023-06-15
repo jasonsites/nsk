@@ -4,7 +4,7 @@
 
 import config from 'config'
 
-import type { Correlation } from '../../types/core'
+import type { Correlation } from '../../types/correlation'
 import type { DomainModel } from '../../types/domain-models'
 import type { DomainServiceWithContext } from '../../types/domain-services'
 import type { LoggerConfiguration, ScopedLogger } from '../../types/logger'
@@ -32,7 +32,7 @@ export default function service(deps: Dependencies): DomainServiceWithContext {
 
       const repo: Repository = repository.context(correlation)
 
-      async function create(params: { data: unknown }): Promise<DomainModel | void> {
+      async function create(params: { data: unknown }): Promise<DomainModel> {
         const { data } = params
         // pre-repo domain logic here
         const result = await repo.create({ data })
@@ -49,7 +49,7 @@ export default function service(deps: Dependencies): DomainServiceWithContext {
       async function detail(params: {
         id: string
         type: string
-      }): Promise<DomainModel | void> {
+      }): Promise<DomainModel> {
         const { id } = params
         // pre-repo domain logic here
         // external service request example
@@ -64,7 +64,7 @@ export default function service(deps: Dependencies): DomainServiceWithContext {
         page: unknown,
         sort: unknown,
         type: string,
-      }): Promise<DomainModel | void> {
+      }): Promise<DomainModel> {
         const { filters, page, sort } = params
         // pre-repo domain logic here
         const result = repo.list({ filters, page, sort })
@@ -76,7 +76,7 @@ export default function service(deps: Dependencies): DomainServiceWithContext {
         data: unknown,
         id: string,
         type: string,
-      }): Promise<DomainModel | void> {
+      }): Promise<DomainModel> {
         const { data, id } = params
         // pre-repo domain logic here
         const result = repo.update({ data, id })

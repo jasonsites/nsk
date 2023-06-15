@@ -65,7 +65,6 @@ export default function serializers(deps: Dependencies) {
 
   function serializeObject(params: { obj: DomainObject, type: string }) {
     const { obj, type } = params
-    console.log('typeof obj', typeof obj)
 
     switch (type) {
       case core.model.example:

@@ -4,7 +4,8 @@
 
 import config from 'config'
 
-import type { CoreTypes, Correlation } from '../../../types/core'
+import type { CoreTypes } from '../../../types/core'
+import type { Correlation } from '../../../types/correlation'
 import type { DomainModel } from '../../../types/domain-models'
 import type { LoggerConfiguration, ScopedLogger } from '../../../types/logger'
 import type { RepositoryModule } from '../../../types/repository'
@@ -12,7 +13,6 @@ import type { PostgresClient } from '../../../postgres/types'
 import type { EntityData } from '../../entities/types'
 import type {
   EntityModelMarshaller,
-  ExampleEntityModel,
   RepositoryHandlerUtilities,
   RepositoryUpsertUtilities,
 } from '../types'
@@ -44,12 +44,12 @@ export default function example(deps: Dependencies): RepositoryModule {
       const log: ScopedLogger = logger.child({ module: label, req_id, level })
       log.enabled = enabled
 
-      async function create(params: { data: any }): Promise<DomainModel | void> {
+      async function create(params: { data: any }): Promise<DomainModel> {
         const { data } = params
 
         try {
           const insert = utils.upsert.compose({ data, method: 'create', type })
-          const record: ExampleEntityModel = await client
+          const record: any = await client
             .insertInto(entities.example.table)
             .values(insert)
             .returning(entities.example.fields)
@@ -58,6 +58,7 @@ export default function example(deps: Dependencies): RepositoryModule {
           return model.marshal({ data: [record] })
         } catch (error: any) {
           if (log.enabled) log.error(error)
+          // @ts-expect-error catch block
           return throwOnDbError({ error })
         }
       }
@@ -88,11 +89,11 @@ export default function example(deps: Dependencies): RepositoryModule {
         return undefined
       }
 
-      async function detail(params: { id: string }): Promise<DomainModel | void> {
+      async function detail(params: { id: string }): Promise<DomainModel> {
         const { id } = params
 
         try {
-          const [record] = await client.selectFrom(entities.example.table)
+          const [record]: Array<any> = await client.selectFrom(entities.example.table)
             .select(entities.example.fields)
             .where(entities.example.field.Deleted, '=', false)
             .where(entities.example.field.Id, '=', id)
@@ -103,6 +104,7 @@ export default function example(deps: Dependencies): RepositoryModule {
           return model.marshal({ data: [record] })
         } catch (error: any) {
           if (log.enabled) log.error(error)
+          // @ts-expect-error catch block
           return throwOnDbError({ error })
         }
       }
@@ -112,7 +114,7 @@ export default function example(deps: Dependencies): RepositoryModule {
         filters: any
         page: any
         sort: any
-      }): Promise<DomainModel | void> {
+      }): Promise<DomainModel> {
         const { filters, page, sort } = params
         const { limit, offset } = page
         const { order, prop } = sort
@@ -135,7 +137,7 @@ export default function example(deps: Dependencies): RepositoryModule {
             totalQuery.where(k, '=', v)
           })
 
-          const records: ExampleEntityModel[] = await query.execute()
+          const records: Array<any> = await query.execute()
           const [{ count }] = await totalQuery.execute()
 
           const meta = { paging: utils.handler.marshalPageData({ count, limit, offset }) }
@@ -143,6 +145,7 @@ export default function example(deps: Dependencies): RepositoryModule {
           return model.marshal({ data: records, meta, solo: false })
         } catch (error: any) {
           if (log.enabled) log.error(error)
+          // @ts-expect-error catch block
           return throwOnDbError({ error })
         }
       }
@@ -150,12 +153,12 @@ export default function example(deps: Dependencies): RepositoryModule {
       async function update(params: {
         data: any
         id: string
-      }): Promise<DomainModel | void> {
+      }): Promise<DomainModel> {
         const { data, id } = params
 
         try {
           const updateData = utils.upsert.compose({ data, type })
-          const record: ExampleEntityModel = await client
+          const record: any = await client
             .updateTable(entities.example.table)
             .set(updateData)
             .where(entities.example.field.Id, '=', id)
@@ -168,6 +171,7 @@ export default function example(deps: Dependencies): RepositoryModule {
           return model.marshal({ data: [record] })
         } catch (error: any) {
           if (log.enabled) log.error(error)
+          // @ts-expect-error catch block
           return throwOnDbError({ error })
         }
       }

@@ -4,10 +4,11 @@
 
 import { Context } from 'koa'
 
-import type { CorrelationWithType } from '../../types/core'
+import type { CorrelationWithType } from '../../types/correlation'
 import type { DomainModule, DomainServiceWithContext } from '../../types/domain-services'
 import type { Controller, HTTPResource } from '../types'
 import type { QueryUtilities, TransformQueryParams } from './types'
+import { DomainModel } from '../../types/domain-models'
 
 // TODO: types
 interface Dependencies {
@@ -26,8 +27,8 @@ export default function controller(deps: Dependencies): Controller {
     validation.context(correlation).validateBody({ body, method, type })
     const { data: { properties } }: HTTPResource = body
     const service: DomainServiceWithContext = domain.getService(type)
-    const result = await service.context(correlation).create({ data: properties, type })
-    ctx.body = serializers.serialize({ input: result, solo: true })
+    const model: DomainModel = await service.context(correlation).create({ data: properties, type })
+    ctx.body = serializers.serialize({ model, type })
     ctx.status = 201
     ctx.type = 'application/json'
   }
@@ -58,8 +59,8 @@ export default function controller(deps: Dependencies): Controller {
     // TODO: query as unknown as TransformQueryParams
     const { filters, page, sort } = utils.transformQuery(query as unknown as TransformQueryParams)
     const service: DomainServiceWithContext = domain.getService(type)
-    const result = await service.context(correlation).list({ filters, page, sort, type })
-    ctx.body = serializers.serialize({ input: result, solo: false })
+    const model = await service.context(correlation).list({ filters, page, sort, type })
+    ctx.body = serializers.serialize({ model, type })
     ctx.status = 200
     ctx.type = 'application/json'
   }
@@ -71,8 +72,8 @@ export default function controller(deps: Dependencies): Controller {
     validation.context(correlation).validateBody({ body, id, method, type })
     const { data: { properties } }: HTTPResource = body
     const service: DomainServiceWithContext = domain.getService(type)
-    const result = await service.context(correlation).update({ data: properties, id, type })
-    ctx.body = serializers.serialize({ input: result, solo: true })
+    const model = await service.context(correlation).update({ data: properties, id, type })
+    ctx.body = serializers.serialize({ model, type })
     ctx.status = 200
     ctx.type = 'application/json'
   }

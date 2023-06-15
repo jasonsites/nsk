@@ -2,7 +2,7 @@
  * @file domain/businsess logic module/service type definitions
  */
 
-import type { Correlation } from './core'
+import type { Correlation } from './correlation'
 import type { DomainModel } from './domain-models'
 
 export interface DomainModule {
@@ -14,11 +14,11 @@ export interface DomainServiceWithContext {
 }
 
 export interface DomainService {
-  create: (params: CreateParams) => Promise<DomainModel | void>
+  create: (params: CreateParams) => Promise<DomainModel>
   destroy: (params: DestroyParams) => Promise<void>
-  detail: (params: DetailParams) => Promise<DomainModel | void>
-  list: (params: ListParams) => Promise<DomainModel | void>
-  update: (params: UpdateParams) => Promise<DomainModel | void>
+  detail: (params: DetailParams) => Promise<DomainModel>
+  list: (params: ListParams) => Promise<DomainModel>
+  update: (params: UpdateParams) => Promise<DomainModel>
 }
 
 type CreateParams = {
