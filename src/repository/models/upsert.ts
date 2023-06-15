@@ -1,28 +1,17 @@
 /**
-* @file repository entity model utilities
+* @file repository upsert utilities
 */
 
 import { sql } from 'kysely'
 
 import type { CoreTypes } from '../../types/core'
-import { PageMetadata } from '../../types/pagination'
 
 interface Dependencies {
   core: CoreTypes,
 }
 
 export default function utilities(deps: Dependencies) {
-  const { core: { NotFoundError, model } } = deps
-
-  // list metadata for all models
-  function composePagingData(params: {
-    count: number,
-    limit: number,
-    offset: number,
-  }): PageMetadata {
-    const { count, limit, offset } = params
-    return { limit, offset, total: count }
-  }
+  const { core: { model } } = deps
 
   /**
    * returns insert/update object for repo entity operations
@@ -32,7 +21,7 @@ export default function utilities(deps: Dependencies) {
    * @param {string} params.type    - resource type
    * @returns {object}
    */
-  function composeUpsert(params: { data: any, method: string, type: string }) {
+  function compose(params: { data: any, method: string, type: string }) {
     const { data, method = 'update', type } = params
     const user_id = 1 // TODO: get from context
 
@@ -73,20 +62,7 @@ export default function utilities(deps: Dependencies) {
     return { description, enabled, status, title }
   }
 
-  // error utilities -----------------------------------------------------
-  // error
-  function throwOnNotFound(params: {
-    id: string,
-    data: any,
-    type: string,
-  }): void {
-    const { id, data, type = 'resource' } = params
-    if (!data || (Array.isArray(data) && data.length === 0)) {
-      throw new NotFoundError(`unable to find ${type} with id '${id}'`)
-    }
-  }
-
-  return { composePagingData, composeUpsert, throwOnNotFound }
+  return { compose }
 }
 
 export const inject = {

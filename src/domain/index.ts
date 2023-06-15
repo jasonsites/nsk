@@ -1,70 +1,37 @@
 /**
  * @file domain/business logic module
- * NOTE: this module (directory) should be renamed to reflect the actual domain
  */
 
-import type { Correlation } from '../types/core'
-import type { DomainModule } from '../types/domain'
-import type { ExternalService } from '../types/services'
-import type { RepositoryModule, Repository } from '../types/repository'
+import { CoreTypes } from '../types/core'
+import type { DomainModule, DomainServiceWithContext } from '../types/domain-services'
 
 interface Dependencies {
-  repo: RepositoryModule
-  services: { example: ExternalService }
+  core: CoreTypes
+  services: { example: DomainServiceWithContext }
 }
 
 export default function domain(deps: Dependencies): DomainModule {
-  const { repo, services } = deps
-  const { example } = services
+  const { core, services } = deps
+  const { InternalServerError, model } = core
 
-  // TODO: domain logger
-
-  return {
-    context: (correlation: Correlation) => {
-      const repository: Repository = repo.context(correlation)
-
-      async function create(params: { data: unknown, type: string }) {
-        const { data, type } = params
-        return repository.create({ data, type })
-      }
-
-      async function destroy(params: { id: string, type: string }) {
-        const { id, type } = params
-        return repository.destroy({ id, type })
-      }
-
-      async function detail(params: { id: string, type: string }) {
-        const { id, type } = params
-        await example.context(correlation).get()
-        return repository.detail({ id, type })
-      }
-
-      async function list(params: {
-        filters: unknown,
-        page: unknown,
-        sort: unknown,
-        type: string,
-      }) {
-        const { filters, page, sort, type } = params
-        return repository.list({ filters, page, sort, type })
-      }
-
-      async function update(params: { data: unknown, id: string, type: string }) {
-        const { data, id, type } = params
-        return repository.update({ data, id, type })
-      }
-
-      return { create, destroy, detail, list, update }
-    },
+  function getService(type: string): DomainServiceWithContext {
+    switch (type) {
+      case model.example:
+        return services.example
+      default:
+        throw new InternalServerError(`unknown domain service type: '${type}'`)
+    }
   }
+
+  return { getService }
 }
 
 export const inject = {
   name: 'domain',
   require: {
-    repo: 'repo',
+    core: 'core',
     services: {
-      example: 'services/example',
+      example: 'domain/services/example',
     },
   },
 }

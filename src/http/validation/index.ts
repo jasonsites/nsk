@@ -6,7 +6,8 @@ import config from 'config'
 import joi from 'joi'
 
 import type Logger from 'bunyan'
-import type { CoreTypes, Correlation } from '../../types/core'
+import type { CoreTypes } from '../../types/core'
+import type { Correlation } from '../../types/correlation'
 import type { LoggerConfiguration, ScopedLogger } from '../../types/logger'
 import type { ErrorBuilder, HTTPBodyMethod, ValidationModule, ValidationSchemas } from './types'
 
@@ -60,7 +61,7 @@ export default function validation(deps: Dependencies): ValidationModule {
       function throwOnInvalid(params: { errors: ErrorBuilder }) {
         const { errors } = params
 
-        if (errors.details.length) {
+        if (errors?.details?.length) {
           const err = composeValidationError(errors)
           if (log.enabled) log.error(`${err.message}`)
           throw err

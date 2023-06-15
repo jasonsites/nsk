@@ -8,6 +8,10 @@
       "enabled": "LOGGER_APP_ENABLED",
       "level": "LOGGER_APP_LEVEL"
     },
+    "domain": {
+      "enabled": "LOGGER_DOMAIN_ENABLED",
+      "level": "LOGGER_DOMAIN_LEVEL"
+    },
     "http": {
       "request": {
         "enabled": "LOGGER_HTTP_REQUEST_ENABLED",

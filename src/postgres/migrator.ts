@@ -1,6 +1,8 @@
 /**
-* @file postgres migrator
-*/
+ * @file postgres migrator
+ */
+
+/* eslint-disable no-console, @typescript-eslint/no-explicit-any */
 
 import * as path from 'path'
 import { promises as fs } from 'fs'

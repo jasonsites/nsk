@@ -6,7 +6,7 @@ import config from 'config'
 
 import type Logger from 'bunyan'
 import type { AxiosInstance } from 'axios'
-import type { Correlation } from '../types/core'
+import type { Correlation } from '../types/correlation'
 import type { LoggerConfiguration } from '../types/logger'
 
 interface Dependencies {

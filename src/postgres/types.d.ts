@@ -1,6 +1,8 @@
 /**
- *
+ * @file postgres client type definitions
  */
+
+import type { Kysely } from 'kysely'
 
 // TODO: namespace all error methods under PostgresClient.errors
 export type PostgresClient = PostgresErrors & {

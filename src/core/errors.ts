@@ -15,62 +15,69 @@ export default function errors(): ErrorTypes {
   }
 
   class ConflictError extends Error {
-    type: string
+    details: Array<Record<string, unknown>>
 
-    constructor(message?: string) {
+    constructor(message: string | undefined) {
       super(message)
       Object.setPrototypeOf(this, ConflictError.prototype)
-      this.type = ErrorType.Conflict
+      this.details = []
+      this.name = ErrorType.Conflict
     }
   }
 
   class ForbiddenError extends Error {
-    type: string
+    details: Array<Record<string, unknown>>
 
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, ForbiddenError.prototype)
-      this.type = ErrorType.Forbidden
+      this.details = []
+      this.name = ErrorType.Forbidden
+      this.details = []
     }
   }
 
   class InternalServerError extends Error {
-    type: string
+    details: Array<Record<string, unknown>>
 
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, InternalServerError.prototype)
-      this.type = ErrorType.InternalServer
+      this.details = []
+      this.name = ErrorType.InternalServer
     }
   }
 
   class NotFoundError extends Error {
-    type: string
+    details: Array<Record<string, unknown>>
 
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, NotFoundError.prototype)
-      this.type = ErrorType.NotFound
+      this.details = []
+      this.name = ErrorType.NotFound
     }
   }
 
   class UnauthorizedError extends Error {
-    type: string
+    details: Array<Record<string, unknown>>
 
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, UnauthorizedError.prototype)
-      this.type = ErrorType.Unauthorized
+      this.details = []
+      this.name = ErrorType.Unauthorized
     }
   }
 
   class ValidationError extends Error {
-    type: string
+    details: Array<Record<string, unknown>>
 
-    constructor(message?: string) {
+    constructor(message: string) {
       super(message)
       Object.setPrototypeOf(this, ValidationError.prototype)
-      this.type = ErrorType.Validation
+      this.details = []
+      this.name = ErrorType.Validation
     }
   }
 

@@ -2,13 +2,24 @@
  * @file example domain model serializer
  */
 
-import type { DomainModel, Serializer } from './types'
+import type { CoreTypes } from '../types/core'
+import type { DomainObject } from '../types/domain-models'
+import type { Serializer } from './types'
 
-export default function serializer(): Serializer {
-  function serialize(params: { model: DomainModel, type: string }) {
-    const { model, type } = params
+interface Dependencies {
+  core: CoreTypes,
+}
 
-    const { id, ...fields } = model
+export default function serializer(deps: Dependencies): Serializer {
+  const { core } = deps
+
+  const type = core.model.example // TODO
+
+  function serialize(params: { obj: DomainObject }) {
+    const { obj } = params
+    const { attributes } = obj
+
+    const { id, ...fields } = attributes
     const {
       created_by,
       created_on,
@@ -37,4 +48,8 @@ export default function serializer(): Serializer {
   return { serialize }
 }
 
-export const inject = {}
+export const inject = {
+  require: {
+    core: 'core',
+  },
+}

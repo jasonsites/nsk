@@ -6,7 +6,7 @@ import { badRequest, boomify, conflict, forbidden, notFound, unauthorized } from
 
 import type Boom from 'boom'
 import type { Context, Middleware, Next } from 'koa'
-import type { CoreTypes, CustomError } from '../../types/core'
+import type { CoreTypes } from '../../types/core'
 
 type AugmentedBoom = Boom<unknown> & { details?: object[], type: string }
 
@@ -37,8 +37,8 @@ export default function middleware(deps: Dependencies): Middleware {
     }
   }
 
-  function boomifyError(error: CustomError): AugmentedBoom {
-    switch (error.type) {
+  function boomifyError(error: Error): AugmentedBoom {
+    switch (error.name) {
       case ErrorType.Conflict: return conflict(error) as unknown as AugmentedBoom
       case ErrorType.Forbidden: return forbidden(error) as unknown as AugmentedBoom
       case ErrorType.NotFound: return notFound(error) as unknown as AugmentedBoom

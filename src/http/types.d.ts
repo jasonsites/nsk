@@ -2,6 +2,11 @@
  * @file http type definitions
  */
 
+import type Koa from 'koa'
+import type { Context, Middleware } from 'koa'
+import type { ErrorMessages } from '../types/core'
+import type { PagingDefaults, SortingDefaults } from './controllers/types'
+
 export type ApiConfiguration = {
   baseURL: string
   messages: { error: ErrorMessages }
@@ -19,6 +24,14 @@ export type Controller = {
   detail: (ctx: Context) => Promise<void>
   list: (ctx: Context) => Promise<void>
   update: (ctx: Context) => Promise<void>
+}
+
+type HTTPResource = {
+  data: {
+    type: string
+    id?: string
+    properties: Record<string, unknown>
+  }
 }
 
 export type HttpRouter = {
