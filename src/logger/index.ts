@@ -2,15 +2,15 @@
  * @file (base) application logger
  */
 
-import Logger, { LoggerOptions, createLogger } from 'bunyan'
+import { createLogger } from 'bunyan'
 import config from 'config'
 
+import type Logger from 'bunyan'
+import type { LoggerOptions } from 'bunyan'
 import type { LoggerConfiguration } from '../types/logger'
 
-const {
-  npm_package_name: name = 'unknown',
-  npm_package_version: version = 'unknown',
-} = process.env
+const name = process.env.npm_package_name ?? 'unknown'
+const version = process.env.npm_package_version ?? 'unknown'
 
 export default function logger(): Logger {
   const { level }: LoggerConfiguration = config.get('logger.app')

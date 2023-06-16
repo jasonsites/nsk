@@ -3,7 +3,7 @@
  */
 
 import type { ExampleEntity } from '../../types/database'
-import type { DomainModel } from '../../types/domain-models'
+import type { DomainModel } from '../../types/domain/models'
 import type { PageMetadata } from '../../types/pagination'
 
 export type MarshalParams = {
@@ -31,11 +31,11 @@ export type PagingDataParams = {
 }
 
 export type RepositoryHandlerUtilities = {
-  marshalPageData: (params: PagingDataParams) => any
-  throwOnNotFound: (params: { id: string; data: any; }) => void
+  marshalPageData: (params: PagingDataParams) => any // TODO: any
+  throwOnNotFound: (params: { id: string; data: any; }) => void // TODO: any
 }
 
 export type RepositoryUpsertUtilities = {
   // TODO: now missing `type` here
-  compose: (params: { data?: any; method?: string; type?: string; }) => any
+  compose: (params: { data?: any; method?: string; type?: string; }) => any // TODO: any
 }

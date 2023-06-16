@@ -25,14 +25,16 @@ fs.writeFile(path, content(), function (err) {
 })
 
 function content() {
-  return `import { Kysely, sql } from 'kysely'
+  return `import { sql } from 'kysely'
 
-export async function up(client: Kysely<any>): Promise<void> {
+import type { PostgresClientType } from '../types'
+
+export async function up(client: PostgresClientType): Promise<void> {
   const raw = \`\`
   await sql.raw(raw).execute(client)
 }
 
-export async function down(client: Kysely<any>): Promise<void> {
+export async function down(client: PostgresClientType): Promise<void> {
   const raw = \`\`
   await sql.raw(raw).execute(client)
 }

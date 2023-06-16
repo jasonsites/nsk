@@ -3,12 +3,12 @@
  */
 
 import type { CoreTypes } from '../../../types/core'
-import { BodySchemaGetter, HTTPBodyMethod, QueryHandler } from '../types'
+import type { BodySchemaGetter, HTTPBodyMethod, QueryHandler } from '../types'
 
 interface Dependencies {
-  core: CoreTypes,
-  query: QueryHandler,
-  resources: Record<string, BodySchemaGetter>,
+  core: CoreTypes
+  query: QueryHandler
+  resources: Record<string, BodySchemaGetter>
 }
 
 export default function schemas(deps: Dependencies) {

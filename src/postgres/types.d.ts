@@ -2,11 +2,14 @@
  * @file postgres client type definitions
  */
 
+/* eslint-disable no-console, @typescript-eslint/no-explicit-any */
+
 import type { Kysely } from 'kysely'
+import type { ThrowOnDBError } from '../types/postgres'
 
 // TODO: namespace all error methods under PostgresClient.errors
 export type PostgresClient = PostgresErrors & {
-  client: Kysely<any>
+  client: PostgresClientType
 }
 
 export type PostgresClientOptions = {
@@ -25,8 +28,6 @@ export type PostgresClientOptions = {
   version: string
 }
 
+export type PostgresClientType = Kysely<any>
+
 export type PostgresErrors = { throwOnDbError: ThrowOnDBError }
-
-export type ThrowOnDBErrorParams = { error: { code?: string } }
-
-export type ThrowOnDBError = (params: ThrowOnDBErrorParams) => void

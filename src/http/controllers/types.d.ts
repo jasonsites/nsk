@@ -5,7 +5,6 @@
 import type { ParsedQs } from 'qs'
 import type { SortOrderOptions } from '../../types/pagination'
 
-
 export type QueryUtilities = {
   parseQuery: (querystring: string) => ParsedQs
   transformQuery: (query: TransformQueryParams) => QueryParameters

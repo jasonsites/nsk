@@ -2,14 +2,14 @@
  * @file domain/businsess logic module/service type definitions
  */
 
-import type { Correlation } from './correlation'
-import type { DomainModel } from './domain-models'
+import type { Correlation } from '../correlation'
+import type { DomainModel } from './models'
 
 export interface DomainModule {
-  getService: (type: string) => DomainServiceWithContext
+  service: (type: string) => DomainServiceModule
 }
 
-export interface DomainServiceWithContext {
+export interface DomainServiceModule {
   context: (correlation: Correlation) => DomainService
 }
 

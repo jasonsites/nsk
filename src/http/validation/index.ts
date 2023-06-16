@@ -9,7 +9,13 @@ import type Logger from 'bunyan'
 import type { CoreTypes } from '../../types/core'
 import type { Correlation } from '../../types/correlation'
 import type { LoggerConfiguration, ScopedLogger } from '../../types/logger'
-import type { ErrorBuilder, HTTPBodyMethod, ValidationModule, ValidationSchemas } from './types'
+import type {
+  ErrorBuilder,
+  ValidateBodyParams,
+  ValidateQueryParams,
+  ValidationModule,
+  ValidationSchemas,
+} from './types'
 
 interface Dependencies {
   core: CoreTypes
@@ -23,85 +29,83 @@ export default function validation(deps: Dependencies): ValidationModule {
 
   const { enabled, label, level }: LoggerConfiguration = config.get('logger.validation')
 
-  return {
-    context: (correlation: Correlation) => {
-      const { req_id } = correlation
+  const context = (correlation: Correlation) => {
+    const { req_id } = correlation
 
-      const log: ScopedLogger = logger.child({ module: label, req_id, level })
-      log.enabled = enabled
+    const log: ScopedLogger = logger.child({ module: label, req_id, level })
+    log.enabled = enabled
 
-      function composeValidationError(params: ErrorBuilder) {
-        const { details, messages } = params
+    function composeValidationError(params: ErrorBuilder) {
+      const { details, messages } = params
 
-        const error = new ValidationError(messages.join(', '))
-        error.details = details
-        return error
+      const error = new ValidationError(messages.join(', '))
+      error.details = details
+      return error
+    }
+
+    function formatBasicValidationErrors(params: { error: joi.ValidationError }) {
+      const { error } = params
+
+      if (!error || !error.isJoi || !Array.isArray(error.details)) {
+        throw new Error('unknown validation error')
       }
-
-      function formatBasicValidationErrors(params: { error: joi.ValidationError }) {
-        const { error } = params
-
-        if (!error || !error.isJoi || !Array.isArray(error.details)) {
-          throw new Error('unknown validation error')
+      return error.details.reduce((memo: ErrorBuilder, detail: joi.ValidationErrorItem) => {
+        const { message, path } = detail
+        memo.messages.push(message)
+        const data = {
+          status: 400,
+          source: { pointer: path.map((p) => `/${p}`).join('') },
+          title: error.name,
+          detail: message,
         }
-        return error.details.reduce((memo: ErrorBuilder, detail: joi.ValidationErrorItem) => {
-          const { message, path } = detail
-          memo.messages.push(message)
-          const data = {
-            status: 400,
-            source: { pointer: path.map((p) => `/${p}`).join('') },
-            title: error.name,
-            detail: message,
-          }
-          memo.details.push(data)
-          return memo
-        }, { details: [], messages: [] })
+        memo.details.push(data)
+        return memo
+      }, { details: [], messages: [] })
+    }
+
+    function throwOnInvalid(params: { errors: ErrorBuilder }) {
+      const { errors } = params
+
+      if (errors?.details?.length) {
+        const err = composeValidationError(errors)
+        if (log.enabled) log.error(`${err.message}`)
+        throw err
       }
+    }
 
-      function throwOnInvalid(params: { errors: ErrorBuilder }) {
-        const { errors } = params
+    function validateBody(params: ValidateBodyParams): void {
+      const { body, method, type } = params
 
-        if (errors?.details?.length) {
-          const err = composeValidationError(errors)
-          if (log.enabled) log.error(`${err.message}`)
-          throw err
-        }
-      }
+      const schema = schemas.bodySchema({ method, type })
+      const options = { abortEarly: false }
+      const { error } = schema.validate(body, options)
 
-      function validateBody(params: { body: object; method: HTTPBodyMethod; type: string; }): void {
-        const { body, method, type } = params
+      const errors: ErrorBuilder = error
+        ? formatBasicValidationErrors({ error })
+        : { details: [], messages: [] }
+      throwOnInvalid({ errors })
+    }
 
-        const schema = schemas.bodySchema({ method, type })
-        const options = { abortEarly: false }
-        const { error } = schema.validate(body, options)
+    function validateQuery(params: ValidateQueryParams): void {
+      const { list, query, type } = params
 
-        const errors: ErrorBuilder = error
-          ? formatBasicValidationErrors({ error })
-          : { details: [], messages: [] }
-        throwOnInvalid({ errors })
-      }
+      const schema = schemas.querySchema({ list, type })
+      const options = { abortEarly: false }
+      const { error } = schema.validate(query, options)
 
-      function validateQuery(params: { list: boolean; query: string; type: string; }): void {
-        const { list, query, type } = params
+      const errors = error
+        ? formatBasicValidationErrors({ error })
+        : { details: [], messages: [] }
+      throwOnInvalid({ errors })
+    }
 
-        const schema = schemas.querySchema({ list, type })
-        const options = { abortEarly: false }
-        const { error } = schema.validate(query, options)
-
-        const errors = error
-          ? formatBasicValidationErrors({ error })
-          : { details: [], messages: [] }
-        throwOnInvalid({ errors })
-      }
-
-      return {
-        composeValidationError,
-        formatBasicValidationErrors,
-        validateBody,
-        validateQuery,
-      }
-    },
+    return {
+      validateBody,
+      validateQuery,
+    }
   }
+
+  return { context }
 }
 
 export const inject = {

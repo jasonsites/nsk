@@ -12,14 +12,8 @@ import type Router from 'koa-router'
 import type { HttpRouter, HttpServer } from './types'
 
 interface Dependencies {
-  middleware: {
-    correlation: Middleware,
-    errorHandler: Middleware,
-    requestLogger: Middleware,
-    responseLogger: Middleware,
-    responseTime: Middleware,
-  },
-  routes: Router[],
+  middleware: Record<string, Middleware>
+  routes: Router[]
 }
 
 export default function router(deps: Dependencies): HttpRouter {

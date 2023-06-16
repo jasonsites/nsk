@@ -15,7 +15,7 @@ interface Dependencies {
 }
 
 export default function route(deps: Dependencies): Router {
-  const { controller, core, middleware } = deps
+  const { core, controller, middleware } = deps
   const { create, destroy, detail, list, update } = controller
 
   const { namespace }: ApiConfiguration = config.get('api')

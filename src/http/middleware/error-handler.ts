@@ -11,7 +11,7 @@ import type { CoreTypes } from '../../types/core'
 type AugmentedBoom = Boom<unknown> & { details?: object[], type: string }
 
 interface Dependencies {
-  core: CoreTypes,
+  core: CoreTypes
 }
 
 export default function middleware(deps: Dependencies): Middleware {
@@ -20,12 +20,12 @@ export default function middleware(deps: Dependencies): Middleware {
   return async function errorHandler(ctx: Context, next: Next) {
     try {
       await next()
-    } catch (err: any) {
+    } catch (err: unknown) {
       const { log } = ctx
       if (log) log.error(err)
       else console.error(err) // eslint-disable-line
 
-      const boomError: AugmentedBoom = boomifyError(err)
+      const boomError: AugmentedBoom = boomifyError(err as Error)
       const { details, output, type } = boomError
       const { message, statusCode } = output.payload
 

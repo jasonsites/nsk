@@ -6,10 +6,10 @@ import config from 'config'
 
 import type Logger from 'bunyan'
 import type { Context, Middleware, Next } from 'koa'
-import { LoggerConfiguration } from '../../types/logger'
+import type { LoggerConfiguration } from '../../types/logger'
 
 interface Dependencies {
-  logger: Logger,
+  logger: Logger
 }
 
 export default function middleware(deps: Dependencies): Middleware {

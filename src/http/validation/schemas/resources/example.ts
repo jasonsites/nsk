@@ -4,12 +4,12 @@
 
 import joi from 'joi'
 
-import type { BodyHandler, DataSchema, HTTPBodyMethod } from '../../types'
 import type { CoreTypes } from '../../../../types/core'
+import type { BodyHandler, DataSchema, HTTPBodyMethod } from '../../types'
 
 interface Dependencies {
-  body: BodyHandler,
-  core: CoreTypes,
+  body: BodyHandler
+  core: CoreTypes
 }
 
 export default function exampleResource(deps: Dependencies) {

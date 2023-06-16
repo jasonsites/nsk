@@ -5,7 +5,8 @@
 import config from 'config'
 
 import type { CoreTypes } from '../types/core'
-import type { PostgresErrors, ThrowOnDBErrorParams } from './types'
+import type { ThrowOnDBErrorParams } from '../types/postgres'
+import type { PostgresErrors } from './types'
 
 interface Dependencies {
   core: CoreTypes

@@ -1,6 +1,8 @@
-import { Kysely, sql } from 'kysely'
+import { sql } from 'kysely'
 
-export async function up(client: Kysely<any>): Promise<void> {
+import type { PostgresClientType } from '../types'
+
+export async function up(client: PostgresClientType): Promise<void> {
   const raw = `
     CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
@@ -26,7 +28,7 @@ export async function up(client: Kysely<any>): Promise<void> {
   await sql.raw(raw).execute(client)
 }
 
-export async function down(client: Kysely<any>): Promise<void> {
+export async function down(client: PostgresClientType): Promise<void> {
   const raw = 'DROP TABLE IF EXISTS "example_entity";'
   await sql.raw(raw).execute(client)
 }
