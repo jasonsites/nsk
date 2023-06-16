@@ -20,7 +20,7 @@ export default function handler(deps: Dependencies) {
   }
 
   // error handling
-  function throwOnNotFound(params: { id: string, data: any, type: string }): void {
+  function throwOnNotFound(params: { id: string, data: unknown, type: string }): void {
     const { id, data, type = 'record' } = params
     if (!data || (Array.isArray(data) && data.length === 0)) {
       throw new NotFoundError(`unable to find ${type} with id '${id}'`)

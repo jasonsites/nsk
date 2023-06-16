@@ -2,11 +2,10 @@
 * @file postgres module
 */
 
-import { Kysely } from 'kysely'
-import { PostgresClient, PostgresErrors } from './types'
+import type { PostgresClient, PostgresClientType, PostgresErrors } from './types'
 
 interface Dependencies {
-  client: Kysely<any>
+  client: PostgresClientType
   errors: PostgresErrors
 }
 

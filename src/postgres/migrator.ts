@@ -2,15 +2,16 @@
  * @file postgres migrator
  */
 
-/* eslint-disable no-console, @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 
 import * as path from 'path'
 import { promises as fs } from 'fs'
 
-import { FileMigrationProvider, Kysely, Migrator } from 'kysely'
+import { FileMigrationProvider, Migrator } from 'kysely'
+import type { PostgresClientType } from './types'
 
 interface Dependencies {
-  db: Kysely<any>,
+  db: PostgresClientType
 }
 
 export default function postgresMigrator({ db }: Dependencies) {

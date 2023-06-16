@@ -5,16 +5,11 @@
 import joi from 'joi'
 
 import type { CoreTypes } from '../../../types/core'
-import type {
-  BodyHandler,
-  BodySchemaBuilder,
-  BodySchemaGetter,
-  HTTPBodyMethod,
-} from '../types'
+import type { BodyHandler, BodySchemaBuilder, BodySchemaGetter, HTTPBodyMethod } from '../types'
 
 type CreateSchemaGetterParams = {
-  builder: BodySchemaBuilder,
-  core: CoreTypes,
+  builder: BodySchemaBuilder
+  core: CoreTypes
 }
 
 export default function body(): BodyHandler {

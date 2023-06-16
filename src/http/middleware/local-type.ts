@@ -6,7 +6,7 @@
 import type { Context, Middleware, Next } from 'koa'
 
 interface Dependencies {
-  type: string,
+  type: string
 }
 
 export default function middleware(deps: Dependencies): Middleware {

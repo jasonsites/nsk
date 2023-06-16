@@ -2,28 +2,29 @@
  * @file domain/business logic module
  */
 
-import { CoreTypes } from '../types/core'
-import type { DomainModule, DomainServiceWithContext } from '../types/domain-services'
+import type { CoreTypes } from '../types/core'
+import type { DomainModule, DomainServiceModule } from '../types/domain/services'
+
 
 interface Dependencies {
   core: CoreTypes
-  services: { example: DomainServiceWithContext }
+  services: { example: DomainServiceModule }
 }
 
 export default function domain(deps: Dependencies): DomainModule {
   const { core, services } = deps
   const { InternalServerError, model } = core
 
-  function getService(type: string): DomainServiceWithContext {
+  function service(type: string): DomainServiceModule {
     switch (type) {
       case model.example:
         return services.example
       default:
-        throw new InternalServerError(`unknown domain service type: '${type}'`)
+        throw new InternalServerError(`invalid domain service type: '${type}'`)
     }
   }
 
-  return { getService }
+  return { service }
 }
 
 export const inject = {

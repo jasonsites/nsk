@@ -21,7 +21,7 @@ export default function utilities(deps: Dependencies) {
    * @param {string} params.type    - resource type
    * @returns {object}
    */
-  function compose(params: { data: any, method: string, type: string }) {
+  function compose(params: { data: any, method: string, type: string }) { // TODO: any
     const { data, method = 'update', type } = params
     const user_id = 1 // TODO: get from context
 
@@ -48,7 +48,7 @@ export default function utilities(deps: Dependencies) {
   }
 
   // field enforcement ---------------------------------------------------
-  function enforceUpsertFields(params: { data: any, type: string }) {
+  function enforceUpsertFields(params: { data: any, type: string }) { // TODO: any
     const { data, type } = params
     switch (type) {
       case model.example: return exampleEntity({ data })

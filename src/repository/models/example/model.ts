@@ -3,7 +3,7 @@
  */
 
 import type { CoreTypes } from '../../../types/core'
-import type { DomainModel, ExampleDomainObject } from '../../../types/domain-models'
+import type { DomainModel, ExampleDomainObject } from '../../../types/domain/models'
 import type { EntityModelMarshaller, ExampleEntityModel, MarshalParams } from '../types'
 
 interface Dependencies {
@@ -11,28 +11,26 @@ interface Dependencies {
 }
 
 export default function example(deps: Dependencies): EntityModelMarshaller {
-  const { core: { InternalServerError } } = deps
+  const { core: { InternalServerError, model } } = deps
 
   function marshal(params: MarshalParams): DomainModel {
     const { meta, solo = true } = params
 
-    const result: DomainModel = { data: [], solo }
-    if (meta) result.meta = meta
+    const entityModelData = <ExampleEntityModel[]>params.data
 
-    const data = <ExampleEntityModel[]>params.data
-
-    const { length } = data
+    const { length } = entityModelData
     if (solo && length > 1) {
-      throw new InternalServerError(`serializer input data with length '${length}' must contain one and only one resource for single resource serialization`)
+      throw new InternalServerError(`marhsal input data with length '${length}' must contain one and only one object for single object serialization`)
     }
 
-    result.data = data.reduce((acc: Array<ExampleDomainObject>, elem: ExampleEntityModel) => {
-      const marshalled = marshalData({ data: elem })
-      acc.push(marshalled)
-      return acc
-    }, [])
-    if (meta) result.meta = meta
-    return result
+    const data = entityModelData
+      .reduce((acc: Array<ExampleDomainObject>, elem: ExampleEntityModel) => {
+        const marshalled = marshalData({ data: elem })
+        acc.push(marshalled)
+        return acc
+      }, [])
+
+    return { data, meta, solo, type: model.example }
   }
 
   function marshalData({ data }: { data: ExampleEntityModel }): ExampleDomainObject {
@@ -64,6 +62,7 @@ export default function example(deps: Dependencies): EntityModelMarshaller {
       },
       meta: null, // TODO
       related: [], // TODO
+      type: 'example', // TODO
     }
   }
 

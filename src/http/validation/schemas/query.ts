@@ -7,7 +7,7 @@ import joi from 'joi'
 import type { CoreTypes } from '../../../types/core'
 
 interface Dependencies {
-  core: CoreTypes,
+  core: CoreTypes
 }
 
 export default function query(deps: Dependencies) {

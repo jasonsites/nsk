@@ -8,7 +8,7 @@ declare module 'app-container' {
 
     glob(pattern: string, options?: unknown): void
 
-    load(components: string[] | unknown): Promise<any>
+    load(components: string[] | unknown): Promise<unknown>
   }
 
   export = AppContainer

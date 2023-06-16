@@ -3,7 +3,7 @@
  */
 
 import type { Correlation } from './correlation'
-import type { DomainModel } from './domain-models'
+import type { DomainModel } from './domain/models'
 import type { ScopedLogger } from './logger'
 
 export interface Repository {
