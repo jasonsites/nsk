@@ -13,8 +13,8 @@ import type { PostgresClient } from '../../../postgres/types'
 import type { EntityData } from '../../entities/types'
 import type {
   EntityModelMarshaller,
+  RepositoryComposerUtilities,
   RepositoryHandlerUtilities,
-  RepositoryUpsertUtilities,
 } from '../types'
 
 interface Dependencies {
@@ -24,8 +24,8 @@ interface Dependencies {
   model: EntityModelMarshaller
   postgres: PostgresClient
   utils: {
+    composer: RepositoryComposerUtilities
     handler: RepositoryHandlerUtilities
-    upsert: RepositoryUpsertUtilities
   }
 }
 
@@ -47,7 +47,7 @@ export default function example(deps: Dependencies): RepositoryModule {
       const { data } = params
 
       try {
-        const insert = utils.upsert.compose({ data, method: 'create', type })
+        const insert = utils.composer.create({ data, type })
         const record: any = await client // TODO: any
           .insertInto(entities.example.table)
           .values(insert)
@@ -71,9 +71,9 @@ export default function example(deps: Dependencies): RepositoryModule {
           .where(entities.example.field.Deleted, '=', false)
           .where(entities.example.field.Id, '=', id)
           .execute()
-        utils.handler.throwOnNotFound({ id, data: record })
+        utils.handler.throwOnNotFound({ id, data: record, type })
 
-        const destroyUpsert = utils.upsert.compose({ method: 'destroy' })
+        const destroyUpsert = utils.composer.destroy()
         await client
           .updateTable(entities.example.table)
           .set(destroyUpsert)
@@ -98,7 +98,7 @@ export default function example(deps: Dependencies): RepositoryModule {
           .where(entities.example.field.Id, '=', id)
           .execute()
 
-        utils.handler.throwOnNotFound({ id, data: record })
+        utils.handler.throwOnNotFound({ id, data: record, type })
 
         return model.marshal({ data: [record] })
       } catch (error) {
@@ -156,7 +156,7 @@ export default function example(deps: Dependencies): RepositoryModule {
       const { data, id } = params
 
       try {
-        const updateData = utils.upsert.compose({ data, type })
+        const updateData = utils.composer.update({ data, type })
         const record: any = await client // TODO: any
           .updateTable(entities.example.table)
           .set(updateData)
@@ -165,7 +165,7 @@ export default function example(deps: Dependencies): RepositoryModule {
           .returning(entities.example.fields)
           .executeTakeFirstOrThrow()
 
-        utils.handler.throwOnNotFound({ id, data: record })
+        utils.handler.throwOnNotFound({ id, data: record, type })
 
         return model.marshal({ data: [record] })
       } catch (error) {
@@ -189,8 +189,8 @@ export const inject = {
     model: 'repository/models/example/model',
     postgres: 'postgres',
     utils: {
+      composer: 'repository/models/composer',
       handler: 'repository/models/handler',
-      upsert: 'repository/models/upsert',
     },
   },
 }

@@ -4,7 +4,7 @@
 
 import type { CoreTypes } from '../../types/core'
 import type { PageMetadata } from '../../types/pagination'
-import type { PagingDataParams } from './types'
+import type { PagingDataParams, ThrownOnNotFoundParams } from './types'
 
 interface Dependencies {
   core: CoreTypes,
@@ -20,7 +20,7 @@ export default function handler(deps: Dependencies) {
   }
 
   // error handling
-  function throwOnNotFound(params: { id: string, data: unknown, type: string }): void {
+  function throwOnNotFound(params: ThrownOnNotFoundParams): void {
     const { id, data, type = 'record' } = params
     if (!data || (Array.isArray(data) && data.length === 0)) {
       throw new NotFoundError(`unable to find ${type} with id '${id}'`)

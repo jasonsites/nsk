@@ -38,4 +38,5 @@ export async function down(client: PostgresClientType): Promise<void> {
   const raw = \`\`
   await sql.raw(raw).execute(client)
 }
-`}
+`
+}

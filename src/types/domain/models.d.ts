@@ -11,8 +11,6 @@ export type DomainModel = {
   type: string
 }
 
-export type DomainModelConstructor = (data: any) => DomainModel // TODO: any
-
 export type DomainModelMetadata = {
   paging: PageMetadata
 }
