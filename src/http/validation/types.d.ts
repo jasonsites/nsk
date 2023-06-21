@@ -3,8 +3,10 @@
  */
 
 import type { ObjectSchema, StringSchema } from 'joi'
+import type { ParsedQs } from 'qs'
 import type { CoreTypes } from '../../types/core'
 import type { Correlation } from '../../types/correlation'
+
 
 export type BodySchemaBuilder = (params: { core: CoreTypes, method: HTTPBodyMethod }) => DataSchema
 
@@ -45,7 +47,7 @@ export type ValidateBodyParams = {
 
 export type ValidateQueryParams = {
   list: boolean
-  query: string
+  query: ParsedQs
   type: string
 }
 

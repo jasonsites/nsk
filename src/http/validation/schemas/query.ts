@@ -17,13 +17,13 @@ export default function query(deps: Dependencies) {
   const allowedSortTypes: string[] = []
   const disallowedFilterTypes: string[] = []
 
-  const validTypes = [
+  const validTypes: string[] = [
     model.example,
   ]
 
   function filtersSchema({ type }: { type: string }) {
     switch (type) {
-      case model.example: return joi.object().required()
+      case model.example: return joi.object()
       default: throw new Error(`invalid type '${type}' for filter query`)
     }
   }
@@ -49,7 +49,7 @@ export default function query(deps: Dependencies) {
       throw new Error(`invalid type '${type}' for query validation`)
     }
 
-    const schema = { f: {}, o: {}, p: {}, s: {} }
+    const schema = { f: joi.object(), o: joi.object(), p: joi.object(), s: joi.object() }
 
     if (list) {
       schema.p = pagingSchema()

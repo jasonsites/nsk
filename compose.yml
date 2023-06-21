@@ -22,7 +22,7 @@ services:
       LOGGER_DOMAIN_ENABLED: "true"
       LOGGER_HTTP_REQUEST_ENABLED: "true"
       LOGGER_HTTP_RESPONSE_ENABLED: "true"
-      LOGGER_HTTP_LEVEL: debug
+      LOGGER_HTTP_LEVEL: info
       LOGGER_REPO_ENABLED: "true"
       NODE_ENV: development
       PGCONN_POOL_MAX: 10

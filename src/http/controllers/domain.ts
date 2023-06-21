@@ -58,8 +58,7 @@ export default function controller(deps: Dependencies): Controller {
     const { querystring } = ctx.request
     const query: ParsedQs = utils.parseQuery(querystring)
     const validator: Validator = validation.context(correlation)
-    // TODO: query as unknown x 2
-    validator.validateQuery({ list: true, query: (query as unknown as string), type })
+    validator.validateQuery({ list: true, query, type })
     const { filters, page, sort } = utils.transformQuery(query as unknown as TransformQueryParams)
     const service: DomainService = domain.service(type).context(correlation)
     const model: DomainModel = await service.list({ filters, page, sort, type })
